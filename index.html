@@ -4,26 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SEA FOOD KINGS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .gold {
+      color: #FFD700;
+    }
+    .bg-gold {
+      background-color: #FFD700;
+    }
+    .border-gold {
+      border-color: #FFD700;
+    }
+  </style>
 </head>
-<body class="bg-black text-yellow-400">
+<body class="bg-black text-white">
   <!-- Navbar -->
-  <nav class="flex justify-between items-center p-4 border-b border-yellow-400">
-    <h1 class="text-2xl font-bold">SEA FOOD KINGS</h1>
+  <nav class="flex justify-between items-center p-4 border-b border-gold">
+    <div class="flex items-center space-x-3">
+      <img src="assets/logo.png" alt="Logo" class="h-12 w-12 rounded-full border border-gold">
+      <h1 class="text-2xl font-bold gold">SEA FOOD KINGS</h1>
+    </div>
     <div>
-      <a href="admin.html" class="mr-4 text-yellow-300 hover:text-white">Admin</a>
-      <a href="cart.html" class="text-yellow-300 hover:text-white">🛒 Cart</a>
+      <a href="admin.html" class="mr-4 gold hover:text-white">Admin</a>
+      <a href="cart.html" class="gold hover:text-white">🛒 Cart</a>
     </div>
   </nav>
 
   <!-- Hero Banner -->
-  <section class="text-center py-10">
-    <h2 class="text-4xl font-extrabold mb-2">Fresh & Premium Seafood</h2>
-    <p class="text-yellow-300">Order Now - Delivered to Your Doorstep</p>
+  <section class="text-center py-10 bg-gradient-to-b from-black to-yellow-900">
+    <h2 class="text-4xl font-extrabold mb-2 gold">Premium Seafood Delivered Fresh</h2>
+    <p class="text-yellow-300">Hand-picked, packed, and shipped the same day.</p>
   </section>
 
   <!-- Product Grid -->
-  <section id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4"></section>
+  <section id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6"></section>
 
   <script>
     const productGrid = document.getElementById("product-grid");
@@ -33,20 +51,30 @@
       { name: "Tiger Prawns", price: 700, img: "https://via.placeholder.com/300x200" }
     ];
 
-    function addToCart(name, price) {
+    function addToCart(name, basePrice, qty) {
+      let multiplier = 1;
+      if (qty === "1kg") multiplier = 2;
+      if (qty === "2kg") multiplier = 4;
+      const price = basePrice * multiplier;
+
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ name, price });
+      cart.push({ name: name + " (" + qty + ")", price });
       localStorage.setItem("cart", JSON.stringify(cart));
-      alert(name + " added to cart!");
+      alert(`${name} (${qty}) added to cart!`);
     }
 
     products.forEach(product => {
       productGrid.innerHTML += `
-        <div class="bg-yellow-900 p-4 rounded-xl shadow-lg text-white">
-          <img src="${product.img}" alt="${product.name}" class="rounded mb-2">
-          <h3 class="text-xl font-bold">${product.name}</h3>
-          <p>₹${product.price} / 500g</p>
-          <button onclick="addToCart('${product.name}', ${product.price})" class="mt-2 bg-yellow-500 text-black px-4 py-1 rounded hover:bg-yellow-300">Add to Cart</button>
+        <div class="bg-yellow-900 p-4 rounded-2xl shadow-lg text-white transition-transform transform hover:scale-105">
+          <img src="${product.img}" alt="${product.name}" class="rounded-lg mb-3 h-40 w-full object-cover">
+          <h3 class="text-xl font-semibold">${product.name}</h3>
+          <p class="mb-2">₹${product.price} / 500g</p>
+          <select id="qty-${product.name}" class="text-black px-2 py-1 rounded mb-2 w-full">
+            <option value="500g">500g</option>
+            <option value="1kg">1kg</option>
+            <option value="2kg">2kg</option>
+          </select>
+          <button onclick="addToCart('${product.name}', ${product.price}, document.getElementById('qty-${product.name}').value)" class="bg-gold text-black px-4 py-2 rounded hover:bg-yellow-300 w-full">Add to Cart</button>
         </div>
       `;
     });
