@@ -78,6 +78,11 @@
     }
 
     function orderOnWhatsApp() {
+      const message = buildOrderMessage();
+      window.open(`https://wa.me/919152299833?text=${message}`, '_blank');
+    }
+
+    function buildOrderMessage() {
       const name = document.getElementById("name").value.trim();
       const phone = document.getElementById("phone").value.trim();
       const address = document.getElementById("address").value.trim();
@@ -85,25 +90,30 @@
 
       if (!name || !phone || !address) {
         alert("Please fill all required fields");
-        return;
+        throw new Error("Missing required fields");
       }
 
-      let message = `Hi! I'd like to place an order.%0A\nName: ${name}%0AContact: ${phone}%0AAddress: ${address}%0A`;
+      let message = `Hi! I'd like to place an order.%0A\nName: ${name}%0AContact: ${phone}%0AAddress: ${address}`;
       if (note) message += `%0ANote: ${note}`;
       message += `%0A%0AOrder Details:%0A`;
       cart.forEach(item => {
         message += `- ${item.name} - ₹${item.price}%0A`;
       });
       message += `%0ATotal: ₹${cart.reduce((t, i) => t + i.price, 0)}`;
-
-      window.open(`https://wa.me/919152299833?text=${message}`, '_blank');
+      return encodeURIComponent(message);
     }
 
     document.getElementById("checkoutForm").addEventListener("submit", e => {
       e.preventDefault();
-      alert("✅ Order placed successfully!\nWe will contact you soon.");
-      localStorage.removeItem("cart");
-      window.location.href = "index.html";
+      try {
+        const message = buildOrderMessage();
+        window.open(`https://wa.me/919152299833?text=${message}`, '_blank');
+        alert("✅ Order placed successfully!\nWe will contact you soon.");
+        localStorage.removeItem("cart");
+        window.location.href = "index.html";
+      } catch (error) {
+        console.warn("Order not sent", error);
+      }
     });
 
     renderCart();
