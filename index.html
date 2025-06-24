@@ -4,165 +4,96 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sea Food Kings</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     body {
+      font-family: 'Poppins', sans-serif;
       background-color: #000;
       color: #FFD700;
-      font-family: 'Poppins', sans-serif;
     }
-    .gold-btn {
-      background-color: #FFD700;
-      color: #000;
-      font-weight: bold;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-    }
-    .gold-btn:hover {
-      background-color: #e6c200;
-      transform: scale(1.05);
-    }
-    .navbar {
-      background-color: #0a0a0a;
-      padding: 1rem 1.5rem;
-      border-bottom: 2px solid #FFD700;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .navbar h1 {
-      font-weight: 700;
-      font-size: 1.3rem;
-      color: #FFD700;
-      display: flex;
-      align-items: center;
-    }
-    .navbar img {
-      height: 35px;
-      margin-right: 10px;
-    }
-    .nav-links {
-      display: flex;
-      gap: 1.2rem;
-    }
-    .nav-links a {
-      color: #FFD700;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-    .nav-links a:hover {
-      color: #e6c200;
-    }
-    .scrolling-wrapper {
+    .product-carousel {
       display: flex;
       overflow-x: auto;
       gap: 1rem;
       padding: 1rem;
-    }
-    .scrolling-wrapper::-webkit-scrollbar {
-      height: 8px;
-    }
-    .scrolling-wrapper::-webkit-scrollbar-thumb {
-      background: #FFD700;
-      border-radius: 4px;
+      scroll-snap-type: x mandatory;
     }
     .product-card {
-      min-width: 230px;
-      background-color: #1a1a1a;
+      background: #1a1a1a;
       border: 1px solid #FFD700;
       border-radius: 10px;
-      padding: 0.8rem;
+      min-width: 250px;
+      scroll-snap-align: start;
       flex-shrink: 0;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+      padding: 1rem;
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.15);
     }
     .product-card img {
-      border-radius: 6px;
-      height: 120px;
+      border-radius: 8px;
+      height: 130px;
       width: 100%;
       object-fit: cover;
-      margin-bottom: 0.5rem;
     }
-    input.qty-input {
-      width: 100%;
-      padding: 0.4rem;
-      margin-top: 0.3rem;
-      border-radius: 5px;
+    .gold-btn {
+      background-color: #FFD700;
       color: #000;
-      font-weight: 500;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    .qty-input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 5px;
+      margin-top: 0.5rem;
+      background: #000;
+      color: #FFD700;
+      border: 1px solid #FFD700;
     }
   </style>
 </head>
 <body>
-
-  <!-- Navbar -->
-  <nav class="navbar">
-    <h1><img src="logo.png" alt="Logo">SEA FOOD KINGS</h1>
-    <div class="nav-links">
-      <a href="#">Home</a>
-      <a href="#products">Products</a>
-      <a href="#">Offers</a>
-      <a href="#">My Orders</a>
-      <a href="cart.html">Cart</a>
-      <a href="#">Contact</a>
-    </div>
-  </nav>
-
-  <!-- Header -->
-  <header class="text-center p-6">
-    <h2 class="text-3xl font-bold text-yellow-300">Premium Seafood, Delivered Fresh</h2>
-    <p class="text-yellow-200 mt-1">Choose quantity, add to cart, and enjoy top-quality seafood</p>
+  <header class="text-center p-6 border-b border-yellow-500">
+    <h1 class="text-3xl font-bold">SEA FOOD KINGS</h1>
+    <p class="text-yellow-400 mt-2">Premium Seafood, Delivered Fresh</p>
   </header>
 
-  <!-- Product Cards -->
-  <div id="products" class="scrolling-wrapper" id="productList"></div>
+  <section class="product-carousel" id="productList">
+    <!-- JS inserts product cards here -->
+  </section>
 
+  <script src="products.js"></script>
   <script>
-    const productList = document.getElementById('products');
+    const list = document.getElementById('productList');
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function addToCart(product, qty) {
-      const weight = parseFloat(qty);
-      if (isNaN(weight) || weight <= 0) return alert("❌ Enter a valid quantity (kg)");
-      const item = {
-        name: `${product.name} (${weight} kg)`,
-        price: Math.round(product.basePrice * weight)
-      };
-      cart.push(item);
+      const total = Math.round(product.basePrice * qty);
+      cart.push({ name: `${product.name} (${qty} kg)`, price: total });
       localStorage.setItem('cart', JSON.stringify(cart));
-      alert("✅ Added to cart!");
+      alert('✅ Added to cart!');
     }
 
-    const products = [
-      { name: "Pomfret 3 pcs", basePrice: 1300, image: "fish.jpg" },
-      { name: "Surmai Big", basePrice: 900, image: "surmai.jpg" },
-      { name: "Lobster 2 pcs", basePrice: 2400, image: "lobster.jpg" },
-      { name: "Rawas Fillet", basePrice: 1600, image: "rawas.jpg" }
-    ];
-
-    products.forEach(product => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.innerHTML = `
-        <img src="./images/${product.image}" alt="${product.name}" />
-        <h3 class="text-lg font-semibold text-yellow-300">${product.name}</h3>
-        <p class="text-sm text-yellow-200">₹${product.basePrice}/kg</p>
-        <input type="number" min="0.25" step="0.25" value="1" class="qty-input" placeholder="Enter kg" />
-        <button class="gold-btn w-full mt-2 add-btn">Add to Cart</button>
-      `;
-      const qtyInput = card.querySelector('.qty-input');
-      const addBtn = card.querySelector('.add-btn');
-      addBtn.addEventListener('click', () => addToCart(product, qtyInput.value));
-      productList.appendChild(card);
-    });
+    if (Array.isArray(products)) {
+      products.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-card';
+        div.innerHTML = `
+          <img src="${p.image}" alt="${p.name}" />
+          <h3 class="text-lg font-semibold mt-2">${p.name}</h3>
+          <p class="text-sm">₹${p.basePrice}/kg</p>
+          <input type="number" class="qty-input" min="0.1" max="100" step="0.1" value="1" />
+          <button class="gold-btn">Add to Cart</button>
+        `;
+        const qtyInput = div.querySelector('.qty-input');
+        const addBtn = div.querySelector('button');
+        addBtn.onclick = () => addToCart(p, parseFloat(qtyInput.value));
+        list.appendChild(div);
+      });
+    }
   </script>
 </body>
 </html>
