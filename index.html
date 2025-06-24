@@ -1,135 +1,91 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sea Food Kings</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
       background-color: #000;
       color: #FFD700;
-      line-height: 1.6;
-    }
-    .navbar {
-      background-color: #1a1a1a;
-      border-bottom: 2px solid #FFD700;
-      padding: 1rem 2rem;
-    }
-    .logo {
-      height: 40px; /* Reduced size for a cleaner look */
-      width: auto;
+      font-family: 'Poppins', sans-serif;
     }
     .gold-btn {
       background-color: #FFD700;
       color: #000;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
+      font-weight: bold;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
       transition: all 0.3s ease;
     }
     .gold-btn:hover {
       background-color: #e6c200;
-      transform: translateY(-2px);
+      transform: scale(1.05);
     }
-    .banner {
-      background: linear-gradient(135deg, #1a1a1a, #000);
-      padding: 3rem 2rem;
-      text-align: center;
-      border: 2px solid #FFD700;
-      border-radius: 10px;
-      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.2), inset 0 0 15px rgba(255, 215, 0, 0.3);
-      margin: 1rem 0;
-      cursor: pointer;
-      transition: transform 0.3s ease;
+    .scrolling-wrapper {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem;
     }
-    .banner:hover {
-      transform: translateY(-5px);
+    .scrolling-wrapper::-webkit-scrollbar {
+      height: 8px;
     }
-    .banner h2 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8), 0 0 10px #FFD700;
-      margin-bottom: 0.5rem;
-    }
-    .banner p {
-      font-size: 1.2rem;
-      font-weight: 500;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
-    }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
+    .scrolling-wrapper::-webkit-scrollbar-thumb {
+      background: #FFD700;
+      border-radius: 4px;
     }
     .product-card {
-      background: #1a1a1a;
+      min-width: 230px;
+      background-color: #1a1a1a;
       border: 1px solid #FFD700;
       border-radius: 10px;
-      overflow: hidden;
+      padding: 0.8rem;
+      flex-shrink: 0;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      padding: 1rem;
     }
     .product-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
     }
     .product-card img {
+      border-radius: 6px;
+      height: 120px;
       width: 100%;
-      height: 150px;
       object-fit: cover;
-      border-radius: 5px;
-      transition: transform 0.3s ease;
-    }
-    .product-card:hover img {
-      transform: scale(1.05);
-    }
-    .product-card h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin: 0.5rem 0;
-    }
-    .product-card p {
-      font-size: 0.9rem;
-      color: #FFD700;
       margin-bottom: 0.5rem;
     }
-    .qty-select {
+    input.qty-input {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.4rem;
+      margin-top: 0.3rem;
       border-radius: 5px;
-      margin-bottom: 0.5rem;
-    }
-    @media (max-width: 640px) {
-      .banner h2 { font-size: 2rem; }
-      .banner p { font-size: 1rem; }
-      .product-grid { grid-template-columns: 1fr; }
+      color: #000;
+      font-weight: 500;
     }
   </style>
 </head>
-<body class="min-h-screen">
+<body>
+
   <!-- Navbar -->
-  <nav class="navbar flex justify-between items-center">
-    <div class="flex items-center gap-4">
-      <img src="logo.png" alt="Sea Food Kings Logo" class="logo">
-      <h1 class="text-xl font-bold">SEA FOOD KINGS</h1>
+  <nav class="flex justify-between items-center bg-black p-4 border-b border-yellow-500">
+    <div class="flex items-center gap-3">
+      <img src="logo.png" class="h-10" />
+      <h1 class="text-xl font-bold text-yellow-300">SEA FOOD KINGS</h1>
     </div>
     <a href="cart.html" class="gold-btn">🛒 Cart</a>
   </nav>
 
-  <!-- Banner -->
-  <header class="banner" onclick="window.location.href='index.html';">
-    <h2>Fresh Seafood Delivered to Your Doorstep</h2>
-    <p>Choose your quantity & enjoy!</p>
+  <!-- Header -->
+  <header class="text-center p-6">
+    <h2 class="text-3xl font-bold text-yellow-300">Premium Seafood, Delivered Fresh</h2>
+    <p class="text-yellow-200 mt-1">Choose quantity, add to cart, and enjoy top-quality seafood</p>
   </header>
 
-  <!-- Product Grid -->
-  <main class="product-grid" id="productList">
-    <!-- Products will be injected here -->
-  </main>
+  <!-- Product Cards -->
+  <div class="scrolling-wrapper" id="productList"></div>
 
   <script src="products.js"></script>
   <script>
@@ -137,40 +93,39 @@
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function addToCart(product, qty) {
-      const priceMap = { '250g': 0.25, '500g': 0.5, '1kg': 1 };
-      const weightFactor = priceMap[qty] || 1;
+      const weight = parseFloat(qty);
+      if (isNaN(weight) || weight <= 0) return alert("❌ Enter a valid quantity (kg)");
       const item = {
-        name: `${product.name} (${qty})`,
-        price: Math.round(product.basePrice * weightFactor)
+        name: `${product.name} (${weight} kg)`,
+        price: Math.round(product.basePrice * weight)
       };
       cart.push(item);
       localStorage.setItem('cart', JSON.stringify(cart));
-      alert('✅ Added to cart!');
+      alert("✅ Added to cart!");
     }
 
-    if (typeof products !== 'undefined' && Array.isArray(products)) {
-      products.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-          <img src="./images/${product.image}" alt="${product.name}" class="w-full h-32 object-cover rounded-md mb-2">
-          <h3>${product.name}</h3>
-          <p>₹${product.basePrice}/kg</p>
-          <select class="qty-select">
-            <option value="250g">250g</option>
-            <option value="500g" selected>500g</option>
-            <option value="1kg">1kg</option>
-          </select>
-          <button class="gold-btn w-full mt-2 add-btn">Add to Cart</button>
-        `;
-        const qtySelect = card.querySelector('.qty-select');
-        const addBtn = card.querySelector('.add-btn');
-        addBtn.addEventListener('click', () => addToCart(product, qtySelect.value));
-        productList.appendChild(card);
-      });
-    } else {
-      console.log('Products data is missing or invalid. Check products.js.');
-    }
+    const products = [
+      { name: "Pomfret 3 pcs", basePrice: 1300, image: "fish.jpg" },
+      { name: "Surmai Big", basePrice: 900, image: "surmai.jpg" },
+      { name: "Lobster 2 pcs", basePrice: 2400, image: "lobster.jpg" },
+      { name: "Rawas Fillet", basePrice: 1600, image: "rawas.jpg" }
+    ];
+
+    products.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="./images/${product.image}" alt="${product.name}" />
+        <h3 class="text-lg font-semibold text-yellow-300">${product.name}</h3>
+        <p class="text-sm text-yellow-200">₹${product.basePrice}/kg</p>
+        <input type="number" min="0.25" step="0.25" value="1" class="qty-input" placeholder="Enter kg" />
+        <button class="gold-btn w-full mt-2 add-btn">Add to Cart</button>
+      `;
+      const qtyInput = card.querySelector('.qty-input');
+      const addBtn = card.querySelector('.add-btn');
+      addBtn.addEventListener('click', () => addToCart(product, qtyInput.value));
+      productList.appendChild(card);
+    });
   </script>
 </body>
 </html>
