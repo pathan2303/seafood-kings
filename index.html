@@ -62,19 +62,17 @@
     }
 
     products.forEach(product => {
-      const card = document.createElement('div');
-      card.className = "bg-yellow-900 text-white rounded-xl p-3 flex flex-col items-center text-center shadow-lg";
       card.innerHTML = `
-        <img src="\${product.image}" alt="\${product.name}" class="w-full h-32 object-cover rounded-md mb-2">
-        <h3 class="text-lg font-semibold">\${product.name}</h3>
-        <p class="text-sm text-yellow-200">₹\${product.basePrice}/kg</p>
-        <select class="mt-2 px-2 py-1 rounded text-black bg-white qty-select">
-          <option value="250g">250g</option>
-          <option value="500g" selected>500g</option>
-          <option value="1kg">1kg</option>
-        </select>
-        <button class="mt-3 px-4 py-1 rounded gold-btn add-btn">Add to Cart</button>
-      `;
+  <img src="${product.image}" alt="${product.name}" class="w-full h-32 object-cover rounded-md mb-2">
+  <h3 class="text-lg font-semibold">${product.name}</h3>
+  <p class="text-sm text-yellow-200">₹${product.basePrice}/kg</p>
+  <select class="mt-2 px-2 py-1 rounded text-black bg-white qty-select">
+    <option value="250g">250g</option>
+    <option value="500g" selected>500g</option>
+    <option value="1kg">1kg</option>
+  </select>
+  <button class="mt-3 px-4 py-1 rounded gold-btn add-btn">Add to Cart</button>
+`;
       const qtySelect = card.querySelector('.qty-select');
       const addBtn = card.querySelector('.add-btn');
       addBtn.addEventListener('click', () => addToCart(product, qtySelect.value));
