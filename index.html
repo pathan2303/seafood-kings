@@ -1,110 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEA FOOD KINGS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEA FOOD KINGS - Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-    }
-    .gold {
+      margin: 0;
+      background-color: #000;
       color: #FFD700;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
     }
-    .bg-gold {
-      background-color: #FFD700;
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
     }
-    .border-gold {
-      border-color: #FFD700;
+    p {
+      font-size: 1.2rem;
+      color: #ffecb3;
+    }
+    .fish {
+      width: 100px;
+      height: 100px;
+      margin-top: 30px;
+      animation: swim 5s infinite linear;
+    }
+    @keyframes swim {
+      0%   { transform: translateX(-150%) rotate(0deg); }
+      50%  { transform: translateX(50%) rotate(5deg); }
+      100% { transform: translateX(150%) rotate(0deg); }
     }
   </style>
 </head>
-<body class="bg-black text-white">
-  <!-- Navbar -->
-  <nav class="flex justify-between items-center px-6 py-4 border-b border-gold bg-black">
-    <div class="flex items-center space-x-4">
-      <img src="logo.png" alt="Logo" class="h-12 w-auto object-contain">
-      <h1 class="text-2xl font-bold gold">SEA FOOD KINGS</h1>
-    </div>
-    <div class="space-x-4">
-      <a href="#categories" class="gold hover:text-white">Categories</a>
-      <a href="cart.html" class="gold hover:text-white">Cart 🛒</a>
-      <a href="admin.html" class="gold hover:text-white">Admin</a>
-    </div>
-  </nav>
-
-  <!-- Hero Banner -->
-  <section class="w-full bg-cover bg-center h-64 flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1583573636261-c86d8d2e9cf0?auto=format&fit=crop&w=1470&q=80');">
-    <div class="bg-black bg-opacity-60 p-6 rounded-xl text-center">
-      <h2 class="text-4xl font-extrabold gold mb-2">Premium Seafood Delivered Fresh</h2>
-      <p class="text-yellow-300">100% Quality Guaranteed • Packed with Care • Express Delivery</p>
-    </div>
-  </section>
-
-  <!-- Categories -->
-  <section id="categories" class="text-center py-6">
-    <h3 class="text-2xl font-bold mb-4 gold">Shop by Category</h3>
-    <div class="flex flex-wrap justify-center gap-4">
-      <button onclick="filterCategory('All')" class="bg-gold text-black px-4 py-2 rounded hover:bg-yellow-300">All</button>
-      <button onclick="filterCategory('Fish')" class="bg-gold text-black px-4 py-2 rounded hover:bg-yellow-300">Fish</button>
-      <button onclick="filterCategory('Prawns')" class="bg-gold text-black px-4 py-2 rounded hover:bg-yellow-300">Prawns</button>
-      <button onclick="filterCategory('Crab')" class="bg-gold text-black px-4 py-2 rounded hover:bg-yellow-300">Crab</button>
-    </div>
-  </section>
-
-  <!-- Product Grid -->
-  <section id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6"></section>
-
-  <script>
-    const productGrid = document.getElementById("product-grid");
-    const products = JSON.parse(localStorage.getItem("products")) || [
-      { name: "King Fish", price: 600, img: "https://via.placeholder.com/300x200", category: "Fish" },
-      { name: "Tiger Prawns", price: 700, img: "https://via.placeholder.com/300x200", category: "Prawns" },
-      { name: "Mud Crab", price: 750, img: "https://via.placeholder.com/300x200", category: "Crab" },
-      { name: "Salmon Fillet", price: 650, img: "https://via.placeholder.com/300x200", category: "Fish" },
-      { name: "White Prawns", price: 550, img: "https://via.placeholder.com/300x200", category: "Prawns" },
-      { name: "Soft Shell Crab", price: 800, img: "https://via.placeholder.com/300x200", category: "Crab" }
-    ];
-
-    function renderProducts(filter = "All") {
-      productGrid.innerHTML = "";
-      const filtered = filter === "All" ? products : products.filter(p => p.category === filter);
-      filtered.forEach(product => {
-        productGrid.innerHTML += `
-          <div class="bg-yellow-900 p-4 rounded-2xl shadow-lg text-white transition-transform transform hover:scale-105">
-            <img src="${product.img}" alt="${product.name}" class="rounded-lg mb-3 h-40 w-full object-cover">
-            <h3 class="text-xl font-semibold">${product.name}</h3>
-            <p class="mb-2">₹${product.price} / 500g</p>
-            <select id="qty-${product.name}" class="text-black px-2 py-1 rounded mb-2 w-full">
-              <option value="500g">500g</option>
-              <option value="1kg">1kg</option>
-              <option value="2kg">2kg</option>
-            </select>
-            <button onclick="addToCart('${product.name}', ${product.price}, document.getElementById('qty-${product.name}').value)" class="bg-gold text-black px-4 py-2 rounded hover:bg-yellow-300 w-full">Add to Cart</button>
-          </div>
-        `;
-      });
-    }
-
-    function filterCategory(category) {
-      renderProducts(category);
-    }
-
-    function addToCart(name, basePrice, qty) {
-      let multiplier = 1;
-      if (qty === "1kg") multiplier = 2;
-      if (qty === "2kg") multiplier = 4;
-      const price = basePrice * multiplier;
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ name: name + " (" + qty + ")", price });
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert(`${name} (${qty}) added to cart!`);
-    }
-
-    // Initial render
-    renderProducts();
-  </script>
+<body>
+  <h1>SEA FOOD KINGS</h1>
+  <p>Website under construction 🛠️</p>
+  <p>To serve you fresh, we're preparing something amazing!</p>
+  <svg class="fish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
+    <path d="M58,32c-4-6-12-10-20-10c-6,0-11,3-15,7c-2-1-4-2-6-2c-5,0-9,4-9,9s4,9,9,9c2,0,4-1,6-2c4,4,9,7,15,7C46,42,54,38,58,32z" />
+    <circle cx="44" cy="30" r="2" fill="#000"/>
+  </svg>
 </body>
 </html>
