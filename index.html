@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +22,41 @@
     .gold-btn:hover {
       background-color: #e6c200;
       transform: scale(1.05);
+    }
+    .navbar {
+      background-color: #0a0a0a;
+      padding: 1rem 1.5rem;
+      border-bottom: 2px solid #FFD700;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar h1 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #FFD700;
+      display: flex;
+      align-items: center;
+    }
+    .navbar img {
+      height: 35px;
+      margin-right: 10px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.2rem;
+    }
+    .nav-links a {
+      color: #FFD700;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: #e6c200;
     }
     .scrolling-wrapper {
       display: flex;
@@ -70,12 +104,16 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="flex justify-between items-center bg-black p-4 border-b border-yellow-500">
-    <div class="flex items-center gap-3">
-      <img src="logo.png" class="h-10" />
-      <h1 class="text-xl font-bold text-yellow-300">SEA FOOD KINGS</h1>
+  <nav class="navbar">
+    <h1><img src="logo.png" alt="Logo">SEA FOOD KINGS</h1>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#products">Products</a>
+      <a href="#">Offers</a>
+      <a href="#">My Orders</a>
+      <a href="cart.html">Cart</a>
+      <a href="#">Contact</a>
     </div>
-    <a href="cart.html" class="gold-btn">🛒 Cart</a>
   </nav>
 
   <!-- Header -->
@@ -85,11 +123,10 @@
   </header>
 
   <!-- Product Cards -->
-  <div class="scrolling-wrapper" id="productList"></div>
+  <div id="products" class="scrolling-wrapper" id="productList"></div>
 
-  <script src="products.js"></script>
   <script>
-    const productList = document.getElementById('productList');
+    const productList = document.getElementById('products');
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function addToCart(product, qty) {
