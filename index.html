@@ -3,71 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel - SEA FOOD KINGS</title>
+  <title>SEA FOOD KINGS</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-black text-yellow-400">
   <!-- Navbar -->
   <nav class="flex justify-between items-center p-4 border-b border-yellow-400">
-    <h1 class="text-2xl font-bold">SEA FOOD KINGS Admin</h1>
-    <a href="index.html" class="text-yellow-300 hover:text-white">⬅ Back to Site</a>
+    <h1 class="text-2xl font-bold">SEA FOOD KINGS</h1>
+    <div>
+      <a href="admin.html" class="mr-4 text-yellow-300 hover:text-white">Admin</a>
+      <a href="cart.html" class="text-yellow-300 hover:text-white">🛒 Cart</a>
+    </div>
   </nav>
 
-  <!-- Admin Section -->
-  <section class="p-4">
-    <h2 class="text-2xl font-bold mb-4">📦 Manage Products</h2>
-
-    <!-- Add Product -->
-    <div class="bg-yellow-900 p-4 rounded-xl mb-6">
-      <h3 class="text-xl mb-2">➕ Add New Product</h3>
-      <input id="pname" placeholder="Name" class="text-black px-2 py-1 rounded mb-2 w-full"/><br/>
-      <input id="pprice" placeholder="Price (₹)" type="number" class="text-black px-2 py-1 rounded mb-2 w-full"/><br/>
-      <input id="pimg" placeholder="Image URL" class="text-black px-2 py-1 rounded mb-2 w-full"/><br/>
-      <button onclick="addProduct()" class="bg-yellow-500 text-black px-4 py-2 rounded">Add Product</button>
-    </div>
-
-    <!-- Product List -->
-    <div>
-      <h3 class="text-xl mb-2">📋 Product List</h3>
-      <div id="product-list" class="space-y-3"></div>
-    </div>
+  <!-- Hero Banner -->
+  <section class="text-center py-10">
+    <h2 class="text-4xl font-extrabold mb-2">Fresh & Premium Seafood</h2>
+    <p class="text-yellow-300">Order Now - Delivered to Your Doorstep</p>
   </section>
 
+  <!-- Product Grid -->
+  <section id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4"></section>
+
   <script>
-    let products = JSON.parse(localStorage.getItem("products")) || [];
+    const productGrid = document.getElementById("product-grid");
+    const products = JSON.parse(localStorage.getItem("products")) || [
+      { name: "Fresh Salmon", price: 500, img: "https://via.placeholder.com/300x200" },
+      { name: "Sea Crab", price: 600, img: "https://via.placeholder.com/300x200" },
+      { name: "Tiger Prawns", price: 700, img: "https://via.placeholder.com/300x200" }
+    ];
 
-    function addProduct() {
-      const name = document.getElementById("pname").value;
-      const price = parseInt(document.getElementById("pprice").value);
-      const img = document.getElementById("pimg").value;
-      if (!name || !price || !img) return alert("Fill all fields!");
-      products.push({ name, price, img });
-      localStorage.setItem("products", JSON.stringify(products));
-      renderProducts();
-      document.getElementById("pname").value = "";
-      document.getElementById("pprice").value = "";
-      document.getElementById("pimg").value = "";
+    function addToCart(name, price) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push({ name, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(name + " added to cart!");
     }
 
-    function deleteProduct(index) {
-      products.splice(index, 1);
-      localStorage.setItem("products", JSON.stringify(products));
-      renderProducts();
-    }
-
-    function renderProducts() {
-      const list = document.getElementById("product-list");
-      list.innerHTML = "";
-      products.forEach((p, i) => {
-        list.innerHTML += `<div class='bg-yellow-800 p-3 rounded-lg'>
-          <strong>${p.name}</strong> - ₹${p.price}<br/>
-          <img src='${p.img}' class='w-32 my-2'/><br/>
-          <button onclick='deleteProduct(${i})' class='text-red-400'>🗑 Delete</button>
-        </div>`;
-      });
-    }
-
-    renderProducts();
+    products.forEach(product => {
+      productGrid.innerHTML += `
+        <div class="bg-yellow-900 p-4 rounded-xl shadow-lg text-white">
+          <img src="${product.img}" alt="${product.name}" class="rounded mb-2">
+          <h3 class="text-xl font-bold">${product.name}</h3>
+          <p>₹${product.price} / 500g</p>
+          <button onclick="addToCart('${product.name}', ${product.price})" class="mt-2 bg-yellow-500 text-black px-4 py-1 rounded hover:bg-yellow-300">Add to Cart</button>
+        </div>
+      `;
+    });
   </script>
 </body>
 </html>
