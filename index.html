@@ -1,11 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 />
   <title>Sea Food Kings</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/poppins@1.5.0/dist/font.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.com/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -27,7 +27,7 @@
   <!-- Navbar -->
   <nav class="bg-black border-b border-yellow-600 p-4 flex justify-between items-center">
     <div class="flex items-center gap-3">
-      <img src="logo.png" alt="logo" class="h-10">
+      <img src="./images/logo.png" alt="logo" class="h-10">
       <h1 class="text-xl font-bold">SEA FOOD KINGS</h1>
     </div>
     <a href="cart.html" class="gold-btn px-4 py-2 rounded">🛒 Cart</a>
@@ -62,17 +62,20 @@
     }
 
     products.forEach(product => {
+      // Create a new card element
+      const card = document.createElement('div');
+      card.className = 'bg-gray-800 p-4 rounded-lg';
       card.innerHTML = `
-  <img src="${product.image}" alt="${product.name}" class="w-full h-32 object-cover rounded-md mb-2">
-  <h3 class="text-lg font-semibold">${product.name}</h3>
-  <p class="text-sm text-yellow-200">₹${product.basePrice}/kg</p>
-  <select class="mt-2 px-2 py-1 rounded text-black bg-white qty-select">
-    <option value="250g">250g</option>
-    <option value="500g" selected>500g</option>
-    <option value="1kg">1kg</option>
-  </select>
-  <button class="mt-3 px-4 py-1 rounded gold-btn add-btn">Add to Cart</button>
-`;
+        <img src="./images/${product.image}" alt="${product.name}" class="w-full h-32 object-cover rounded-md mb-2">
+        <h3 class="text-lg font-semibold">${product.name}</h3>
+        <p class="text-sm text-yellow-200">₹${product.basePrice}/kg</p>
+        <select class="mt-2 px-2 py-1 rounded text-black bg-white qty-select">
+          <option value="250g">250g</option>
+          <option value="500g" selected>500g</option>
+          <option value="1kg">1kg</option>
+        </select>
+        <button class="mt-3 px-4 py-1 rounded gold-btn add-btn">Add to Cart</button>
+      `;
       const qtySelect = card.querySelector('.qty-select');
       const addBtn = card.querySelector('.add-btn');
       addBtn.addEventListener('click', () => addToCart(product, qtySelect.value));
