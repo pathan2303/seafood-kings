@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SEA FOOD KINGS - Coming Soon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      background-color: #000;
+      background: #1a1a1a; /* Deep black for premium feel */
       color: #FFD700;
       font-family: 'Poppins', sans-serif;
       display: flex;
@@ -18,36 +18,189 @@
       height: 100vh;
       text-align: center;
       overflow: hidden;
+      position: relative;
     }
+
+    /* Subtle golden gradient overlay for depth */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255, 215, 0, 0.05), rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+      z-index: 1;
+    }
+
+    /* Subtle water-like background with minimal wave animation */
+    .water-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.2),
+        rgba(50, 50, 50, 0.3)
+      );
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .wave {
+      position: absolute;
+      bottom: 0;
+      width: 200%;
+      height: 80px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="rgba(255,215,0,0.1)" d="M0,0 C280,80 720,80 1440,0 L1440,100 L0,100 Z"/></svg>');
+      animation: wave 10s linear infinite;
+      opacity: 0.3;
+    }
+
+    .wave:nth-child(2) {
+      bottom: 10px;
+      opacity: 0.2;
+      animation-duration: 12s;
+    }
+
+    @keyframes wave {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Content container */
+    .content {
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Premium golden text with shine effect */
     h1 {
       font-family: 'Pacifico', cursive;
-      font-size: 3rem;
+      font-size: 4.5rem;
       margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, #FFD700, #DAA520, #FFD700);
+      background-size: 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 4s linear infinite;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 215, 0, 0.3);
     }
+
+    @keyframes shine {
+      0% { background-position: 0%; }
+      100% { background-position: 200%; }
+    }
+
     p {
-      font-size: 1.2rem;
-      color: #ffecb3;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #E6B800;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+      letter-spacing: 0.5px;
     }
+
+    /* Fish animation */
+    .fish-container {
+      position: absolute;
+      bottom: 15%;
+      width: 100%;
+      height: 150px;
+      overflow: hidden;
+      z-index: 3;
+    }
+
     .fish {
-      width: 100px;
-      height: 100px;
-      margin-top: 30px;
-      animation: swim 5s infinite linear;
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      left: -100px;
+      animation: swim-cook-serve 10s infinite linear;
+      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
     }
-    @keyframes swim {
-      0%   { transform: translateX(-150%) rotate(0deg); }
-      50%  { transform: translateX(50%) rotate(5deg); }
-      100% { transform: translateX(150%) rotate(0deg); }
+
+    @keyframes swim-cook-serve {
+      0% {
+        transform: translateX(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      30% {
+        transform: translateX(40vw) rotate(5deg);
+        opacity: 1;
+      }
+      40% {
+        transform: translateX(50vw) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateX(50vw) rotate(0deg) scale(1.2);
+        opacity: 0.5;
+      }
+      60% {
+        transform: translateX(50vw) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+      80% {
+        transform: translateX(80vw) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(100vw) rotate(0deg);
+        opacity: 0;
+      }
+    }
+
+    /* Cooked fish on plate */
+    .cooked-fish {
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      left: 50vw;
+      bottom: 10%;
+      opacity: 0;
+      animation: appear-on-plate 10s infinite linear;
+      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    }
+
+    @keyframes appear-on-plate {
+      0%, 50% { opacity: 0; }
+      60% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h1 { font-size: 3rem; }
+      p { font-size: 1.1rem; }
+      .fish, .cooked-fish { width: 60px; height: 60px; }
+      .fish-container { bottom: 10%; }
     }
   </style>
 </head>
 <body>
-  <h1>SEA FOOD KINGS</h1>
-  <p>Website under construction 🛠️</p>
-  <p>To serve you fresh, we're preparing something amazing!</p>
-  <svg class="fish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
-    <path d="M58,32c-4-6-12-10-20-10c-6,0-11,3-15,7c-2-1-4-2-6-2c-5,0-9,4-9,9s4,9,9,9c2,0,4-1,6-2c4,4,9,7,15,7C46,42,54,38,58,32z" />
-    <circle cx="44" cy="30" r="2" fill="#000"/>
-  </svg>
+  <div class="overlay"></div>
+  <div class="water-bg">
+    <div class="wave"></div>
+    <div class="wave"></div>
+  </div>
+  <div class="content">
+    <h1>SEA FOOD KINGS</h1>
+    <p>Website under construction 🛠️</p>
+    <p>Preparing a premium seafood experience!</p>
+  </div>
+  <div class="fish-container">
+    <svg class="fish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
+      <path d="M58,32c-4-6-12-10-20-10c-6,0-11,3-15,7c-2-1-4-2-6-2c-5,0-9,4-9,9s4,9,9,9c2,0,4-1,6-2c4,4,9,7,15,7C46,42,54,38,58,32z" />
+      <circle cx="44" cy="30" r="2" fill="#000"/>
+    </svg>
+    <svg class="cooked-fish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#DAA520">
+      <path d="M10,40h44v8H10z" fill="#FFF" /> <!-- Plate -->
+      <path d="M20,36c-4-2-8-2-12,0c0,4,4,8,8,8s8-4,8-8z" fill="#DAA520" /> <!-- Cooked fish -->
+      <path d="M28,36c-4-2-8-2-12,0c0,4,4,8,8,8s8-4,8-8z" fill="#DAA520" />
+      <path d="M36,36c-4-2-8-2-12,0c0,4,4,8,8,8s8-4,8-8z" fill="#DAA520" />
+    </svg>
+  </div>
 </body>
 </html>
