@@ -1,66 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cart - SEA FOOD KINGS</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - SEA FOOD KINGS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .gold { color: #FFD700; }
+    .bg-gold { background-color: #FFD700; }
+  </style>
 </head>
-<body class="bg-black text-yellow-400">
+<body class="bg-black text-white min-h-screen">
   <!-- Navbar -->
-  <nav class="flex justify-between items-center p-4 border-b border-yellow-400">
-    <h1 class="text-2xl font-bold">SEA FOOD KINGS</h1>
-    <a href="index.html" class="text-yellow-300 hover:text-white">⬅ Back to Shop</a>
+  <nav class="flex justify-between items-center px-6 py-4 border-b border-yellow-500 bg-black">
+    <div class="flex items-center space-x-4">
+      <img src="logo.png" alt="Logo" class="h-12 w-auto object-contain">
+      <h1 class="text-2xl font-bold gold">SEA FOOD KINGS</h1>
+    </div>
+    <a href="index.html" class="gold hover:text-white">← Back to Shop</a>
   </nav>
 
   <!-- Cart Section -->
-  <section class="p-4">
-    <h2 class="text-2xl font-bold mb-4">🛒 Your Cart</h2>
-    <div id="cart-items" class="mb-4 space-y-2"></div>
+  <section class="p-6 max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold gold mb-4">🛒 Your Cart</h2>
+    <div id="cartItems" class="space-y-4"></div>
 
-    <!-- Coupon Section -->
-    <div class="mb-4">
-      <input type="text" id="coupon" placeholder="Enter Coupon Code" class="text-black px-2 py-1 rounded"/>
-      <button onclick="applyCoupon()" class="bg-yellow-500 text-black px-3 py-1 rounded ml-2">Apply</button>
-      <p id="discount-msg" class="text-green-400 mt-2"></p>
+    <div class="mt-6 text-right">
+      <p class="text-xl font-semibold">Total: ₹<span id="cartTotal">0</span></p>
     </div>
 
-    <!-- Payment Method -->
-    <div class="mb-4">
-      <p class="font-bold">Choose Payment:</p>
-      <label class="block mt-2">
-        <input type="radio" name="payment" value="cod" checked> Cash on Delivery (COD)
-      </label>
-      <label class="block">
-        <input type="radio" name="payment" value="gpay"> Google Pay (scan QR below)
-      </label>
-      <img src="https://via.placeholder.com/200x200?text=Google+Pay+QR" alt="GPay QR" class="mt-2 w-40">
+    <!-- Checkout Form -->
+    <div class="mt-10 p-6 bg-yellow-900 rounded-xl">
+      <h3 class="text-xl font-bold mb-4">🧾 Checkout Details</h3>
+      <form id="checkoutForm" class="space-y-4">
+        <input type="text" id="name" placeholder="Full Name" class="w-full px-4 py-2 rounded text-black" required>
+        <input type="tel" id="phone" placeholder="Phone Number" class="w-full px-4 py-2 rounded text-black" required>
+        <textarea id="address" placeholder="Delivery Address" rows="3" class="w-full px-4 py-2 rounded text-black" required></textarea>
+        <textarea id="note" placeholder="Optional Note (e.g. No ice, doorbell broken...)" rows="2" class="w-full px-4 py-2 rounded text-black"></textarea>
+
+        <div class="flex gap-4 pt-4">
+          <button type="submit" class="bg-gold text-black font-bold px-6 py-2 rounded hover:bg-yellow-400">📦 Place Order</button>
+          <button type="button" onclick="orderOnWhatsApp()" class="border border-yellow-500 px-6 py-2 rounded text-yellow-400 hover:bg-yellow-700">💬 Order on WhatsApp</button>
+        </div>
+      </form>
     </div>
-
-    <!-- Total -->
-    <p class="text-xl font-bold mb-4">Total: ₹<span id="total">0</span></p>
-
-    <!-- WhatsApp Order Button -->
-    <button onclick="placeOrder()" class="bg-green-500 text-black px-4 py-2 rounded">📲 Place Order on WhatsApp</button>
   </section>
 
   <script>
+    const cartItemsContainer = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let total = 0;
-    let discount = 0;
-    let discountCode = "";
 
     function renderCart() {
-      const cartDiv = document.getElementById("cart-items");
-      cartDiv.innerHTML = "";
-      total = 0;
+      cartItemsContainer.innerHTML = "";
+      let total = 0;
       cart.forEach((item, index) => {
         total += item.price;
-        cartDiv.innerHTML += `<div>
-          • ${item.name} - ₹${item.price} <button onclick="removeItem(${index})" class="text-red-500 ml-2">x</button>
-        </div>`;
+        cartItemsContainer.innerHTML += `
+          <div class="flex justify-between items-center bg-yellow-800 px-4 py-3 rounded-xl">
+            <div>
+              <p class="text-lg font-semibold">${item.name}</p>
+              <p class="text-sm">₹${item.price}</p>
+            </div>
+            <button onclick="removeItem(${index})" class="text-red-400 hover:text-red-200">Remove</button>
+          </div>
+        `;
       });
-      document.getElementById("total").innerText = total - discount;
+      cartTotal.textContent = total;
     }
 
     function removeItem(index) {
@@ -69,33 +77,34 @@
       renderCart();
     }
 
-    function applyCoupon() {
-      const code = document.getElementById("coupon").value.trim();
-      if (code === "SEA10") {
-        discount = total * 0.10;
-        discountCode = code;
-        document.getElementById("discount-msg").innerText = `Coupon Applied: ₹${discount} off!`;
-      } else {
-        discount = 0;
-        discountCode = "";
-        document.getElementById("discount-msg").innerText = `Invalid coupon.`;
+    function orderOnWhatsApp() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const note = document.getElementById("note").value.trim();
+
+      if (!name || !phone || !address) {
+        alert("Please fill all required fields");
+        return;
       }
-      document.getElementById("total").innerText = total - discount;
-    }
 
-    function placeOrder() {
-      const payment = document.querySelector("input[name='payment']:checked").value;
-      let message = "Hello SEA FOOD KINGS,%0aI want to order:%0a";
+      let message = `Hi! I'd like to place an order.%0A\nName: ${name}%0AContact: ${phone}%0AAddress: ${address}%0A`;
+      if (note) message += `%0ANote: ${note}`;
+      message += `%0A%0AOrder Details:%0A`;
       cart.forEach(item => {
-        message += `- ${item.name} - ₹${item.price}%0a`;
+        message += `- ${item.name} - ₹${item.price}%0A`;
       });
-      if (discountCode) message += `Coupon: ${discountCode} (-₹${discount})%0a`;
-      message += `Payment Mode: ${payment === "cod" ? "Cash on Delivery" : "Google Pay"}%0a`;
-      message += `Total: ₹${total - discount}`;
+      message += `%0ATotal: ₹${cart.reduce((t, i) => t + i.price, 0)}`;
 
-      const phone = "919152299833"; // e.g. 91XXXXXXXXXX
-      window.location.href = `https://wa.me/${phone}?text=${message}`;
+      window.open(`https://wa.me/919152299833?text=${message}`, '_blank');
     }
+
+    document.getElementById("checkoutForm").addEventListener("submit", e => {
+      e.preventDefault();
+      alert("✅ Order placed successfully!\nWe will contact you soon.");
+      localStorage.removeItem("cart");
+      window.location.href = "index.html";
+    });
 
     renderCart();
   </script>
