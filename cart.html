@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Your Cart - SEA FOOD KINGS</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -42,7 +43,6 @@
 
         <div class="flex gap-4 pt-4">
           <button type="submit" class="bg-gold text-black font-bold px-6 py-2 rounded hover:bg-yellow-400">📦 Place Order</button>
-          <button type="button" onclick="orderOnWhatsApp()" class="border border-yellow-500 px-6 py-2 rounded text-yellow-400 hover:bg-yellow-700">💬 Order on WhatsApp</button>
         </div>
       </form>
     </div>
@@ -77,42 +77,37 @@
       renderCart();
     }
 
-    function orderOnWhatsApp() {
-      const message = buildOrderMessage();
-      window.open(`https://wa.me/919152299833?text=${message}`, '_blank');
-    }
+    document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    function buildOrderMessage() {
       const name = document.getElementById("name").value.trim();
       const phone = document.getElementById("phone").value.trim();
       const address = document.getElementById("address").value.trim();
       const note = document.getElementById("note").value.trim();
+      const items = cart.map(item => item.name + ' - ₹' + item.price).join(", ");
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-      if (!name || !phone || !address) {
-        alert("Please fill all required fields");
-        throw new Error("Missing required fields");
-      }
+      const payload = { name, phone, address, note, items, total };
 
-      let message = `Hi! I'd like to place an order.%0A\nName: ${name}%0AContact: ${phone}%0AAddress: ${address}`;
-      if (note) message += `%0ANote: ${note}`;
-      message += `%0A%0AOrder Details:%0A`;
-      cart.forEach(item => {
-        message += `- ${item.name} - ₹${item.price}%0A`;
-      });
-      message += `%0ATotal: ₹${cart.reduce((t, i) => t + i.price, 0)}`;
-      return encodeURIComponent(message);
-    }
-
-    document.getElementById("checkoutForm").addEventListener("submit", e => {
-      e.preventDefault();
       try {
-        const message = buildOrderMessage();
-        window.open(`https://wa.me/919152299833?text=${message}`, '_blank');
-        alert("✅ Order placed successfully!\nWe will contact you soon.");
-        localStorage.removeItem("cart");
-        window.location.href = "index.html";
+        const res = await fetch("https://script.google.com/macros/s/AKfycbyoIVSNkcCy7rPUubByik6izwgZo5N4Y0mGekL2N6I/exec", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res.ok) {
+          alert("✅ Order placed successfully! We’ll contact you shortly.");
+          localStorage.removeItem("cart");
+          window.location.href = "index.html";
+        } else {
+          alert("❌ Failed to place order. Please try again.");
+        }
       } catch (error) {
-        console.warn("Order not sent", error);
+        console.error("Error placing order:", error);
+        alert("❌ Error occurred while placing order.");
       }
     });
 
