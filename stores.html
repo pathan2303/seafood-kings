@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sea Food Kings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #111);
+      color: #e8c175;
+    }
+
+    .logo-banner {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    header {
+      text-align: center;
+      padding: 1rem 2rem 0;
+      position: relative;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem;
+      padding: 1rem 2rem 0;
+    }
+
+    .nav-links a {
+      color: #e8c175;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff2cc;
+    }
+
+    header h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      margin: 0.5rem 0 0.3rem;
+      color: #e8c175;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: #d1b67c;
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-right {
+      position: absolute;
+      right: 2rem;
+      top: 1rem;
+    }
+
+    .cart-btn {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      position: relative;
+      font-size: 0.9rem;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -12px;
+      background-color: #e8c175;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.75rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 2rem;
+      background: linear-gradient(to right, #0d0d0d, #1a1a1a);
+    }
+
+    .product-card {
+      background-color: #1b1b1b;
+      border: 1px solid #e8c175;
+      border-radius: 10px;
+      padding: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .product-card h3 {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      color: #e8c175;
+    }
+
+    .product-card p {
+      font-size: 0.9rem;
+    }
+
+    .qty-input {
+      width: 100%;
+      padding: 0.4rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #e8c175;
+    }
+
+    .add-btn {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      font-weight: bold;
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background-color: #d1b67c;
+    }
+
+    @media (max-width: 640px) {
+      .product-container {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-right {
+        position: static;
+        transform: none;
+        margin-top: 0.5rem;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img src="octo.png" alt="Sea Food Kings Banner" class="logo-banner">
+
+  <header>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="cart.html">Cart</a>
+      <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
+    </div>
+
+    <h2>Premium Seafood, Delivered Fresh</h2>
+    <p>Choose your quantity & enjoy seafood royalty at your doorstep</p>
+    <div class="cart-right">
+      <a href="cart.html" class="cart-btn">🛒 View Cart <span id="cartCount2" class="cart-count">0</span></a>
+    </div>
+  </header>
+
+  <div class="product-container" id="productList">
+    <!-- Product cards will be inserted here -->
+  </div>
+
+  <script src="products.js"></script>
+  <script>
+    const productList = document.getElementById("productList");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function updateCartCount() {
+      const count = cart.length;
+      document.getElementById("cartCount2").textContent = count;
+    }
+
+    function addToCart(product, qty) {
+      const item = {
+        name: `${product.name} (${qty}kg)`,
+        price: Math.round(product.basePrice * qty)
+      };
+      cart.push(item);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      alert("✅ Added to cart!");
+    }
+
+    updateCartCount();
+
+    if (typeof products !== 'undefined' && Array.isArray(products)) {
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>₹${product.basePrice}/kg</p>
+          <input type="number" step="0.25" min="1" class="qty-input" value="1">
+          <button class="add-btn">Add to Cart</button>
+        `;
+        const qtyInput = card.querySelector(".qty-input");
+        const addBtn = card.querySelector(".add-btn");
+        addBtn.addEventListener("click", () => addToCart(product, parseFloat(qtyInput.value)));
+        productList.appendChild(card);
+      });
+    } else {
+      productList.innerHTML = "<p style='color: red;'>Product list not loaded.</p>";
+    }
+  </script>
+</body>
+</html>
