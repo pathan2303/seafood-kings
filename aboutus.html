@@ -18,7 +18,6 @@
       background-color: #111;
       padding: 1rem 2rem;
       display: flex;
-      justify-content: center;
       align-items: center;
       border-bottom: 2px solid #FFD700;
       position: relative;
@@ -27,7 +26,7 @@
     .navbar .brand {
       display: flex;
       align-items: center;
-      text-align: center;
+      width: 100%;
     }
 
     .logo {
@@ -40,26 +39,20 @@
       font-family: 'Cinzel', serif;
       font-size: 1.8rem;
       color: #FFD700;
-      margin: 0;
+      margin: 0 auto;
       font-weight: 700;
       text-transform: uppercase;
-      display: inline-block;
+      display: flex;
+      justify-content: center;
+      width: 100%;
       position: relative;
-      transition: transform 0.3s ease;
-    }
-
-    .navbar h1:hover {
-      animation: smoothJump 1.5s ease-in-out infinite;
-    }
-
-    @keyframes smoothJump {
-      0% { transform: translateY(0) rotateX(0deg); }
-      50% { transform: translateY(-15px) rotateX(15deg); }
-      100% { transform: translateY(0) rotateX(0deg); }
+      z-index: 1;
     }
 
     .navbar h1 span {
       display: inline-block;
+      margin: 0 2px;
+      transform-origin: bottom;
       transition: transform 0.3s ease;
     }
 
@@ -68,19 +61,43 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 0;
+      font-size: 30px;
       cursor: pointer;
+      opacity: 0;
+      z-index: 0;
     }
 
-    .fish-trigger:hover ~ h1 span {
-      animation: tiltBounce 0.5s ease forwards;
+    .navbar:hover .fish-trigger {
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
     }
 
-    @keyframes tiltBounce {
-      0% { transform: translateZ(0) rotateX(0deg); }
-      50% { transform: translateZ(10px) rotateX(20deg) scale(1.1); }
-      100% { transform: translateZ(0) rotateX(0deg) scale(1); }
+    .navbar:hover .fish-trigger:hover ~ h1 span {
+      animation: elasticBounce 1s ease-out backwards;
     }
+
+    @keyframes elasticBounce {
+      0% { transform: scaleY(0.3); }
+      25% { transform: scaleY(1.1); }
+      40% { transform: scaleY(0.9); }
+      60% { transform: scaleY(1.05); }
+      80% { transform: scaleY(0.95); }
+      100% { transform: scaleY(1); }
+    }
+
+    .navbar h1 span:nth-child(1) { animation-delay: 0s; }
+    .navbar h1 span:nth-child(2) { animation-delay: 0.1s; }
+    .navbar h1 span:nth-child(3) { animation-delay: 0.2s; }
+    .navbar h1 span:nth-child(4) { animation-delay: 0.3s; }
+    .navbar h1 span:nth-child(5) { animation-delay: 0.4s; }
+    .navbar h1 span:nth-child(6) { animation-delay: 0.5s; }
+    .navbar h1 span:nth-child(7) { animation-delay: 0.6s; }
+    .navbar h1 span:nth-child(8) { animation-delay: 0.7s; }
+    .navbar h1 span:nth-child(9) { animation-delay: 0.8s; }
+    .navbar h1 span:nth-child(10) { animation-delay: 0.9s; }
+    .navbar h1 span:nth-child(11) { animation-delay: 1.0s; }
+    .navbar h1 span:nth-child(12) { animation-delay: 1.1s; }
+    .navbar h1 span:nth-child(13) { animation-delay: 1.2s; }
 
     .cart-btn {
       background-color: #FFD700;
@@ -204,7 +221,7 @@
   <nav class="navbar">
     <div class="brand">
       <img src="logo.png" alt="Sea Food Kings Logo" class="logo">
-      <h1>SEA FOOD KINGS<span style="display:none;">🐟</span></h1>
+      <h1><span>S</span><span>E</span><span>A</span><span> </span><span>F</span><span>O</span><span>O</span><span>D</span><span> </span><span>K</span><span>I</span><span>N</span><span>G</span><span>S</span></h1>
       <div class="fish-trigger">🐟</div>
     </div>
     <a href="cart.html" class="cart-btn">🛒 Cart</a>
