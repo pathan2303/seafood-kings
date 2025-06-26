@@ -1,219 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SEA FOOD KINGS - Coming Soon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sea Food Kings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      background: #1a1a1a;
-      color: #FFD700;
       font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+    }
+
+    .navbar {
+      background-color: #111;
+      padding: 1rem 2rem;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      border-bottom: 2px solid #FFD700;
+    }
+
+    .navbar h1 {
+      font-size: 1.5rem;
+      color: #FFD700;
+    }
+
+    .cart-btn {
+      background-color: #FFD700;
+      padding: 0.5rem 1rem;
+      color: #000;
+      font-weight: bold;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .cart-btn:hover {
+      background-color: #e6c200;
+    }
+
+    header {
       text-align: center;
-      overflow: hidden;
-      position: relative;
+      padding: 2rem 1rem;
+      border-bottom: 1px solid #FFD700;
     }
 
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, rgba(255, 215, 0, 0.05), rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
-      z-index: 1;
+    header h2 {
+      color: #FFD700;
+      font-size: 2rem;
     }
 
-    .water-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.2),
-        rgba(50, 50, 50, 0.3)
-      );
-      z-index: 2;
-      overflow: hidden;
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 2rem;
     }
 
-    .wave {
-      position: absolute;
-      bottom: 0;
-      width: 200%;
-      height: 80px;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="rgba(255,215,0,0.1)" d="M0,0 C280,80 720,80 1440,0 L1440,100 L0,100 Z"/></svg>');
-      animation: wave 10s linear infinite;
-      opacity: 0.3;
+    .product-card {
+      background-color: #1a1a1a;
+      border: 1px solid #FFD700;
+      border-radius: 10px;
+      padding: 1rem;
+      transition: transform 0.3s ease;
     }
 
-    .wave:nth-child(2) {
-      bottom: 10px;
-      opacity: 0.2;
-      animation-duration: 12s;
+    .product-card:hover {
+      transform: translateY(-5px);
     }
 
-    @keyframes wave {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .content {
-      position: relative;
-      z-index: 3;
-    }
-
-    .workers-container {
-      position: absolute;
-      top: 10%;
-      width: 100%;
-      height: 100px;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      z-index: 3;
-    }
-
-    .worker {
-      width: 60px;
-      height: 60px;
-    }
-
-    .worker .hammer-arm {
-      transform-origin: center;
-      animation: hammer 1s ease-in-out infinite;
-    }
-
-    .worker:nth-child(2) .hammer-arm {
-      animation-delay: 0.5s;
-    }
-
-    @keyframes hammer {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(-45deg); }
-    }
-
-    h1 {
-      font-family: 'Pacifico', cursive;
-      font-size: 4.5rem;
-      margin-bottom: 0.5rem;
-      margin-top: 80px;
-      background: linear-gradient(45deg, #FFD700, #DAA520, #FFD700);
-      background-size: 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shine 4s linear infinite;
-      text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 215, 0, 0.3);
-    }
-
-    @keyframes shine {
-      0% { background-position: 0%; }
-      100% { background-position: 200%; }
-    }
-
-    p {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #E6B800;
-      text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-      letter-spacing: 0.5px;
-    }
-
-    .fish-container {
-      position: absolute;
-      bottom: 15%;
+    .product-card img {
       width: 100%;
       height: 150px;
-      overflow: hidden;
-      z-index: 3;
+      object-fit: cover;
+      border-radius: 5px;
     }
 
-    .fish {
-      width: 60px;
-      height: 60px;
-      position: absolute;
-      left: -100px;
-      animation: swim 6s infinite linear;
-      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    .product-card h3 {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      color: #FFD700;
     }
 
-    .fish:nth-child(2) { animation-delay: 1.5s; }
-    .fish:nth-child(3) { animation-delay: 3s; }
-    .fish:nth-child(4) { animation-delay: 4.5s; }
-
-    @keyframes swim {
-      0% {
-        transform: translateX(-100px) translateY(0) rotate(0deg);
-        opacity: 0.8;
-      }
-      50% {
-        transform: translateX(100vw) translateY(20px) rotate(3deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(200vw) translateY(0) rotate(0deg);
-        opacity: 0.8;
-      }
+    .product-card p {
+      font-size: 0.9rem;
     }
 
-    @media (max-width: 768px) {
-      h1 { font-size: 3rem; margin-top: 60px; }
-      p { font-size: 1.1rem; }
-      .fish, .worker { width: 50px; height: 50px; }
-      .fish-container { bottom: 10%; }
-      .workers-container { top: 5%; gap: 20px; }
+    .qty-input {
+      width: 100%;
+      padding: 0.4rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+    }
+
+    .add-btn {
+      background-color: #FFD700;
+      color: #000;
+      font-weight: bold;
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background-color: #e6c200;
     }
   </style>
 </head>
 <body>
-  <div class="overlay"></div>
-  <div class="water-bg">
-    <div class="wave"></div>
-    <div class="wave"></div>
-  </div>
-  <div class="workers-container">
-    <svg class="worker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
-      <path d="M32,20a8,8,0,1,0-8-8A8,8,0,0,0,32,20Z" /> <!-- Head -->
-      <path d="M36,28H28V44H20V52H44V44H36Z" /> <!-- Body and legs -->
-      <path class="hammer-arm" d="M40,28H36V36H44V32Z" fill="#DAA520" /> <!-- Arm with hammer -->
-    </svg>
-    <svg class="worker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
-      <path d="M32,20a8,8,0,1,0-8-8A8,8,0,0,0,32,20Z" />
-      <path d="M36,28H28V44H20V52H44V44H36Z" />
-      <path class="hammer-arm" d="M40,28H36V36H44V32Z" fill="#DAA520" />
-    </svg>
-  </div>
-  <div class="content">
+  <nav class="navbar">
     <h1>SEA FOOD KINGS</h1>
-    <p>Website under construction 🛠️</p>
-    <p>Preparing a premium seafood experience!</p>
+    <a href="cart.html" class="cart-btn">🛒 Cart</a>
+  </nav>
+
+  <header>
+    <h2>Premium Seafood, Delivered Fresh</h2>
+    <p>Choose quantity, add to cart, and enjoy top-quality seafood</p>
+  </header>
+
+  <div class="product-container" id="productList">
+    <!-- Product cards will be inserted here -->
   </div>
-  <div class="fish-container">
-    <svg class="fish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
-      <path d="M58,32c-4-6-12-10-20-10c-6,0-11,3-15,7c-2-1-4-2-6-2c-5,0-9,4-9,9s4,9,9,9c2,0,4-1,6-2c4,4,9,7,15,7C46,42,54,38,58,32z" />
-      <circle cx="44" cy="30" r="2" fill="#000"/>
-    </svg>
-    <svg class="fish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
-      <path d="M58,32c-4-6-12-10-20-10c-6,0-11,3-15,7c-2-1-4-2-6-2c-5,0-9,4-9,9s4,9,9,9c2,0,4-1,6-2c4,4,9,7,15,7C46,42,54,38,58,32z" />
-      <circle cx="44" cy="30" r="2" fill="#000"/>
-    </svg>
-    <svg class="fish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
-      <path d="M58,32c-4-6-12-10-20-10c-6,0-11,3-15,7c-2-1-4-2-6-2c-5,0-9,4-9,9s4,9,9,9c2,0,4-1,6-2c4,4,9,7,15,7C46,42,54,38,58,32z" />
-      <circle cx="44" cy="30" r="2" fill="#000"/>
-    </svg>
-    <svg class="fish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#FFD700">
-      <path d="M58,32c-4-6-12-10-20-10c-6,0-11,3-15,7c-2-1-4-2-6-2c-5,0-9,4-9,9s4,9,9,9c2,0,4-1,6-2c4,4,9,7,15,7C46,42,54,38,58,32z" />
-      <circle cx="44" cy="30" r="2" fill="#000"/>
-    </svg>
-  </div>
+
+  <script src="products.js"></script>
+  <script>
+    const productList = document.getElementById("productList");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function addToCart(product, qty) {
+      const item = {
+        name: `${product.name} (${qty}kg)`,
+        price: Math.round(product.basePrice * qty)
+      };
+      cart.push(item);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("✅ Added to cart!");
+    }
+
+    if (typeof products !== 'undefined' && Array.isArray(products)) {
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>₹${product.basePrice}/kg</p>
+          <input type="number" step="0.25" min="0.25" class="qty-input" value="1">
+          <button class="add-btn">Add to Cart</button>
+        `;
+        const qtyInput = card.querySelector(".qty-input");
+        const addBtn = card.querySelector(".add-btn");
+        addBtn.addEventListener("click", () => addToCart(product, parseFloat(qtyInput.value)));
+        productList.appendChild(card);
+      });
+    } else {
+      productList.innerHTML = "<p style='color: red;'>Product list not loaded.</p>";
+    }
+  </script>
 </body>
 </html>
