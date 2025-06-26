@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sea Food Kings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -22,16 +22,22 @@
       border-bottom: 2px solid #FFD700;
     }
 
+    .logo {
+      height: 40px; /* Adjusted for a cleaner look */
+      width: auto;
+    }
+
     .navbar h1 {
       font-size: 1.5rem;
       color: #FFD700;
+      margin: 0;
     }
 
     .cart-btn {
       background-color: #FFD700;
       padding: 0.5rem 1rem;
       color: #000;
-      font-weight: bold;
+      font-weight: 500;
       border-radius: 5px;
       text-decoration: none;
       transition: all 0.3s ease;
@@ -39,23 +45,44 @@
 
     .cart-btn:hover {
       background-color: #e6c200;
+      transform: translateY(-2px);
     }
 
-    header {
+    .banner {
+      background: linear-gradient(135deg, #1a1a1a, #000);
+      padding: 3rem 1rem;
       text-align: center;
-      padding: 2rem 1rem;
-      border-bottom: 1px solid #FFD700;
+      border: 2px solid #FFD700;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.2), inset 0 0 15px rgba(255, 215, 0, 0.3);
+      margin: 1rem 0;
+      cursor: pointer;
+      transition: transform 0.3s ease;
     }
 
-    header h2 {
+    .banner:hover {
+      transform: translateY(-5px);
+    }
+
+    .banner h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
       color: #FFD700;
-      font-size: 2rem;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8), 0 0 10px #FFD700;
+      margin-bottom: 0.5rem;
+    }
+
+    .banner p {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #FFD700;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
     }
 
     .product-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
       padding: 2rem;
     }
 
@@ -64,18 +91,23 @@
       border: 1px solid #FFD700;
       border-radius: 10px;
       padding: 1rem;
-      transition: transform 0.3s ease;
+      transition: transform 0.2s ease; /* Reduced animation duration */
     }
 
     .product-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-3px); /* Reduced lift height */
     }
 
     .product-card img {
       width: 100%;
-      height: 150px;
+      height: 120px; /* Reduced height for balance */
       object-fit: cover;
       border-radius: 5px;
+      transition: transform 0.2s ease;
+    }
+
+    .product-card:hover img {
+      transform: scale(1.02); /* Subtle scale effect */
     }
 
     .product-card h3 {
@@ -100,7 +132,7 @@
     .add-btn {
       background-color: #FFD700;
       color: #000;
-      font-weight: bold;
+      font-weight: 500;
       width: 100%;
       padding: 0.5rem;
       margin-top: 0.5rem;
@@ -113,15 +145,24 @@
     .add-btn:hover {
       background-color: #e6c200;
     }
+
+    @media (max-width: 640px) {
+      .banner h2 { font-size: 2rem; }
+      .banner p { font-size: 1rem; }
+      .product-container { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <h1>SEA FOOD KINGS</h1>
+    <div class="flex items-center gap-4">
+      <img src="logo.png" alt="Sea Food Kings Logo" class="logo">
+      <h1>SEA FOOD KINGS</h1>
+    </div>
     <a href="cart.html" class="cart-btn">🛒 Cart</a>
   </nav>
 
-  <header>
+  <header class="banner" onclick="window.location.href='index.html';">
     <h2>Premium Seafood, Delivered Fresh</h2>
     <p>Choose quantity, add to cart, and enjoy top-quality seafood</p>
   </header>
@@ -150,7 +191,7 @@
         const card = document.createElement("div");
         card.className = "product-card";
         card.innerHTML = `
-          <img src="${product.image}" alt="${product.name}">
+          <img src="./images/${product.image}" alt="${product.name}">
           <h3>${product.name}</h3>
           <p>₹${product.basePrice}/kg</p>
           <input type="number" step="0.25" min="0.25" class="qty-input" value="1">
