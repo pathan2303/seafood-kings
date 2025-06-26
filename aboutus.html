@@ -1,130 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sea Food Kings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --gold: #FFD700;
+      --black: #000;
+      --dark: #111;
+      --card-bg: #1a1a1a;
+    }
+
     body {
+      font-family: 'Poppins', sans-serif;
       margin: 0;
-      background-color: #000;
-      color: #FFD700;
-      font-family: 'Cinzel', serif;
+      background-color: var(--black);
+      color: #fff;
     }
 
-    .navbar {
-      background-color: #111;
-      padding: 1rem;
-      border-bottom: 2px solid #FFD700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
+    .header-banner {
+      width: 100%;
+      max-height: 400px;
+      overflow: hidden;
+      background-color: var(--black);
+      border-bottom: 3px solid var(--gold);
     }
 
-    .brand-container {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 80px;
+    .header-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
     }
 
-    .brand-name {
-      font-size: 2.2rem;
-      font-weight: 900;
-      display: flex;
-      gap: 4px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .brand-name span {
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
-
-    .fish {
-      position: absolute;
-      top: -30px;
-      font-size: 1.5rem;
-      animation: swim 6s infinite ease-in-out;
-    }
-
-    @keyframes swim {
-      0%   { left: 0%; transform: translateY(0); }
-      5%   { transform: translateY(-15px); }
-      10%  { transform: translateY(0); }
-      15%  { transform: translateY(-15px); }
-      20%  { transform: translateY(0); }
-      25%  { transform: translateY(-15px); }
-      30%  { transform: translateY(0); }
-      35%  { transform: translateY(-15px); }
-      40%  { transform: translateY(0); }
-      45%  { transform: translateY(-15px); }
-      50%  { transform: translateY(0); }
-      55%  { transform: translateY(-15px); }
-      60%  { transform: translateY(0); }
-      65%  { transform: translateY(-15px); }
-      70%  { transform: translateY(0); }
-      75%  { transform: translateY(-15px); }
-      80%  { transform: translateY(0); }
-      85%  { transform: translateY(-15px); }
-      90%  { transform: translateY(0); }
-      95%  { transform: translateY(-15px); }
-      100% { left: 100%; transform: translateY(0); }
-    }
-
-    header {
+    .tagline {
       text-align: center;
+      background-color: var(--dark);
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--gold);
+    }
+
+    .tagline h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin: 0;
+      font-weight: 600;
+      text-shadow: 1px 1px 3px rgba(255, 215, 0, 0.3);
+    }
+
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
       padding: 2rem;
     }
 
-    header h2 {
-      font-size: 1.5rem;
-      text-shadow: 0 0 5px #FFD700;
+    .product-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      padding: 1rem;
+      transition: transform 0.3s ease;
     }
 
-    header p {
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .product-card h3 {
       font-size: 1rem;
-      color: #ddd;
-      font-family: sans-serif;
+      margin: 0.5rem 0;
+      color: var(--gold);
+    }
+
+    .product-card p {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .qty-input {
+      width: 100%;
+      padding: 0.4rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--gold);
+    }
+
+    .add-btn {
+      background-color: var(--gold);
+      color: #000;
+      font-weight: bold;
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background-color: #e6c200;
+    }
+
+    @media (max-width: 640px) {
+      .tagline h2 { font-size: 1rem; }
+      .product-container { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="brand-container">
-      <div class="fish">🐟</div>
-      <div class="brand-name" id="brandText">
-        <span>S</span><span>E</span><span>A</span><span> </span>
-        <span>F</span><span>O</span><span>O</span><span>D</span><span> </span>
-        <span>K</span><span>I</span><span>N</span><span>G</span><span>S</span>
-      </div>
-    </div>
-  </nav>
+  <div class="header-banner">
+    <img src="octo.png" alt="Sea Food Kings Logo">
+  </div>
 
-  <header>
-    <h2>Royal Seafood, Delivered Fresh</h2>
-    <p>Select your desired quantity and enjoy luxury at your doorstep.</p>
-  </header>
+  <div class="tagline">
+    <h2>Premium Seafood, Delivered Fresh Right To Your Doorstep</h2>
+  </div>
 
+  <div class="product-container" id="productList">
+    <!-- Product cards will be inserted here -->
+  </div>
+
+  <script src="products.js"></script>
   <script>
-    const spans = document.querySelectorAll('#brandText span');
+    const productList = document.getElementById("productList");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    let index = 0;
-    setInterval(() => {
-      spans.forEach((span, i) => {
-        span.style.transform = 'scale(1)';
+    function addToCart(product, qty) {
+      const item = {
+        name: `${product.name} (${qty}kg)`,
+        price: Math.round(product.basePrice * qty)
+      };
+      cart.push(item);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("✅ Added to cart!");
+    }
+
+    if (typeof products !== 'undefined' && Array.isArray(products)) {
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>₹${product.basePrice}/kg</p>
+          <input type="number" step="0.25" min="1" class="qty-input" value="1">
+          <button class="add-btn">Add to Cart</button>
+        `;
+        const qtyInput = card.querySelector(".qty-input");
+        const addBtn = card.querySelector(".add-btn");
+        addBtn.addEventListener("click", () => addToCart(product, parseFloat(qtyInput.value)));
+        productList.appendChild(card);
       });
-
-      if (spans[index]) {
-        spans[index].style.transform = 'scale(1.4)';
-      }
-
-      index = (index + 1) % spans.length;
-    }, 400);
+    } else {
+      productList.innerHTML = "<p style='color: red;'>Product list not loaded.</p>";
+    }
   </script>
 </body>
 </html>
