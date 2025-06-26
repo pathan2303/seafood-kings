@@ -18,7 +18,7 @@
       background-color: #111;
       padding: 1rem 2rem;
       display: flex;
-      justify-content: center; /* Center the brand */
+      justify-content: center;
       align-items: center;
       border-bottom: 2px solid #FFD700;
       position: relative;
@@ -44,31 +44,23 @@
       font-weight: 700;
       text-transform: uppercase;
       display: inline-block;
-      animation: jumpAndBounce 3s ease-in-out infinite;
       position: relative;
+      transition: transform 0.3s ease;
     }
 
-    @keyframes jumpAndBounce {
+    .navbar h1:hover {
+      animation: smoothJump 1.5s ease-in-out infinite;
+    }
+
+    @keyframes smoothJump {
       0% { transform: translateY(0) rotateX(0deg); }
-      25% { transform: translateY(-20px) rotateX(0deg); }
-      50% { transform: translateY(0) rotateX(0deg); }
-      75% { transform: translateY(-10px) rotateX(360deg); }
+      50% { transform: translateY(-15px) rotateX(15deg); }
       100% { transform: translateY(0) rotateX(0deg); }
     }
 
     .navbar h1 span {
       display: inline-block;
       transition: transform 0.3s ease;
-    }
-
-    .navbar h1:hover span {
-      animation: bounce3D 0.5s ease forwards;
-    }
-
-    @keyframes bounce3D {
-      0% { transform: translateZ(0) scale(1); }
-      50% { transform: translateZ(20px) scale(1.2); }
-      100% { transform: translateZ(0) scale(1); }
     }
 
     .fish-trigger {
@@ -81,7 +73,13 @@
     }
 
     .fish-trigger:hover ~ h1 span {
-      animation: bounce3D 0.5s ease forwards;
+      animation: tiltBounce 0.5s ease forwards;
+    }
+
+    @keyframes tiltBounce {
+      0% { transform: translateZ(0) rotateX(0deg); }
+      50% { transform: translateZ(10px) rotateX(20deg) scale(1.1); }
+      100% { transform: translateZ(0) rotateX(0deg) scale(1); }
     }
 
     .cart-btn {
@@ -172,7 +170,7 @@
       border-radius: 5px;
       border: none;
       text-align: center;
-      background-color: rgba(255, 255, 255, 0.1); /* Transparent white */
+      background-color: rgba(255, 255, 255, 0.1);
       color: #FFD700;
     }
 
