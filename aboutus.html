@@ -10,7 +10,7 @@
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      background-color: #0b0b0b;
+      background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #111);
       color: #e8c175;
     }
 
@@ -18,18 +18,18 @@
       background-color: #121212;
       padding: 1rem 2rem;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       border-bottom: 1px solid #e8c175;
+      gap: 2rem;
     }
 
     .navbar ul {
       list-style: none;
       display: flex;
-      gap: 1.5rem;
+      gap: 2rem;
       padding: 0;
       margin: 0;
-      align-items: center;
     }
 
     .navbar a {
@@ -37,26 +37,27 @@
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s ease;
+      position: relative;
     }
 
     .navbar a:hover {
       color: #fff2cc;
     }
 
-    .cart-icon {
-      position: relative;
-    }
-
     .cart-count {
       position: absolute;
-      top: -8px;
+      top: -10px;
       right: -12px;
-      background: #e8c175;
-      color: #0d0d0d;
-      font-size: 0.75rem;
+      background-color: #e8c175;
+      color: #000;
       font-weight: bold;
+      font-size: 0.75rem;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      padding: 0.2rem 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .logo-banner {
@@ -66,32 +67,55 @@
     }
 
     header {
-      text-align: left;
-      padding: 1rem 2rem;
+      text-align: center;
+      padding: 1rem 2rem 0;
+      position: relative;
     }
 
     header h2 {
       font-family: 'Cinzel', serif;
-      font-size: 1.25rem;
-      margin: 0.5rem 0;
+      font-size: 1.5rem;
+      margin: 0.5rem 0 0.3rem;
       color: #e8c175;
     }
 
     header p {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #d1b67c;
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-right {
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .cart-btn {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      position: relative;
+      font-size: 0.9rem;
     }
 
     .product-container {
-      background-color: #0b0b0b;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
       padding: 2rem;
+      background: linear-gradient(to right, #0d0d0d, #1a1a1a);
     }
 
     .product-card {
-      background-color: #1a1a1a;
+      background-color: #1b1b1b;
       border: 1px solid #e8c175;
       border-radius: 10px;
       padding: 1rem;
@@ -130,7 +154,7 @@
       color: #e8c175;
     }
 
-    .add-btn, .cart-btn {
+    .add-btn {
       background-color: #e8c175;
       color: #0d0d0d;
       font-weight: bold;
@@ -143,20 +167,19 @@
       transition: background 0.3s ease;
     }
 
-    .add-btn:hover, .cart-btn:hover {
+    .add-btn:hover {
       background-color: #d1b67c;
-    }
-
-    .cart-btn {
-      width: auto;
-      padding: 0.5rem 1.2rem;
-      text-decoration: none;
-      display: inline-block;
     }
 
     @media (max-width: 640px) {
       .product-container {
         grid-template-columns: 1fr;
+      }
+
+      .cart-right {
+        position: static;
+        transform: none;
+        margin-top: 0.5rem;
       }
     }
   </style>
@@ -166,10 +189,7 @@
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="aboutus.html">About Us</a></li>
-      <li class="cart-icon">
-        <a href="cart.html">Cart</a>
-        <span class="cart-count" id="cartCount">0</span>
-      </li>
+      <li><a href="cart.html">Cart <span id="cartCount" class="cart-count">0</span></a></li>
       <li><a href="https://wa.me/919152299833" target="_blank">Contact Us</a></li>
     </ul>
   </nav>
@@ -179,6 +199,9 @@
   <header>
     <h2>Premium Seafood, Delivered Fresh</h2>
     <p>Choose your quantity & enjoy seafood royalty at your doorstep</p>
+    <div class="cart-right">
+      <a href="cart.html" class="cart-btn">🛒 View Cart <span id="cartCount2" class="cart-count">0</span></a>
+    </div>
   </header>
 
   <div class="product-container" id="productList">
@@ -189,8 +212,12 @@
   <script>
     const productList = document.getElementById("productList");
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const cartCount = document.getElementById("cartCount");
-    cartCount.textContent = cart.length;
+
+    function updateCartCount() {
+      const count = cart.length;
+      document.getElementById("cartCount").textContent = count;
+      document.getElementById("cartCount2").textContent = count;
+    }
 
     function addToCart(product, qty) {
       const item = {
@@ -199,9 +226,11 @@
       };
       cart.push(item);
       localStorage.setItem("cart", JSON.stringify(cart));
-      cartCount.textContent = cart.length;
+      updateCartCount();
       alert("✅ Added to cart!");
     }
+
+    updateCartCount();
 
     if (typeof products !== 'undefined' && Array.isArray(products)) {
       products.forEach(product => {
