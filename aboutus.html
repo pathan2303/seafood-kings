@@ -10,7 +10,7 @@
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      background-color: #0d0d0d;
+      background-color: #0b0b0b;
       color: #e8c175;
     }
 
@@ -29,6 +29,7 @@
       gap: 1.5rem;
       padding: 0;
       margin: 0;
+      align-items: center;
     }
 
     .navbar a {
@@ -42,6 +43,22 @@
       color: #fff2cc;
     }
 
+    .cart-icon {
+      position: relative;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -12px;
+      background: #e8c175;
+      color: #0d0d0d;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-radius: 50%;
+      padding: 0.2rem 0.5rem;
+    }
+
     .logo-banner {
       width: 100%;
       height: auto;
@@ -49,23 +66,24 @@
     }
 
     header {
-      text-align: center;
-      padding: 1rem;
+      text-align: left;
+      padding: 1rem 2rem;
     }
 
     header h2 {
       font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       margin: 0.5rem 0;
       color: #e8c175;
     }
 
     header p {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #d1b67c;
     }
 
     .product-container {
+      background-color: #0b0b0b;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
@@ -73,7 +91,7 @@
     }
 
     .product-card {
-      background-color: #1b1b1b;
+      background-color: #1a1a1a;
       border: 1px solid #e8c175;
       border-radius: 10px;
       padding: 1rem;
@@ -148,7 +166,10 @@
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="aboutus.html">About Us</a></li>
-      <li><a href="cart.html">Cart</a></li>
+      <li class="cart-icon">
+        <a href="cart.html">Cart</a>
+        <span class="cart-count" id="cartCount">0</span>
+      </li>
       <li><a href="https://wa.me/919152299833" target="_blank">Contact Us</a></li>
     </ul>
   </nav>
@@ -168,6 +189,8 @@
   <script>
     const productList = document.getElementById("productList");
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartCount = document.getElementById("cartCount");
+    cartCount.textContent = cart.length;
 
     function addToCart(product, qty) {
       const item = {
@@ -176,6 +199,7 @@
       };
       cart.push(item);
       localStorage.setItem("cart", JSON.stringify(cart));
+      cartCount.textContent = cart.length;
       alert("✅ Added to cart!");
     }
 
