@@ -1,49 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sea Food Kings</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --gold: #d2b886;
-      --black: #121212;
-      --dark: #1a1a1a;
-    }
-
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      background-color: var(--black);
-      color: var(--gold);
+      background-color: #0d0d0d;
+      color: #e8c175;
     }
 
-    .header-banner {
+    .navbar {
+      background-color: #121212;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e8c175;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      padding: 0;
+      margin: 0;
+    }
+
+    .navbar a {
+      color: #e8c175;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      color: #fff2cc;
+    }
+
+    .logo-banner {
       width: 100%;
       height: auto;
       display: block;
     }
 
     header {
-      background-color: var(--black);
       text-align: center;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--gold);
+      padding: 1rem;
     }
 
     header h2 {
       font-family: 'Cinzel', serif;
-      font-size: 1.3rem;
-      color: var(--gold);
-      margin: 0.3rem 0;
+      font-size: 1.5rem;
+      margin: 0.5rem 0;
+      color: #e8c175;
     }
 
     header p {
       font-size: 0.85rem;
-      color: #aaa;
-      margin: 0;
+      color: #d1b67c;
     }
 
     .product-container {
@@ -54,8 +73,8 @@
     }
 
     .product-card {
-      background-color: var(--dark);
-      border: 1px solid var(--gold);
+      background-color: #1b1b1b;
+      border: 1px solid #e8c175;
       border-radius: 10px;
       padding: 1rem;
       transition: transform 0.3s ease;
@@ -75,7 +94,7 @@
     .product-card h3 {
       font-size: 1rem;
       margin: 0.5rem 0;
-      color: var(--gold);
+      color: #e8c175;
     }
 
     .product-card p {
@@ -90,12 +109,12 @@
       border: none;
       text-align: center;
       background-color: rgba(255, 255, 255, 0.05);
-      color: var(--gold);
+      color: #e8c175;
     }
 
-    .add-btn {
-      background-color: var(--gold);
-      color: #000;
+    .add-btn, .cart-btn {
+      background-color: #e8c175;
+      color: #0d0d0d;
       font-weight: bold;
       width: 100%;
       padding: 0.5rem;
@@ -106,23 +125,39 @@
       transition: background 0.3s ease;
     }
 
-    .add-btn:hover {
-      background-color: #bca470;
+    .add-btn:hover, .cart-btn:hover {
+      background-color: #d1b67c;
+    }
+
+    .cart-btn {
+      width: auto;
+      padding: 0.5rem 1.2rem;
+      text-decoration: none;
+      display: inline-block;
     }
 
     @media (max-width: 640px) {
-      header h2 { font-size: 1rem; }
-      header p { font-size: 0.75rem; }
-      .product-container { grid-template-columns: 1fr; }
+      .product-container {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <img src="octo.png" alt="Sea Food Kings Logo" class="header-banner">
+  <nav class="navbar">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="aboutus.html">About Us</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="https://wa.me/919152299833" target="_blank">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <img src="octo.png" alt="Sea Food Kings Banner" class="logo-banner">
 
   <header>
     <h2>Premium Seafood, Delivered Fresh</h2>
-    <p>Select your desired quantity and enjoy luxury at your doorstep.</p>
+    <p>Choose your quantity & enjoy seafood royalty at your doorstep</p>
   </header>
 
   <div class="product-container" id="productList">
