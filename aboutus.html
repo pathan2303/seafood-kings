@@ -14,52 +14,6 @@
       color: #e8c175;
     }
 
-    .navbar {
-      background-color: #121212;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      border-bottom: 1px solid #e8c175;
-      gap: 2rem;
-    }
-
-    .navbar ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-      padding: 0;
-      margin: 0;
-    }
-
-    .navbar a {
-      color: #e8c175;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-      position: relative;
-    }
-
-    .navbar a:hover {
-      color: #fff2cc;
-    }
-
-    .cart-count {
-      position: absolute;
-      top: -10px;
-      right: -12px;
-      background-color: #e8c175;
-      color: #000;
-      font-weight: bold;
-      font-size: 0.75rem;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
     .logo-banner {
       width: 100%;
       height: auto;
@@ -70,6 +24,24 @@
       text-align: center;
       padding: 1rem 2rem 0;
       position: relative;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem;
+      padding: 1rem 2rem 0;
+    }
+
+    .nav-links a {
+      color: #e8c175;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff2cc;
     }
 
     header h2 {
@@ -88,8 +60,7 @@
     .cart-right {
       position: absolute;
       right: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 1rem;
     }
 
     .cart-btn {
@@ -104,6 +75,22 @@
       align-items: center;
       position: relative;
       font-size: 0.9rem;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -12px;
+      background-color: #e8c175;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.75rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .product-container {
@@ -181,22 +168,25 @@
         transform: none;
         margin-top: 0.5rem;
       }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="aboutus.html">About Us</a></li>
-      <li><a href="cart.html">Cart <span id="cartCount" class="cart-count">0</span></a></li>
-      <li><a href="https://wa.me/919152299833" target="_blank">Contact Us</a></li>
-    </ul>
-  </nav>
-
   <img src="octo.png" alt="Sea Food Kings Banner" class="logo-banner">
 
   <header>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="cart.html">Cart</a>
+      <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
+    </div>
+
     <h2>Premium Seafood, Delivered Fresh</h2>
     <p>Choose your quantity & enjoy seafood royalty at your doorstep</p>
     <div class="cart-right">
@@ -215,7 +205,6 @@
 
     function updateCartCount() {
       const count = cart.length;
-      document.getElementById("cartCount").textContent = count;
       document.getElementById("cartCount2").textContent = count;
     }
 
