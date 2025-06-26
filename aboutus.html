@@ -1,146 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sea Food Kings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEA FOOD KINGS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
       margin: 0;
-      background-color: #000;
-      color: #fff;
-    }
-
-    .navbar {
-      background-color: #111;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      border-bottom: 2px solid #FFD700;
-      position: relative;
-    }
-
-    .navbar .brand {
-      display: flex;
-      align-items: center;
-      width: 100%;
-    }
-
-    .logo {
-      height: 60px;
-      width: auto;
-      margin-right: 1rem;
-    }
-
-    .navbar h1 {
-      font-family: 'Cinzel', serif;
-      font-size: 1.8rem;
+      background: #000;
       color: #FFD700;
-      margin: 0 auto;
-      font-weight: 700;
-      text-transform: uppercase;
-      display: flex;
-      justify-content: center;
-      width: 100%;
+      font-family: 'Cinzel', serif;
+      overflow-x: hidden;
     }
 
-    .navbar h1 span {
+    .header-wrapper {
+      position: relative;
+      width: 100%;
+      padding: 2rem 0 3rem;
+      text-align: center;
+      background: linear-gradient(to right, #111, #000);
+      overflow: hidden;
+      border-bottom: 2px solid #FFD700;
+    }
+
+    .brand-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: 5px;
+      position: relative;
+      z-index: 1;
       display: inline-block;
-      margin: 0 2px;
-      transform-origin: bottom;
+    }
+
+    .brand-title span {
+      display: inline-block;
       transition: transform 0.3s ease;
     }
 
-    .fish-trigger {
-      position: absolute;
-      top: 50%;
-      right: 6rem; /* Adjusted to avoid overlap, tweak as needed */
-      transform: translateY(-50%);
-      font-size: 30px;
-      cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.3s ease;
-      z-index: 0;
+    .brand-title span.bounce {
+      animation: bounce 0.6s ease;
     }
 
-    .fish-trigger:hover {
-      opacity: 1;
-    }
-
-    .fish-trigger:hover ~ .brand h1 span {
-      animation: elasticBounce 1s ease-out backwards;
-    }
-
-    @keyframes elasticBounce {
-      0% { transform: scaleY(0.3); }
-      25% { transform: scaleY(1.1); }
-      40% { transform: scaleY(0.9); }
-      60% { transform: scaleY(1.05); }
-      80% { transform: scaleY(0.95); }
+    @keyframes bounce {
+      0%   { transform: scale(1); }
+      30%  { transform: scaleY(1.6); }
+      50%  { transform: scaleY(0.6); }
+      70%  { transform: scaleY(1.2); }
       100% { transform: scaleY(1); }
     }
 
-    .navbar h1 span:nth-child(1) { animation-delay: 0s; }
-    .navbar h1 span:nth-child(2) { animation-delay: 0.1s; }
-    .navbar h1 span:nth-child(3) { animation-delay: 0.2s; }
-    .navbar h1 span:nth-child(4) { animation-delay: 0.3s; }
-    .navbar h1 span:nth-child(5) { animation-delay: 0.4s; }
-    .navbar h1 span:nth-child(6) { animation-delay: 0.5s; }
-    .navbar h1 span:nth-child(7) { animation-delay: 0.6s; }
-    .navbar h1 span:nth-child(8) { animation-delay: 0.7s; }
-    .navbar h1 span:nth-child(9) { animation-delay: 0.8s; }
-    .navbar h1 span:nth-child(10) { animation-delay: 0.9s; }
-    .navbar h1 span:nth-child(11) { animation-delay: 1.0s; }
-    .navbar h1 span:nth-child(12) { animation-delay: 1.1s; }
-
-    .cart-btn {
-      background-color: #FFD700;
-      padding: 0.5rem 1rem;
-      color: #000;
-      font-weight: bold;
-      border-radius: 5px;
-      text-decoration: none;
-      transition: all 0.3s ease;
+    .fish {
       position: absolute;
-      right: 2rem;
+      top: 0;
+      left: -80px;
+      width: 60px;
+      height: auto;
+      z-index: 10;
+      animation: swim 6s linear infinite;
     }
 
-    .cart-btn:hover {
-      background-color: #e6c200;
+    @keyframes swim {
+      0%   { left: -80px; top: 55%; }
+      25%  { top: 45%; }
+      50%  { top: 60%; }
+      75%  { top: 50%; }
+      100% { left: 100vw; top: 55%; }
     }
 
-    header {
-      background: linear-gradient(135deg, #1a1a1a, #000);
-      padding: 2rem 1rem;
-      text-align: center;
-      border: 2px solid #FFD700;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2), inset 0 0 8px rgba(255, 215, 0, 0.3);
-      margin: 1rem 0;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    header:hover {
-      transform: translateY(-5px);
-    }
-
-    header h2 {
-      color: #FFD700;
-      font-size: 2rem;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 6px #FFD700;
-    }
-
-    header p {
-      font-size: 0.9rem;
+    .subtitle {
+      margin-top: 1rem;
+      font-size: 1rem;
       font-weight: 500;
       color: #FFD700;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+      text-shadow: 1px 1px 3px #000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-wrapper">
+    <img src="https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif" alt="Fish" class="fish" id="fish" />
+    <h1 class="brand-title" id="title">
+      <span>S</span><span>E</span><span>A</span> 
+      <span>F</span><span>O</span><span>O</span><span>D</span> 
+      <span>K</span><span>I</span><span>N</span><span>G</span><span>S</span>
+    </h1>
+    <p class="subtitle">Select your desired quantity and enjoy luxury at your doorstep.</p>
+  </div>
+
+  <script>
+    const fish = document.getElementById("fish");
+    const letters = document.querySelectorAll("#title span");
+
+    function checkBounce() {
+      const fishRect = fish.getBoundingClientRect();
+      letters.forEach(letter => {
+        const rect = letter.getBoundingClientRect();
+        if (fishRect.left + 30 > rect.left && fishRect.left < rect.right) {
+          if (!letter.classList.contains("bounce")) {
+            letter.classList.add("bounce");
+            setTimeout(() => letter.classList.remove("bounce"), 600);
+          }
+        }
+      });
     }
 
+    setInterval(checkBounce, 100); // check every 100ms while fish is swimming
+  </script>
+
+</body>
+</html>
     .product-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
