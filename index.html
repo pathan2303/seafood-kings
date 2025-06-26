@@ -24,7 +24,7 @@
     }
 
     .logo {
-      height: 70px; /* Slightly increased for better visibility */
+      height: 70px;
       width: auto;
     }
 
@@ -32,18 +32,19 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+    }
+
+    .brand .name {
+      flex-grow: 1;
       text-align: center;
-      width: 100%; /* Ensure centering works */
-      justify-content: center; /* Center the brand */
     }
 
     .brand h1 {
       font-family: 'Cinzel', serif;
-      font-size: 2.2rem; /* Increased for prominence */
-      color: #d4af37; /* Rich gold tone */
+      font-size: 2.2rem;
+      color: #d4af37;
       margin: 0;
       animation: slideAndGlow 3s ease-in-out infinite;
-      text-align: center;
     }
 
     @keyframes slideAndGlow {
@@ -69,7 +70,7 @@
 
     .banner {
       background: linear-gradient(135deg, #1a1a1a, #000);
-      padding: 1.5rem 1rem; /* Further reduced for smaller size */
+      padding: 1.5rem 1rem;
       text-align: center;
       border: 2px solid #FFD700;
       border-radius: 8px;
@@ -84,7 +85,7 @@
     }
 
     .banner h2 {
-      font-size: 1.8rem; /* Reduced for smaller banner */
+      font-size: 1.8rem;
       font-weight: 700;
       color: #FFD700;
       text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 6px #FFD700;
@@ -92,7 +93,7 @@
     }
 
     .banner p {
-      font-size: 0.9rem; /* Reduced for smaller banner */
+      font-size: 0.9rem;
       font-weight: 500;
       color: #FFD700;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
@@ -119,7 +120,7 @@
 
     .product-card img {
       width: 100%;
-      height: 120px; /* Adjusted for better balance */
+      height: 120px;
       object-fit: cover;
       border-radius: 5px;
       transition: transform 0.2s ease;
@@ -178,7 +179,7 @@
   <nav class="navbar">
     <div class="brand">
       <img src="logo.png" alt="Sea Food Kings Logo" class="logo">
-      <h1>SEA FOOD KINGS</h1>
+      <div class="name"><h1>SEA FOOD KINGS</h1></div>
     </div>
     <a href="cart.html" class="cart-btn">🛒 Cart</a>
   </nav>
