@@ -4,36 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us - Sea Food Kings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: #0d0d0d url('https://www.transparenttextures.com/patterns/fish-scale.png');
+      margin: 0;
+      background: #0f0f0f;
       color: #e8c175;
+      overflow-x: hidden;
     }
 
     header {
-      text-align: center;
-      padding: 2rem;
-      border-bottom: 1px solid #e8c175;
-    }
-
-    header h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: #e8c175;
-    }
-
-    .nav-links {
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #333;
       display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 1.5rem;
+      align-items: center;
+      background-color: #0d0d0d;
     }
 
     .nav-links a {
       color: #e8c175;
+      margin-right: 1.5rem;
       text-decoration: none;
       font-weight: 600;
     }
@@ -42,57 +33,86 @@
       color: #fff2cc;
     }
 
-    .content {
-      max-width: 800px;
-      margin: 0 auto;
+    .about-container {
+      max-width: 900px;
+      margin: 2rem auto;
       padding: 2rem;
-      background-color: rgba(255, 255, 255, 0.02);
+      background: rgba(27, 27, 27, 0.9);
       border-radius: 10px;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.05);
+      position: relative;
+      overflow: hidden;
     }
 
-    .fish-bg {
-      background-image: url('https://www.transparenttextures.com/patterns/fishes.png');
-      background-repeat: repeat;
-      background-size: contain;
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #fff2cc;
     }
 
-    @media (max-width: 640px) {
-      .nav-links {
-        flex-direction: column;
-        gap: 1rem;
-      }
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #e8c175;
+    }
+
+    .fish {
+      position: absolute;
+      width: 60px;
+      height: 30px;
+      background: url('https://i.imgur.com/vQbRqUP.png') no-repeat center center / contain;
+      animation: swim 20s linear infinite;
+      opacity: 0.2;
+    }
+
+    .fish:nth-child(1) {
+      top: 10%;
+      animation-delay: 0s;
+    }
+    .fish:nth-child(2) {
+      top: 30%;
+      animation-delay: 5s;
+    }
+    .fish:nth-child(3) {
+      top: 50%;
+      animation-delay: 10s;
+    }
+    .fish:nth-child(4) {
+      top: 70%;
+      animation-delay: 15s;
+    }
+
+    @keyframes swim {
+      0% { left: -80px; }
+      100% { left: 100%; }
     }
   </style>
 </head>
-<body class="fish-bg">
+<body>
   <header>
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="aboutus.html">About Us</a>
       <a href="cart.html">Cart</a>
-      <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
     </div>
-    <h1>About Sea Food Kings</h1>
   </header>
 
-  <div class="content">
+  <div class="about-container">
+    <h1>About Sea Food Kings</h1>
     <p>
-     Welcome to <strong>Sea Food Kings</strong>, your premium destination for the freshest and finest quality seafood. We are passionate about bringing you the royal taste of the ocean, handpicked and delivered with utmost care.
-
-From juicy prawns and tender fillets to exotic shellfish, each product is curated to ensure maximum freshness and luxury. We believe seafood should not only be fresh—it should feel royal.
-
-Our team sources directly from trusted local fishermen and ensures your order reaches your home in the freshest condition possible.
-
-Thank you for choosing Sea Food Kings. Dive into a world of rich flavours and seafood royalty today!
+      Welcome to Sea Food Kings, where ocean's royalty meets your plate! We're committed to delivering the freshest, finest quality seafood, sourced responsibly and packed with flavor. From the depths of the sea to the luxury of your table — we bring you excellence every time.
     </p>
     <p>
-      <strong>Contact Support:</strong><br />
-      WhatsApp Bot: <a href="https://wa.me/919152299833" target="_blank">+91 91522 99833</a><br />
-      Mr. Shabaz: <a href="tel:+919167455556">+91 91674 55556</a>
+      Our team believes in quality, transparency, and unmatched customer satisfaction. Whether it's shrimp, crab, fish or more — we've got your cravings covered. Trust us, your taste buds will thank you!
     </p>
     <p>
-      Thank you for choosing Sea Food Kings. We look forward to serving you the best seafood in the city.
+      Contact us on WhatsApp: <a href="https://wa.me/919152299833" style="color:#fff2cc">+91 9152299833 (Bot)</a><br>
+      Or Call: <span style="color:#fff2cc">Mr. Shabaz - +91 9167455556</span>
     </p>
+    <div class="fish"></div>
+    <div class="fish"></div>
+    <div class="fish"></div>
+    <div class="fish"></div>
   </div>
 </body>
 </html>
