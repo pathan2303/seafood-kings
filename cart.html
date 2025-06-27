@@ -93,6 +93,23 @@
     .checkout-btn:hover {
       background-color: #d1b67c;
     }
+
+    .payment-section {
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .payment-section img {
+      width: 260px;
+      border-radius: 10px;
+      margin-top: 1rem;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+    }
+
+    .payment-section p {
+      margin-top: 0.8rem;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
@@ -108,7 +125,14 @@
     <h1>Your Cart</h1>
     <div id="cartItems"></div>
     <div class="total" id="totalAmount">Total: ₹0</div>
-    <button class="checkout-btn" onclick="redirectToWhatsApp()">Place Order via WhatsApp</button>
+
+    <div class="payment-section">
+      <h2>Payment Options</h2>
+      <button class="checkout-btn" onclick="placeOrder()">Proceed to Checkout</button>
+      <img src="1000289696.jpg" alt="Scan QR for UPI Payment">
+      <p>UPI ID: <strong>shabaz.cool76@oksbi</strong></p>
+      <p>or Pay on Delivery (COD)</p>
+    </div>
   </div>
 
   <script>
@@ -133,13 +157,10 @@
       totalAmount.textContent = `Total: ₹${total}`;
     }
 
-    function redirectToWhatsApp() {
-      let message = "*SEA FOOD KINGS ORDER*%0A";
-      cartItems.forEach(item => {
-        message += `\u2022 ${item.name} - ₹${item.price}%0A`;
-      });
-      message += `%0A*Total:* ₹${total}`;
-      window.open(`https://wa.me/919152299833?text=${message}`, "_blank");
+    function placeOrder() {
+      alert("Your order has been recorded and sent to our system. Thank you!");
+      localStorage.removeItem("cart");
+      window.location.href = "index.html";
     }
   </script>
 </body>
