@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+  <title>Checkout - Sea Food Kings</title>
   <meta charset="UTF-8" />
-  <title>Checkout - SEA FOOD KINGS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background-color: #0f0f0f;
-      color: #e8c175;
+      background: #0f0f0f;
       font-family: 'Poppins', sans-serif;
+      color: #fff;
       padding: 2rem;
     }
     .container {
@@ -16,87 +17,82 @@
       background: #1a1a1a;
       padding: 2rem;
       border-radius: 10px;
+      border: 1px solid #e8c175;
     }
-    h2 { text-align: center; margin-bottom: 1rem; }
     label {
       display: block;
       margin-top: 1rem;
-      font-weight: bold;
+      color: #e8c175;
     }
-    input, textarea, select {
+    input, textarea {
       width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.5rem;
+      padding: 0.7rem;
+      margin-top: 0.3rem;
+      background: #111;
+      border: 1px solid #444;
+      color: white;
       border-radius: 5px;
-      border: none;
-      background: #2a2a2a;
-      color: #fff;
     }
     button {
-      width: 100%;
-      margin-top: 2rem;
-      padding: 0.8rem;
       background: #e8c175;
       border: none;
-      color: #000;
+      padding: 1rem;
+      margin-top: 2rem;
+      width: 100%;
       font-weight: bold;
-      font-size: 1rem;
+      color: #000;
+      border-radius: 8px;
       cursor: pointer;
-      border-radius: 6px;
     }
     button:hover {
-      background: #ffe08a;
+      background: #ffdd77;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Cash On Delivery</h2>
+    <h2>Confirm Your Order (Cash on Delivery)</h2>
     <form id="codForm">
-      <label>Name:</label>
+      <label for="name">Full Name</label>
       <input type="text" id="name" required>
 
-      <label>Phone Number:</label>
-      <input type="text" id="phone" required>
-
-      <label>Address:</label>
+      <label for="address">Address</label>
       <textarea id="address" required></textarea>
 
-      <button type="submit">Place Order - COD</button>
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required>
+
+      <button type="submit">Place Order</button>
     </form>
   </div>
 
   <script>
-    const webhookURL = 'YOUR_ZAPIER_WEBHOOK_URL'; // Replace this
-
-    document.getElementById('codForm').addEventListener('submit', async (e) => {
+    document.getElementById("codForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const address = document.getElementById('address').value;
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-      const orderDetails = {
+      const name = document.getElementById("name").value;
+      const address = document.getElementById("address").value;
+      const phone = document.getElementById("phone").value;
+
+      const data = {
         name,
-        phone,
         address,
-        cart: cart.map(item => `${item.name} - ₹${item.price}`).join(', '),
-        total: cart.reduce((acc, item) => acc + item.price, 0),
-        paymentMethod: "Cash on Delivery"
+        phone,
+        payment: "Cash on Delivery",
+        timestamp: new Date().toLocaleString()
       };
 
-      try {
-        await fetch(webhookURL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderDetails)
-        });
-        alert("✅ Order placed successfully!");
-        localStorage.removeItem('cart');
-        window.location.href = "index.html";
-      } catch (err) {
-        alert("❌ Something went wrong, try again.");
-      }
+      fetch("https://hooks.zapier.com/hooks/catch/23506670/ubiaupo/", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(() => {
+        window.location.href = "thankyou.html";
+      }).catch((err) => {
+        alert("Error placing order: " + err);
+      });
     });
   </script>
 </body>
