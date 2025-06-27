@@ -97,6 +97,8 @@
     .payment-section {
       margin-top: 3rem;
       text-align: center;
+      display: none;
+      animation: fadeIn 1s ease-in-out forwards;
     }
 
     .payment-section img {
@@ -109,6 +111,11 @@
     .payment-section p {
       margin-top: 0.8rem;
       font-size: 0.95rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -125,10 +132,10 @@
     <h1>Your Cart</h1>
     <div id="cartItems"></div>
     <div class="total" id="totalAmount">Total: ₹0</div>
+    <button class="checkout-btn" onclick="showPayment()">Proceed to Checkout</button>
 
-    <div class="payment-section">
+    <div class="payment-section" id="paymentSection">
       <h2>Payment Options</h2>
-      <button class="checkout-btn" onclick="placeOrder()">Proceed to Checkout</button>
       <img src="qrcode.jpg" alt="Scan QR for UPI Payment">
       <p>UPI ID: <strong>shabaz.cool76@oksbi</strong></p>
       <p>or Pay on Delivery (COD)</p>
@@ -139,6 +146,7 @@
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
     const cartContainer = document.getElementById("cartItems");
     const totalAmount = document.getElementById("totalAmount");
+    const paymentSection = document.getElementById("paymentSection");
 
     let total = 0;
     if (cartItems.length === 0) {
@@ -157,10 +165,9 @@
       totalAmount.textContent = `Total: ₹${total}`;
     }
 
-    function placeOrder() {
-      alert("Your order has been recorded and sent to our system. Thank you!");
-      localStorage.removeItem("cart");
-      window.location.href = "index.html";
+    function showPayment() {
+      paymentSection.style.display = 'block';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
   </script>
 </body>
