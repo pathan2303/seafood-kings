@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Cart - Sea Food Kings</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -13,6 +12,7 @@
       background: linear-gradient(to right, #0d0d0d, #1a1a1a);
       color: #e8c175;
     }
+
     header {
       padding: 1rem 2rem;
       display: flex;
@@ -20,15 +20,18 @@
       align-items: center;
       border-bottom: 1px solid #333;
     }
+
     .nav-links a {
       color: #e8c175;
       margin-right: 1.5rem;
       text-decoration: none;
       font-weight: 600;
     }
+
     .nav-links a:hover {
       color: #fff2cc;
     }
+
     .container {
       max-width: 900px;
       margin: 2rem auto;
@@ -37,12 +40,14 @@
       border-radius: 10px;
       box-shadow: 0 0 12px rgba(255, 215, 0, 0.05);
     }
+
     h1 {
       font-size: 1.8rem;
       border-bottom: 1px solid #444;
       padding-bottom: 1rem;
       margin-bottom: 1.5rem;
     }
+
     .cart-item {
       display: flex;
       justify-content: space-between;
@@ -50,16 +55,20 @@
       padding: 0.8rem 0;
       border-bottom: 1px solid #333;
     }
+
     .cart-item:last-child {
       border-bottom: none;
     }
+
     .item-name {
       font-weight: 600;
     }
+
     .item-price {
       font-weight: bold;
       color: #fff;
     }
+
     .total {
       text-align: right;
       margin-top: 1.5rem;
@@ -67,6 +76,7 @@
       font-weight: bold;
       color: #fff2cc;
     }
+
     .checkout-btn {
       background-color: #e8c175;
       color: #0d0d0d;
@@ -79,38 +89,45 @@
       float: right;
       margin-top: 1rem;
     }
+
     .checkout-btn:hover {
       background-color: #d1b67c;
     }
+
     .payment-section {
       margin-top: 3rem;
       text-align: center;
       display: none;
       animation: fadeIn 1s ease-in-out forwards;
     }
+
     .payment-section img {
       width: 260px;
       border-radius: 10px;
       margin-top: 1rem;
       box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
     }
+
     .payment-section p {
       margin-top: 0.8rem;
       font-size: 0.95rem;
     }
-    .cod-button {
-      margin-top: 1.5rem;
-      padding: 0.7rem 1.5rem;
-      background-color: #ffd700;
-      color: #000;
-      font-weight: bold;
+
+    .confirm-btn {
+      margin-top: 2rem;
+      background-color: #e8c175;
       border: none;
+      padding: 0.7rem 1.8rem;
+      font-size: 1rem;
+      font-weight: bold;
       border-radius: 5px;
       cursor: pointer;
     }
-    .cod-button:hover {
-      background-color: #f6c700;
+
+    .confirm-btn:hover {
+      background-color: #d6b05c;
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -137,7 +154,7 @@
       <img src="qrcode.jpg" alt="Scan QR for UPI Payment">
       <p>UPI ID: <strong>shabaz.cool76@oksbi</strong></p>
       <p>or Pay on Delivery (COD)</p>
-      <button class="cod-button" onclick="submitCOD()">Confirm COD Order</button>
+      <button class="confirm-btn" onclick="sendOrder()">Confirm COD Order</button>
     </div>
   </div>
 
@@ -169,45 +186,37 @@
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
-    function submitCOD() {
-      if (!cartItems.length) {
-        alert("Your cart is empty.");
+    function sendOrder() {
+      if (cartItems.length === 0) {
+        alert("Your cart is empty!");
         return;
       }
+
       const orderData = {
-        items: cartItems.map(i => i.name).join(", "),
+        name: "Customer", // Replace later with input field
+        items: cartItems,
         total: total,
-        method: "Cash on Delivery"
+        time: new Date().toLocaleString()
       };
+
       fetch("https://hooks.zapier.com/hooks/catch/23506670/ubiaupo/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData)
       })
-      .then(res => {
-        if (res.ok) {
+      .then(response => {
+        if (response.ok) {
+          localStorage.removeItem("cart");
           window.location.href = "thankyou.html";
         } else {
-          alert("Something went wrong while placing the order.");
+          alert("❌ Failed to place order.");
         }
       })
-      .catch(err => {
-        console.error("Fetch error:", err);
-        alert("Failed to send order. Please try again.");
+      .catch(error => {
+        alert("❌ Network error.");
+        console.error(error);
       });
     }
   </script>
-  <footer style="background: #0d0d0d; color: #e8c175; padding: 2rem 1rem; text-align: center; border-top: 1px solid #333;">
-  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; font-size: 0.95rem; line-height: 1.6;">
-    <a href="privacy-policy.html" style="color: #e8c175; text-decoration: none;">Privacy Policy</a>
-    <a href="terms-and-conditions.html" style="color: #e8c175; text-decoration: none;">Terms & Conditions</a>
-    <a href="cancellation-refund.html" style="color: #e8c175; text-decoration: none;">Cancellation & Refund</a>
-    <a href="shipping-delivery.html" style="color: #e8c175; text-decoration: none;">Shipping & Delivery</a>
-    <a href="contact.html" style="color: #e8c175; text-decoration: none;">Contact Us</a>
-  </div>
-  <div style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">
-    &copy; 2025 <strong>Sea Food Kings</strong> — All Rights Reserved
-  </div>
-</footer>
 </body>
 </html>
