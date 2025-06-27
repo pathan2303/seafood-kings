@@ -1,99 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Checkout - Sea Food Kings</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      background: #0f0f0f;
-      font-family: 'Poppins', sans-serif;
-      color: #fff;
-      padding: 2rem;
-    }
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: #1a1a1a;
-      padding: 2rem;
-      border-radius: 10px;
-      border: 1px solid #e8c175;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      color: #e8c175;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 0.7rem;
-      margin-top: 0.3rem;
-      background: #111;
-      border: 1px solid #444;
-      color: white;
-      border-radius: 5px;
-    }
-    button {
-      background: #e8c175;
-      border: none;
-      padding: 1rem;
-      margin-top: 2rem;
-      width: 100%;
-      font-weight: bold;
-      color: #000;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #ffdd77;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h2>Confirm Your Order (Cash on Delivery)</h2>
-    <form id="codForm">
-      <label for="name">Full Name</label>
-      <input type="text" id="name" required>
+<h2>Enter Delivery Details</h2>
+<form id="orderForm">
+  <input type="text" name="name" placeholder="Your Name" required><br><br>
+  <input type="text" name="phone" placeholder="Phone Number" required><br><br>
+  <textarea name="address" placeholder="Delivery Address" required></textarea><br><br>
+  <button type="submit" class="checkout-btn">Confirm COD Order</button>
+</form>
 
-      <label for="address">Address</label>
-      <textarea id="address" required></textarea>
+<script>
+  document.getElementById("orderForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-      <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" required>
-
-      <button type="submit">Place Order</button>
-    </form>
-  </div>
-
-  <script>
-    document.getElementById("codForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const name = document.getElementById("name").value;
-      const address = document.getElementById("address").value;
-      const phone = document.getElementById("phone").value;
-
-      const data = {
-        name,
-        address,
-        phone,
-        payment: "Cash on Delivery",
-        timestamp: new Date().toLocaleString()
-      };
-
-      fetch("https://hooks.zapier.com/hooks/catch/23506670/ubiaupo/", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }).then(() => {
-        window.location.href = "thankyou.html";
-      }).catch((err) => {
-        alert("Error placing order: " + err);
-      });
+    const formData = new FormData(this);
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
     });
-  </script>
-</body>
-</html>
+
+    // Optional: attach cart items
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    data.cart = cart;
+
+    fetch("https://hooks.zapier.com/hooks/catch/23506670/ubiaupo/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(res => {
+      if (res.ok) {
+        alert("✅ Order placed successfully!");
+        localStorage.removeItem("cart");
+        window.location.href = "thankyou.html";
+      } else {
+        alert("❌ Order failed. Please try again.");
+      }
+    });
+  });
+</script>
