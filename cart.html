@@ -1,14 +1,211 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart - Sea Food Kings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #0d0d0d, #1a1a1a);
+      color: #e8c175;
+    }
+
+    header {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
+
+    .nav-links a {
+      color: #e8c175;
+      margin-right: 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: #fff2cc;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background-color: #1b1b1b;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.05);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      border-bottom: 1px solid #444;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-name {
+      font-weight: 600;
+    }
+
+    .item-price {
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .total {
+      text-align: right;
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff2cc;
+    }
+
+    .checkout-btn {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      float: right;
+      margin-top: 1rem;
+    }
+
+    .checkout-btn:hover {
+      background-color: #d1b67c;
+    }
+
+    .payment-section {
+      margin-top: 3rem;
+      text-align: center;
+      display: none;
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+
+    .payment-section img {
+      width: 260px;
+      border-radius: 10px;
+      margin-top: 1rem;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+    }
+
+    .payment-section p {
+      margin-top: 0.8rem;
+      font-size: 0.95rem;
+    }
+
+    .cod-button {
+      background-color: #000;
+      color: #e8c175;
+      border: 2px solid #e8c175;
+      padding: 10px 20px;
+      font-weight: 600;
+      margin-top: 1rem;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .cod-button:hover {
+      background-color: #222;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
-<body style="background:#0f0f0f; color:#e8c175; font-family:'Poppins', sans-serif; text-align:center; padding:4rem;">
-  <h1>Your Cart</h1>
-  <p>Items have been added here...</p>
-  <a href="checkout.html" style="color:#000; background:#ffd700; padding:1rem 2rem; text-decoration:none; border-radius:8px;">Proceed to Checkout</a>
+<body>
+  <header>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="cart.html">Cart</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1>Your Cart</h1>
+    <div id="cartItems"></div>
+    <div class="total" id="totalAmount">Total: ₹0</div>
+    <button class="checkout-btn" onclick="showPayment()">Proceed to Checkout</button>
+
+    <div class="payment-section" id="paymentSection">
+      <h2>Payment Options</h2>
+      <img src="qrcode.jpg" alt="Scan QR for UPI Payment">
+      <p>UPI ID: <strong>shabaz.cool76@oksbi</strong></p>
+      <p>or Pay on Delivery (COD)</p>
+      <button class="cod-button" onclick="submitCOD()">Confirm COD Order</button>
+    </div>
+  </div>
+
+  <script>
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartContainer = document.getElementById("cartItems");
+    const totalAmount = document.getElementById("totalAmount");
+    const paymentSection = document.getElementById("paymentSection");
+
+    let total = 0;
+    if (cartItems.length === 0) {
+      cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      cartItems.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <span class="item-name">${item.name}</span>
+          <span class="item-price">₹${item.price}</span>
+        `;
+        cartContainer.appendChild(div);
+        total += item.price;
+      });
+      totalAmount.textContent = `Total: ₹${total}`;
+    }
+
+    function showPayment() {
+      paymentSection.style.display = 'block';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function submitCOD() {
+      const orderData = {
+        items: cartItems.map(i => i.name).join(", "),
+        total: total,
+        method: "Cash on Delivery"
+      };
+
+      fetch("https://hooks.zapier.com/hooks/catch/23506670/ubiaupo/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData)
+      })
+      .then(res => {
+        if (res.ok) {
+          window.location.href = "thankyou.html";
+        } else {
+          alert("Something went wrong!");
+        }
+      });
+    }
+  </script>
 </body>
 </html>
