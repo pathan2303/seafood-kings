@@ -1,117 +1,146 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Cart - SEA FOOD KINGS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Your Cart - Sea Food Kings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Poppins', sans-serif; }
-    .gold { color: #FFD700; }
-    .bg-gold { background-color: #FFD700; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #0d0d0d, #1a1a1a);
+      color: #e8c175;
+    }
+
+    header {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
+
+    .nav-links a {
+      color: #e8c175;
+      margin-right: 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: #fff2cc;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background-color: #1b1b1b;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.05);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      border-bottom: 1px solid #444;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-name {
+      font-weight: 600;
+    }
+
+    .item-price {
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .total {
+      text-align: right;
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff2cc;
+    }
+
+    .checkout-btn {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      float: right;
+      margin-top: 1rem;
+    }
+
+    .checkout-btn:hover {
+      background-color: #d1b67c;
+    }
   </style>
 </head>
-<body class="bg-black text-white min-h-screen">
-  <!-- Navbar -->
-  <nav class="flex justify-between items-center px-6 py-4 border-b border-yellow-500 bg-black">
-    <div class="flex items-center space-x-4">
-      <img src="logo.png" alt="Logo" class="h-12 w-auto object-contain">
-      <h1 class="text-2xl font-bold gold">SEA FOOD KINGS</h1>
+<body>
+  <header>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="cart.html">Cart</a>
     </div>
-    <a href="index.html" class="gold hover:text-white">← Back to Shop</a>
-  </nav>
+  </header>
 
-  <!-- Cart Section -->
-  <section class="p-6 max-w-4xl mx-auto">
-    <h2 class="text-2xl font-bold gold mb-4">🛒 Your Cart</h2>
-    <div id="cartItems" class="space-y-4"></div>
-
-    <div class="mt-6 text-right">
-      <p class="text-xl font-semibold">Total: ₹<span id="cartTotal">0</span></p>
-    </div>
-
-    <!-- Checkout Form -->
-    <div class="mt-10 p-6 bg-yellow-900 rounded-xl">
-      <h3 class="text-xl font-bold mb-4">🧾 Checkout Details</h3>
-      <form id="checkoutForm" class="space-y-4">
-        <input type="text" id="name" placeholder="Full Name" class="w-full px-4 py-2 rounded text-black" required>
-        <input type="tel" id="phone" placeholder="Phone Number" class="w-full px-4 py-2 rounded text-black" required>
-        <textarea id="address" placeholder="Delivery Address" rows="3" class="w-full px-4 py-2 rounded text-black" required></textarea>
-        <textarea id="note" placeholder="Optional Note (e.g. No ice, doorbell broken...)" rows="2" class="w-full px-4 py-2 rounded text-black"></textarea>
-
-        <div class="flex gap-4 pt-4">
-          <button type="submit" class="bg-gold text-black font-bold px-6 py-2 rounded hover:bg-yellow-400">📦 Place Order</button>
-        </div>
-      </form>
-    </div>
-  </section>
+  <div class="container">
+    <h1>Your Cart</h1>
+    <div id="cartItems"></div>
+    <div class="total" id="totalAmount">Total: ₹0</div>
+    <button class="checkout-btn" onclick="redirectToWhatsApp()">Place Order via WhatsApp</button>
+  </div>
 
   <script>
-    const cartItemsContainer = document.getElementById("cartItems");
-    const cartTotal = document.getElementById("cartTotal");
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartContainer = document.getElementById("cartItems");
+    const totalAmount = document.getElementById("totalAmount");
 
-    function renderCart() {
-      cartItemsContainer.innerHTML = "";
-      let total = 0;
-      cart.forEach((item, index) => {
-        total += item.price;
-        cartItemsContainer.innerHTML += `
-          <div class="flex justify-between items-center bg-yellow-800 px-4 py-3 rounded-xl">
-            <div>
-              <p class="text-lg font-semibold">${item.name}</p>
-              <p class="text-sm">₹${item.price}</p>
-            </div>
-            <button onclick="removeItem(${index})" class="text-red-400 hover:text-red-200">Remove</button>
-          </div>
+    let total = 0;
+    if (cartItems.length === 0) {
+      cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      cartItems.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <span class="item-name">${item.name}</span>
+          <span class="item-price">₹${item.price}</span>
         `;
+        cartContainer.appendChild(div);
+        total += item.price;
       });
-      cartTotal.textContent = total;
+      totalAmount.textContent = `Total: ₹${total}`;
     }
 
-    function removeItem(index) {
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
+    function redirectToWhatsApp() {
+      let message = "*SEA FOOD KINGS ORDER*%0A";
+      cartItems.forEach(item => {
+        message += `\u2022 ${item.name} - ₹${item.price}%0A`;
+      });
+      message += `%0A*Total:* ₹${total}`;
+      window.open(`https://wa.me/919152299833?text=${message}`, "_blank");
     }
-
-    document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const note = document.getElementById("note").value.trim();
-      const items = cart.map(item => item.name + ' - ₹' + item.price).join(", ");
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
-
-      const payload = { name, phone, address, note, items, total };
-
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbyoIVSNkcCy7rPUubByik6izwgZo5N4Y0mGekL2N6I/exec", {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (res.ok) {
-          alert("✅ Order placed successfully! We’ll contact you shortly.");
-          localStorage.removeItem("cart");
-          window.location.href = "index.html";
-        } else {
-          alert("❌ Failed to place order. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error placing order:", error);
-        alert("❌ Error occurred while placing order.");
-      }
-    });
-
-    renderCart();
   </script>
 </body>
 </html>
