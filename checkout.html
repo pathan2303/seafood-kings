@@ -132,10 +132,10 @@
 
     function getFormData() {
       return {
-        name: document.getElementById("custName").value.trim() || "Customer",
-        phone: document.getElementById("custPhone").value.trim() || "N/A",
-        address: document.getElementById("custAddress").value.trim() || "N/A",
-        note: document.getElementById("custNote").value.trim() || "",
+      const name = document.getElementById("name")?.value || "Customer";
+      const phone = document.getElementById("phone")?.value || "N/A";
+      const address = document.getElementById("address")?.value || "N/A";
+      const note = document.getElementById("note")?.value || "";
         items: cart.map(item => `${item.name} - ₹${item.price}`).join(", "),
         total: total,
         time: new Date().toLocaleString()
