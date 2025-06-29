@@ -69,98 +69,88 @@
   </div>
 
   <script>
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-    function collectFormData() {
-      return {
-        name: document.getElementById("name").value.trim() || "Customer",
-        phone: document.getElementById("phone").value.trim() || "N/A",
-        address: document.getElementById("address").value.trim() || "N/A",
-        note: document.getElementById("note").value.trim(),
-        items: cart.map(item => `${item.name} - ₹${item.price}`).join(", "),
-        total: total,
-        time: new Date().toLocaleString(),
-      };
+  function collectFormData() {
+    return {
+      name: document.getElementById("name").value.trim() || "Customer",
+      phone: document.getElementById("phone").value.trim() || "N/A",
+      address: document.getElementById("address").value.trim() || "N/A",
+      note: document.getElementById("note").value.trim(),
+      items: cart.map(item => `${item.name} - ₹${item.price}`).join(", "),
+      total: total,
+      time: new Date().toLocaleString(),
+    };
+  }
+
+  function sendCODOrder() {
+    if (cart.length === 0) {
+      alert("🛒 Your cart is empty!");
+      return;
     }
 
-    function sendCODOrder() {
-      if (cart.length === 0) {
-        alert("🛒 Your cart is empty!");
-        return;
-      }
+    const data = collectFormData();
+    if (!data.name || !data.phone || !data.address) {
+      alert("❗Please fill all required fields.");
+      return;
+    }
 
-      const data = collectFormData();
+    fetch(CONFIG.zapierWebhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+    .then(() => {
+      localStorage.removeItem("cart");
+      window.location.href = "thankyou.html";
+    })
+    .catch(err => {
+      alert("❌ Network error while placing COD order.");
+      console.error(err);
+    });
+  }
 
-      if (!data.name || !data.phone || !data.address) {
-        alert("❗Please fill all required fields.");
-        return;
-      }
+  function payViaRazorpay() {
+    const data = collectFormData();
+    if (!data.name || !data.phone || !data.address) {
+      alert("❗Please fill all required fields.");
+      return;
+    }
 
-      fetch(CONFIG.zapierWebhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-      .then(response => {
-        if (response.ok) {
+    const options = {
+      key: CONFIG.razorpayKey,
+      amount: data.total * 100,
+      currency: "INR",
+      name: "Sea Food Kings",
+      description: "Order Payment",
+      handler: function () {
+        fetch(CONFIG.zapierWebhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+        .then(() => {
           localStorage.removeItem("cart");
           window.location.href = "thankyou.html";
-        } else {
-          alert("❌ COD Order failed. Zapier error.");
-        }
-      })
-      .catch(err => {
-        alert("❌ Network error while placing COD order.");
-        console.error(err);
-      });
-    }
-
-    function payViaRazorpay() {
-      const data = collectFormData();
-
-      if (!data.name || !data.phone || !data.address) {
-        alert("❗Please fill all required fields.");
-        return;
+        })
+        .catch(err => {
+          alert("❌ Razorpay paid but log failed.");
+          console.error(err);
+        });
+      },
+      prefill: {
+        name: data.name,
+        contact: data.phone,
+      },
+      theme: {
+        color: "#e8c175"
       }
+    };
 
-      const options = {
-        key: CONFIG.razorpayKey,
-        amount: data.total * 100,
-        currency: "INR",
-        name: "Sea Food Kings",
-        description: "Order Payment",
-        handler: function () {
-          fetch(CONFIG.zapierWebhook, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-          })
-          .then(res => {
-            if (res.ok) {
-              localStorage.removeItem("cart");
-              window.location.href = "thankyou.html";
-            } else {
-              alert("❌ Razorpay paid but logging failed.");
-            }
-          })
-          .catch(err => {
-            alert("❌ Razorpay paid but network/log failed.");
-            console.error(err);
-          });
-        },
-        prefill: {
-          name: data.name,
-          contact: data.phone,
-        },
-        theme: {
-          color: "#e8c175"
-        }
-      };
-
-      const rzp = new Razorpay(options);
-      rzp.open();
-    }
-  </script>
+    const rzp = new Razorpay(options);
+    rzp.open();
+  }
+</script>
 </body>
 </html>
