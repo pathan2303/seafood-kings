@@ -4,155 +4,192 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout - Sea Food Kings</title>
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="config.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #0f0f0f;
+      margin: 0;
+      background: linear-gradient(to right, #0d0d0d, #1a1a1a);
       color: #e8c175;
-      padding: 2rem;
     }
-    h2 { text-align: center; }
+
+    header {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
+
+    .nav-links a {
+      color: #e8c175;
+      margin-right: 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
     .container {
-      max-width: 500px;
-      margin: auto;
-      background: #1a1a1a;
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #1c1c1c;
       padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(255,215,0,0.1);
+      border-radius: 10px;
     }
-    input, textarea, button {
+
+    input, textarea {
       width: 100%;
       padding: 0.7rem;
-      margin-top: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: none;
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    .total {
+      font-size: 1.1rem;
+      text-align: right;
+      margin-bottom: 1.5rem;
+    }
+
+    .payment-options {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .payment-options button {
+      flex: 1;
+      padding: 0.8rem;
+      font-weight: bold;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .razorpay-btn {
+      background: #ffd700;
+      color: #000;
+    }
+
+    .cod-btn {
+      background: #e8c175;
+      color: #000;
+    }
+
+    .confirm {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .confirm button {
+      padding: 0.9rem 2rem;
+      background: #fff2cc;
+      color: #000;
       border: none;
       border-radius: 5px;
-      font-size: 1rem;
-    }
-    button {
-      background-color: #e8c175;
-      color: #000;
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #d1b67c;
-    }
-    .toggle-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1.5rem;
-    }
-    .toggle-buttons button {
-      width: 48%;
+
+    .thankyou {
+      text-align: center;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
+  <header>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="cart.html">Cart</a>
+    </div>
+  </header>
 
   <div class="container">
-    <h2>Checkout</h2>
-    <form id="orderForm">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="tel" name="phone" placeholder="Phone Number" required />
-      <textarea name="address" placeholder="Delivery Address" required></textarea>
-      <textarea name="note" placeholder="Note (optional)"></textarea>
+    <h2>Enter Delivery Details</h2>
+    <input type="text" id="custName" placeholder="Full Name" required />
+    <input type="tel" id="custPhone" placeholder="Phone Number" required />
+    <textarea id="custAddress" placeholder="Full Address" required></textarea>
+    <input type="text" id="custNote" placeholder="Note (optional)" />
 
-      <div class="toggle-buttons">
-        <button type="button" onclick="payWithRazorpay()">Pay with Razorpay</button>
-        <button type="submit">Cash on Delivery</button>
-      </div>
-    </form>
+    <div class="total" id="totalAmount">Total: ₹0</div>
+
+    <div class="payment-options">
+      <button class="razorpay-btn" onclick="payRazorpay()">Pay via Razorpay</button>
+      <button class="cod-btn" onclick="sendOrder()">Cash on Delivery</button>
+    </div>
   </div>
 
   <script>
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const total = cart.reduce((sum, item) => sum + item.price, 0);
+    document.getElementById("totalAmount").innerText = `Total: ₹${total}`;
 
-    // COD Submit Handler
-    document.getElementById("orderForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      const data = {
-        name: formData.get("name"),
-        phone: formData.get("phone"),
-        address: formData.get("address"),
-        note: formData.get("note"),
+    function getFormData() {
+      return {
+        name: document.getElementById("custName").value.trim() || "Customer",
+        phone: document.getElementById("custPhone").value.trim() || "N/A",
+        address: document.getElementById("custAddress").value.trim() || "N/A",
+        note: document.getElementById("custNote").value.trim() || "",
         items: cart.map(item => `${item.name} - ₹${item.price}`).join(", "),
         total: total,
-        timestamp: new Date().toLocaleString()
+        time: new Date().toLocaleString()
       };
+    }
+
+    function sendOrder() {
+      const data = getFormData();
+
+      if (!data.name || !data.phone || !data.address) {
+        alert("❌ Please fill all required fields.");
+        return;
+      }
 
       fetch(CONFIG.zapierWebhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       })
-      .then(res => {
-        if (res.ok) {
-          localStorage.removeItem("cart");
-          window.location.href = "thankyou.html";
-        } else {
-          alert("❌ Order failed. Please try again.");
-        }
+      .then(() => {
+        localStorage.removeItem("cart");
+        window.location.href = "thankyou.html";
+      })
+      .catch(() => {
+        alert("❌ Network error while placing order.");
       });
-    });
+    }
 
-    // Razorpay handler
-    function payWithRazorpay() {
-      const form = document.getElementById("orderForm");
-      const formData = new FormData(form);
-      const name = formData.get("name");
-      const phone = formData.get("phone");
-      const address = formData.get("address");
-      const note = formData.get("note");
+    function payRazorpay() {
+      const form = getFormData();
 
-      if (!name || !phone || !address) {
-        alert("Please fill in all required fields before payment.");
+      if (!form.name || !form.phone || !form.address) {
+        alert("❌ Please fill all required fields.");
         return;
       }
 
       const options = {
         key: CONFIG.razorpayKey,
-        amount: total * 100,
+        amount: form.total * 100,
         currency: "INR",
         name: "Sea Food Kings",
-        description: "Seafood Order",
-        handler: function (response) {
-          const data = {
-            name,
-            phone,
-            address,
-            note,
-            items: cart.map(item => `${item.name} - ₹${item.price}`).join(", "),
-            total,
-            paymentId: response.razorpay_payment_id,
-            timestamp: new Date().toLocaleString()
-          };
-
-          fetch(CONFIG.zapierWebhook, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-          }).then(res => {
-            if (res.ok) {
-              localStorage.removeItem("cart");
-              window.location.href = "thankyou.html";
-            } else {
-              alert("❌ Order failed to log after payment.");
-            }
-          });
-        },
+        description: "Order Payment",
         prefill: {
-          name: name,
-          contact: phone
+          name: form.name,
+          contact: form.phone,
         },
         theme: {
           color: "#e8c175"
+        },
+        handler: function () {
+          sendOrder(); // Only send to Zapier if payment succeeded
         }
       };
+
       const rzp = new Razorpay(options);
       rzp.open();
     }
