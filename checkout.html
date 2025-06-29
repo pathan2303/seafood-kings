@@ -69,9 +69,9 @@
 
     function collectFormData() {
       return {
-        name: document.getElementById("name").value.trim() || "Customer",
-        phone: document.getElementById("phone").value.trim() || "N/A",
-        address: document.getElementById("address").value.trim() || "N/A",
+        name: document.getElementById("name").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        address: document.getElementById("address").value.trim(),
         note: document.getElementById("note").value.trim(),
         items: cart.map(item => `${item.name} - ₹${item.price}`).join(", "),
         total: total,
@@ -82,10 +82,8 @@
     function sendOrderToZapier(data) {
       fetch(CONFIG.zapierWebhook, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
       })
       .then((res) => {
         if (res.ok || res.status === 0) {
@@ -96,23 +94,34 @@
         }
       })
       .catch((err) => {
-        alert("❌ Network error. Please try again.");
+        alert("❌ Network error while logging order.");
         console.error(err);
       });
     }
 
     function sendCODOrder() {
-      if (cart.length === 0) {
-        alert("Cart is empty.");
+      const data = collectFormData();
+
+      if (!data.name || !data.phone || !data.address) {
+        alert("Please fill all required fields.");
         return;
       }
 
-      const data = collectFormData();
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
       sendOrderToZapier(data);
     }
 
     function payViaRazorpay() {
       const data = collectFormData();
+
+      if (!data.name || !data.phone || !data.address) {
+        alert("Please fill all required fields.");
+        return;
+      }
 
       const options = {
         key: CONFIG.razorpayKey,
