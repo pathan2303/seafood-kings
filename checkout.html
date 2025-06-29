@@ -15,7 +15,6 @@
       margin: 0;
       padding: 2rem;
     }
-
     .container {
       max-width: 600px;
       margin: auto;
@@ -23,7 +22,6 @@
       padding: 2rem;
       border-radius: 10px;
     }
-
     input, textarea {
       width: 100%;
       padding: 0.7rem;
@@ -31,7 +29,6 @@
       border: none;
       border-radius: 5px;
     }
-
     .btn {
       width: 100%;
       padding: 0.9rem;
@@ -43,12 +40,10 @@
       border-radius: 5px;
       margin-top: 1rem;
     }
-
     .btn-secondary {
       background-color: #333;
       color: #e8c175;
     }
-
     .payment-options {
       margin-top: 1.5rem;
     }
@@ -69,88 +64,77 @@
   </div>
 
   <script>
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  function collectFormData() {
-    return {
-      name: document.getElementById("name").value.trim() || "Customer",
-      phone: document.getElementById("phone").value.trim() || "N/A",
-      address: document.getElementById("address").value.trim() || "N/A",
-      note: document.getElementById("note").value.trim(),
-      items: cart.map(item => `${item.name} - ₹${item.price}`).join(", "),
-      total: total,
-      time: new Date().toLocaleString(),
-    };
-  }
-
-  function sendCODOrder() {
-    if (cart.length === 0) {
-      alert("🛒 Your cart is empty!");
-      return;
+    function collectFormData() {
+      return {
+        name: document.getElementById("name").value.trim() || "Customer",
+        phone: document.getElementById("phone").value.trim() || "N/A",
+        address: document.getElementById("address").value.trim() || "N/A",
+        note: document.getElementById("note").value.trim(),
+        items: cart.map(item => `${item.name} - ₹${item.price}`).join(", "),
+        total: total,
+        time: new Date().toLocaleString(),
+      };
     }
 
-    const data = collectFormData();
-    if (!data.name || !data.phone || !data.address) {
-      alert("❗Please fill all required fields.");
-      return;
-    }
-
-    fetch(CONFIG.zapierWebhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-    .then(() => {
-      localStorage.removeItem("cart");
-      window.location.href = "thankyou.html";
-    })
-    .catch(err => {
-      alert("❌ Network error while placing COD order.");
-      console.error(err);
-    });
-  }
-
-  function payViaRazorpay() {
-    const data = collectFormData();
-    if (!data.name || !data.phone || !data.address) {
-      alert("❗Please fill all required fields.");
-      return;
-    }
-
-    const options = {
-      key: CONFIG.razorpayKey,
-      amount: data.total * 100,
-      currency: "INR",
-      name: "Sea Food Kings",
-      description: "Order Payment",
-      handler: function () {
-        fetch(CONFIG.zapierWebhook, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        })
-        .then(() => {
+    function sendOrderToZapier(data) {
+      fetch(CONFIG.zapierWebhook, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+      .then((res) => {
+        if (res.ok || res.status === 0) {
           localStorage.removeItem("cart");
           window.location.href = "thankyou.html";
-        })
-        .catch(err => {
-          alert("❌ Razorpay paid but log failed.");
-          console.error(err);
-        });
-      },
-      prefill: {
-        name: data.name,
-        contact: data.phone,
-      },
-      theme: {
-        color: "#e8c175"
-      }
-    };
+        } else {
+          alert("❌ Order placed but logging failed.");
+        }
+      })
+      .catch((err) => {
+        alert("❌ Network error. Please try again.");
+        console.error(err);
+      });
+    }
 
-    const rzp = new Razorpay(options);
-    rzp.open();
-  }
-</script>
+    function sendCODOrder() {
+      if (cart.length === 0) {
+        alert("Cart is empty.");
+        return;
+      }
+
+      const data = collectFormData();
+      sendOrderToZapier(data);
+    }
+
+    function payViaRazorpay() {
+      const data = collectFormData();
+
+      const options = {
+        key: CONFIG.razorpayKey,
+        amount: data.total * 100,
+        currency: "INR",
+        name: "Sea Food Kings",
+        description: "Online Order Payment",
+        handler: function () {
+          sendOrderToZapier(data);
+        },
+        prefill: {
+          name: data.name,
+          contact: data.phone
+        },
+        theme: {
+          color: "#e8c175"
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
 </body>
 </html>
