@@ -86,32 +86,43 @@
 
     function sendCODOrder() {
       if (cart.length === 0) {
-        alert("Your cart is empty!");
+        alert("🛒 Your cart is empty!");
         return;
       }
 
       const data = collectFormData();
 
+      if (!data.name || !data.phone || !data.address) {
+        alert("❗Please fill all required fields.");
+        return;
+      }
+
       fetch(CONFIG.zapierWebhook, {
         method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
-      .then(() => {
-        localStorage.removeItem("cart");
-        window.location.href = "thankyou.html";
+      .then(response => {
+        if (response.ok) {
+          localStorage.removeItem("cart");
+          window.location.href = "thankyou.html";
+        } else {
+          alert("❌ COD Order failed. Zapier error.");
+        }
       })
-      .catch((err) => {
-        alert("❌ Network error");
+      .catch(err => {
+        alert("❌ Network error while placing COD order.");
         console.error(err);
       });
     }
 
     function payViaRazorpay() {
       const data = collectFormData();
+
+      if (!data.name || !data.phone || !data.address) {
+        alert("❗Please fill all required fields.");
+        return;
+      }
 
       const options = {
         key: CONFIG.razorpayKey,
@@ -124,14 +135,23 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
-          }).then(() => {
-            localStorage.removeItem("cart");
-            window.location.href = "thankyou.html";
-          }).catch(() => alert("❌ Order placed but failed to log!"));
+          })
+          .then(res => {
+            if (res.ok) {
+              localStorage.removeItem("cart");
+              window.location.href = "thankyou.html";
+            } else {
+              alert("❌ Razorpay paid but logging failed.");
+            }
+          })
+          .catch(err => {
+            alert("❌ Razorpay paid but network/log failed.");
+            console.error(err);
+          });
         },
         prefill: {
           name: data.name,
-          contact: data.phone
+          contact: data.phone,
         },
         theme: {
           color: "#e8c175"
