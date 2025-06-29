@@ -147,10 +147,11 @@
     }
 
     function sendOrder() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const note = document.getElementById("note").value.trim();
+      const name = document.getElementById("name")?.value || "Customer";
+      const phone = document.getElementById("phone")?.value || "N/A";
+      const address = document.getElementById("address")?.value || "N/A";
+      const note = document.getElementById("note")?.value || "";
+im();
 
       if (!name || !phone || !address) {
         alert("Please fill all required fields.");
