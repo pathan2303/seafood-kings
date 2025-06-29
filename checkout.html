@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout - Sea Food Kings</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="config.js"></script> <!-- Razorpay key + Zapier link -->
+  <script src="config.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -55,10 +55,10 @@
   <div class="container">
     <h2>Checkout</h2>
     <form id="orderForm">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="tel" name="phone" placeholder="Phone Number" required />
       <textarea name="address" placeholder="Delivery Address" required></textarea>
-      <textarea name="note" placeholder="Any special instructions (optional)"></textarea>
+      <textarea name="note" placeholder="Note (optional)"></textarea>
 
       <div class="toggle-buttons">
         <button type="button" onclick="payWithRazorpay()">Pay with Razorpay</button>
