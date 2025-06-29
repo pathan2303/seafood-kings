@@ -6,6 +6,7 @@
   <title>Checkout - Sea Food Kings</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="config.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -78,45 +79,33 @@
       };
     }
 
-    function sendOrderToZapier(data) {
+    function sendToZapier(data) {
       fetch(CONFIG.zapierWebhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       })
-      .then((res) => {
-        if (res.ok || res.status === 0) {
-          localStorage.removeItem("cart");
-          window.location.href = "thankyou.html";
-        } else {
-          alert("❌ Order placed but logging failed.");
-        }
+      .then(() => {
+        localStorage.removeItem("cart");
+        window.location.href = "thankyou.html";
       })
       .catch((err) => {
-        alert("❌ Network error while logging order.");
+        alert("❌ Network error while sending order.");
         console.error(err);
       });
     }
 
     function sendCODOrder() {
       const data = collectFormData();
-
       if (!data.name || !data.phone || !data.address) {
         alert("Please fill all required fields.");
         return;
       }
-
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-
-      sendOrderToZapier(data);
+      sendToZapier(data);
     }
 
     function payViaRazorpay() {
       const data = collectFormData();
-
       if (!data.name || !data.phone || !data.address) {
         alert("Please fill all required fields.");
         return;
@@ -129,7 +118,7 @@
         name: "Sea Food Kings",
         description: "Online Order Payment",
         handler: function () {
-          sendOrderToZapier(data);
+          sendToZapier(data);
         },
         prefill: {
           name: data.name,
@@ -144,11 +133,5 @@
       rzp.open();
     }
   </script>
-  <script>
-  const CONFIG = {
-    razorpayKey: "rzp_test_rXXsewprnszVhN",
-    zapierWebhook: "https://hooks.zapier.com/hooks/catch/23506670/ubk1gb1/"
-  };
-</script>
 </body>
 </html>
