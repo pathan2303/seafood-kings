@@ -6,7 +6,6 @@
   <title>Checkout - Sea Food Kings</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="config.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -145,5 +144,11 @@
       rzp.open();
     }
   </script>
+  <script>
+  const CONFIG = {
+    razorpayKey: "rzp_test_rXXsewprnszVhN",
+    zapierWebhook: "https://hooks.zapier.com/hooks/catch/23506670/ubk1gb1/"
+  };
+</script>
 </body>
 </html>
