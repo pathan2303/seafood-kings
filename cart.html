@@ -173,13 +173,14 @@
         body: JSON.stringify(orderData)
       })
       .then(() => {
-        localStorage.removeItem("cart");
-        window.location.href = "thankyou.html";
-      })
-      .catch(err => {
-        alert("❌ Network error.");
-        console.error(err);
-      });
+  localStorage.removeItem("cart");
+  window.location.href = "thankyou.html";
+})
+.catch(err => {
+  console.warn("Zapier webhook failed silently, but payment was successful.");
+  localStorage.removeItem("cart");
+  window.location.href = "thankyou.html";
+});
     }
 
     function payRazorpay() {
