@@ -3,9 +3,18 @@
   <input type="text" name="name" placeholder="Your Name" required><br><br>
   <input type="text" name="phone" placeholder="Phone Number" required><br><br>
   <textarea name="address" placeholder="Delivery Address" required></textarea><br><br>
+
+  <label><input type="radio" name="paymentMode" value="cod" checked> Cash on Delivery</label><br>
+  <label><input type="radio" name="paymentMode" value="upi"> UPI (Google Pay/PhonePe)</label><br><br>
+
+  <div id="upiSection" style="display: none;">
+    <img src="qrcode.jpg" alt="Scan to Pay" style="width:200px;"><br>
+    <p>UPI ID: <strong>shabaz.cool76@oksbi</strong></p>
+    <button type="button" id="rzp-button" class="checkout-btn">Pay with Razorpay</button>
+  </div>
+
   <button type="submit" class="checkout-btn">Confirm COD Order</button>
 </form>
-
 <script>
   document.getElementById("orderForm").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -36,3 +45,4 @@
     });
   });
 </script>
+
