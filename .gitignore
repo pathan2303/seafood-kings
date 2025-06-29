@@ -1,2 +1,5 @@
 config.js
+# ignore secrets but not config.js
+# Add this line:
+!config.js
 
