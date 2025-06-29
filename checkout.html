@@ -1,48 +1,160 @@
-<h2>Enter Delivery Details</h2>
-<form id="orderForm">
-  <input type="text" name="name" placeholder="Your Name" required><br><br>
-  <input type="text" name="phone" placeholder="Phone Number" required><br><br>
-  <textarea name="address" placeholder="Delivery Address" required></textarea><br><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout - Sea Food Kings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="config.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #0d0d0d, #1a1a1a);
+      color: #e8c175;
+      padding: 2rem;
+    }
 
-  <label><input type="radio" name="paymentMode" value="cod" checked> Cash on Delivery</label><br>
-  <label><input type="radio" name="paymentMode" value="upi"> UPI (Google Pay/PhonePe)</label><br><br>
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #1b1b1b;
+      padding: 2rem;
+      border-radius: 10px;
+    }
 
-  <div id="upiSection" style="display: none;">
-    <img src="qrcode.jpg" alt="Scan to Pay" style="width:200px;"><br>
-    <p>UPI ID: <strong>shabaz.cool76@oksbi</strong></p>
-    <button type="button" id="rzp-button" class="checkout-btn">Pay with Razorpay</button>
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .btn {
+      background-color: #e8c175;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #d1b67c;
+    }
+
+    .payment-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .payment-options button {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Enter Delivery Details</h2>
+    <form id="orderForm">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="text" name="phone" placeholder="Phone Number" required />
+      <textarea name="address" placeholder="Delivery Address" required></textarea>
+      <textarea name="note" placeholder="Note (optional)"></textarea>
+
+      <div class="payment-options">
+        <button type="button" class="btn" onclick="payWithRazorpay()">Pay with Razorpay</button>
+        <button type="submit" class="btn">Cash on Delivery</button>
+      </div>
+    </form>
   </div>
 
-  <button type="submit" class="checkout-btn">Confirm COD Order</button>
-</form>
-<script>
-  document.getElementById("orderForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const data = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-
-    // Optional: attach cart items
+  <script>
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    data.cart = cart;
 
-    fetch("https://hooks.zapier.com/hooks/catch/23506670/ubiaupo/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    })
-    .then(res => {
-      if (res.ok) {
-        alert("✅ Order placed successfully!");
-        localStorage.removeItem("cart");
-        window.location.href = "thankyou.html";
-      } else {
-        alert("❌ Order failed. Please try again.");
+    function payWithRazorpay() {
+      const total = cart.reduce((sum, item) => sum + item.price, 0) * 100; // in paise
+      const name = document.querySelector('[name="name"]').value.trim();
+      const phone = document.querySelector('[name="phone"]').value.trim();
+      const address = document.querySelector('[name="address"]').value.trim();
+
+      if (!name || !phone || !address) {
+        alert("Please fill in all delivery details first.");
+        return;
       }
-    });
-  });
-</script>
 
+      const options = {
+        key: CONFIG.razorpayKey,
+        amount: total,
+        currency: "INR",
+        name: "Sea Food Kings",
+        description: "Premium Seafood Order",
+        handler: function (response) {
+          sendOrderToZapier(name, phone, address, "Paid via Razorpay", total / 100);
+        },
+        prefill: { name, contact: phone },
+        theme: { color: "#e8c175" },
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+
+    document.getElementById("orderForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = this.name.value.trim();
+      const phone = this.phone.value.trim();
+      const address = this.address.value.trim();
+      const note = this.note.value.trim();
+
+      if (!name || !phone || !address) {
+        alert("Please fill all required fields.");
+        return;
+      }
+
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      sendOrderToZapier(name, phone, address, note || "COD", total);
+    });
+
+    function sendOrderToZapier(name, phone, address, note, total) {
+      const orderData = {
+        name,
+        phone,
+        address,
+        note,
+        total,
+        items: cart.map(item => `${item.name} - ₹${item.price}`),
+        timestamp: new Date().toLocaleString(),
+      };
+
+      fetch(CONFIG.zapierWebhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      })
+      .then(res => {
+        if (res.ok) {
+          localStorage.removeItem("cart");
+          window.location.href = "thankyou.html";
+        } else {
+          alert("❌ Order failed. Please try again.");
+        }
+      })
+      .catch(() => alert("❌ Network error."));
+    }
+  </script>
+
+</body>
+</html>
