@@ -188,5 +188,49 @@
       });
     }
   </script>
+  <script>
+  function sendOrder() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    const name = document.getElementById("custName")?.value || "Customer";
+    const phone = document.getElementById("custPhone")?.value || "N/A";
+    const address = document.getElementById("custAddress")?.value || "N/A";
+    const note = document.getElementById("custNote")?.value || "";
+
+    const items = cart.map(item => `${item.name} - ₹${item.price}`).join(", ");
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+    const orderData = {
+      name: name,
+      phone: phone,
+      address: address,
+      note: note,
+      items: items,
+      total: total,
+      time: new Date().toLocaleString(),
+    };
+
+    fetch("https://hooks.zapier.com/hooks/catch/23506670/ubk1gb1/", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderData),
+    })
+    .then(() => {
+      localStorage.removeItem("cart");
+      window.location.href = "thankyou.html";
+    })
+    .catch(error => {
+      alert("❌ Failed to place order.");
+      console.error(error);
+    });
+  }
+</script>
 </body>
 </html>
