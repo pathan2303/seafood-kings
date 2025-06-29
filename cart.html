@@ -159,14 +159,15 @@ im();
       }
 
       const orderData = {
-        name,
-        phone,
-        address,
-        note,
-        items: cartItems.map(item => `${item.name} - ₹${item.price}`).join(", "),
-        total,
-        time: new Date().toLocaleString()
-      };
+        name: name,
+        phone: phone,
+        address: address,
+        note: note,
+        items: items,
+        total: total,
+        time: new Date().toLocaleString(), // THIS is the Timestamp
+};
+
 
       fetch(CONFIG.zapierWebhook, {
         method: "POST",
