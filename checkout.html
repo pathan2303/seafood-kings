@@ -85,16 +85,29 @@
     }
 
     function sendCODOrder() {
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
       const data = collectFormData();
 
       fetch(CONFIG.zapierWebhook, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
-      }).then(() => {
+      })
+      .then(() => {
         localStorage.removeItem("cart");
         window.location.href = "thankyou.html";
-      }).catch(() => alert("❌ Network error"));
+      })
+      .catch((err) => {
+        alert("❌ Network error");
+        console.error(err);
+      });
     }
 
     function payViaRazorpay() {
