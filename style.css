@@ -1,6 +1,6 @@
 body {
   background-color: #0d0d0d;
-  color: #e8c175;
+  color: #e8c175; /* Golden text */
   font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
@@ -12,8 +12,84 @@ body {
   padding: 2rem;
 }
 
+header {
+  text-align: center;
+  padding: 20px 0;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+nav a {
+  color: #ffd700; /* Brighter gold for links */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
 h1 {
   color: #ffd700;
-  border-bottom: 1px solid #444;
-  padding-bottom: 1rem;
+  font-size: 2rem;
+  margin: 10px 0;
+}
+
+p {
+  color: #e8c175;
+  margin: 5px 0;
+}
+
+#products div {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#products img {
+  border: 1px solid #ffd700;
+}
+
+#products input {
+  padding: 5px;
+  background: rgba(0,0,0,0.5);
+  color: #ffd700;
+  border: 1px solid #ffd700;
+}
+
+#products button {
+  padding: 5px 10px;
+  background: #ffd700;
+  color: #0d0d0d;
+  border: none;
+  cursor: pointer;
+}
+
+#products button:hover {
+  background: #e8c175;
+}
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  border-top: 1px solid #444;
+}
+
+footer a {
+  color: #ffd700;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+footer p {
+  margin-top: 10px;
 }
