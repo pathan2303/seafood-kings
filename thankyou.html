@@ -1,30 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thank You - Sea Food Kings</title>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #111);
+      color: #e8c175;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    header {
+      text-align: center;
+      padding: 1rem 2rem 0;
+      position: relative;
+    }
+    .nav-links {
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem;
+      padding: 1rem 2rem 0;
+    }
+    .nav-links a {
+      color: #e8c175;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: #fff2cc;
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      margin: 0.5rem 0 0.3rem;
+      color: #e8c175;
+    }
+    p {
+      color: #d1b67c;
+    }
+    .cart-right {
+      position: absolute;
+      right: 2rem;
+      top: 1rem;
+    }
+    .cart-btn {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -12px;
+      background-color: #e8c175;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.75rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      border-top: 1px solid #444;
+    }
+    footer a {
+      color: #e8c175;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #fff2cc;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="aboutus.html">About Us</a>
-        <a href="cart.html">Cart</a>
-        <a href="contact.html">Contact Us</a>
-      </nav>
+  <img src="octo2.png" alt="Sea Food Kings Banner" class="logo-banner">
+  <header>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="cart.html">Cart</a>
+      <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
+    </div>
     <h1>Thank You for Your Order!</h1>
-    </header>
+    <div class="cart-right">
+      <a href="cart.html" class="cart-btn">🛒 View Cart <span id="cartCount2" class="cart-count">0</span></a>
+    </div>
+  </header>
+  <div class="container">
     <p>Your payment was successful. You'll receive a confirmation soon.</p>
-    <a href="index.html">Back to Home</a>
-    <footer>
-      <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="terms-and-conditions.html">Terms & Conditions</a>
-      <a href="cancellation-refund.html">Cancellation & Refund</a>
-      <a href="shipping-delivery.html">Shipping & Delivery</a>
-      <a href="contact.html">Contact Us</a>
-      <p>© 2025 Sea Food Kings — All Rights Reserved</p>
-    </footer>
+    <a href="index.html" class="cart-btn">Back to Home</a>
   </div>
+  <footer>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-and-conditions.html">Terms & Conditions</a>
+    <a href="cancellation-refund.html">Cancellation & Refund</a>
+    <a href="shipping-delivery.html">Shipping & Delivery</a>
+    <a href="contact.html">Contact Us</a>
+    <p>© 2025 Sea Food Kings — All Rights Reserved</p>
+  </footer>
+  <script>
+    document.getElementById("cartCount2").textContent = (JSON.parse(localStorage.getItem("cart")) || []).length;
+  </script>
 </body>
 </html>
