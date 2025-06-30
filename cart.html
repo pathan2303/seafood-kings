@@ -1,77 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cart - Sea Food Kings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #121212;
-      color: #e8c175;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: #1e1e1e;
-      border-radius: 10px;
-    }
-
-    h1 {
-      color: #e8c175;
-    }
-
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      margin: 1rem 0;
-      border-bottom: 1px solid #333;
-      padding-bottom: 0.5rem;
-    }
-
-    .checkout-btn {
-      background-color: #e8c175;
-      color: #000;
-      padding: 0.7rem 2rem;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      float: right;
-    }
-  </style>
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="products.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>Your Cart</h1>
     <div id="cartItems"></div>
-    <h2 id="total">Total: ₹0</h2>
-    <button onclick="window.location.href='checkout.html'">Proceed to Checkout</button>
+    <p>Total: ₹<span id="cartTotal">0</span></p>
+    <a href="checkout.html" onclick="saveCartTotal()">Proceed to Checkout</a>
   </div>
-
   <script>
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const container = document.getElementById("cartItems");
-    const totalEl = document.getElementById("total");
+    // Load cart from localStorage or initialize empty
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    let total = 0;
-    if (cart.length === 0) {
-      container.innerHTML = "<p>Your cart is empty.</p>";
-    } else {
-      cart.forEach(item => {
-        total += item.price;
-        const div = document.createElement("div");
-        div.classList.add("cart-item");
-        div.innerHTML = `<span>${item.name}</span><span>₹${item.price}</span>`;
-        container.appendChild(div);
+    // Display cart items
+    const cartItemsDiv = document.getElementById("cartItems");
+    const cartTotalSpan = document.getElementById("cartTotal");
+    
+    function renderCart() {
+      cartItemsDiv.innerHTML = "";
+      let total = 0;
+      cart.forEach((item, index) => {
+        const product = products.find((p) => p.name === item.name);
+        if (product) {
+          const itemTotal = product.basePrice * item.quantity;
+          total += itemTotal;
+          cartItemsDiv.innerHTML += `
+            <div>
+              <p>${product.name} (Qty: ${item.quantity}) - ₹${itemTotal}</p>
+              <button onclick="updateQuantity(${index}, -1)">-</button>
+              <button onclick="updateQuantity(${index}, 1)">+</button>
+              <button onclick="removeFromCart(${index})">Remove</button>
+            </div>
+          `;
+        }
       });
+      cartTotalSpan.textContent = total;
     }
-    totalEl.textContent = "Total: ₹" + total;
+
+    // Update quantity
+    function updateQuantity(index, change) {
+      cart[index].quantity += change;
+      if (cart[index].quantity <= 0) cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    // Remove item
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    // Save total for checkout
+    function saveCartTotal() {
+      const total = parseFloat(cartTotalSpan.textContent) * 100; // Convert to paise
+      localStorage.setItem("cartTotal", total);
+    }
+
+    // Initial render
+    renderCart();
   </script>
 </body>
 </html>
