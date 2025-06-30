@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Your Cart</title>
+  <title>Your Cart - Sea Food Kings</title>
   <link rel="stylesheet" href="style.css">
   <script src="products.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Your Cart</h1>
+    <header>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="aboutus.html">About Us</a>
+        <a href="cart.html">Cart</a>
+        <a href="contact.html">Contact Us</a>
+      </nav>
+      <h1>Your Cart</h1>
+      <a href="index.html">🛒 Back to Shopping</a>
+    </header>
     <div id="cartItems"></div>
     <p>Total: ₹<span id="cartTotal">0</span></p>
-    <a href="checkout.html" onclick="saveCartTotal()">Proceed to Checkout</a>
+    <a href="checkout.html">Proceed to Checkout</a>
+    <footer>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-and-conditions.html">Terms & Conditions</a>
+      <a href="cancellation-refund.html">Cancellation & Refund</a>
+      <a href="shipping-delivery.html">Shipping & Delivery</a>
+      <a href="contact.html">Contact Us</a>
+      <p>© 2025 Sea Food Kings — All Rights Reserved</p>
+    </footer>
   </div>
   <script>
-    // Load cart from localStorage or initialize empty
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    // Display cart items
     const cartItemsDiv = document.getElementById("cartItems");
     const cartTotalSpan = document.getElementById("cartTotal");
-    
+
     function renderCart() {
       cartItemsDiv.innerHTML = "";
       let total = 0;
-      cart.forEach((item, index) => {
+      cart.forEach((item) => {
         const product = products.find((p) => p.name === item.name);
         if (product) {
           const itemTotal = product.basePrice * item.quantity;
@@ -31,9 +45,6 @@
           cartItemsDiv.innerHTML += `
             <div>
               <p>${product.name} (Qty: ${item.quantity}) - ₹${itemTotal}</p>
-              <button onclick="updateQuantity(${index}, -1)">-</button>
-              <button onclick="updateQuantity(${index}, 1)">+</button>
-              <button onclick="removeFromCart(${index})">Remove</button>
             </div>
           `;
         }
@@ -41,28 +52,6 @@
       cartTotalSpan.textContent = total;
     }
 
-    // Update quantity
-    function updateQuantity(index, change) {
-      cart[index].quantity += change;
-      if (cart[index].quantity <= 0) cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-    }
-
-    // Remove item
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-    }
-
-    // Save total for checkout
-    function saveCartTotal() {
-      const total = parseFloat(cartTotalSpan.textContent) * 100; // Convert to paise
-      localStorage.setItem("cartTotal", total);
-    }
-
-    // Initial render
     renderCart();
   </script>
 </body>
