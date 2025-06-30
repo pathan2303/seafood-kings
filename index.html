@@ -29,15 +29,12 @@
     </footer>
   </div>
   <script>
-    // Load cart
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    // Display products
     const productsDiv = document.getElementById("products");
     products.forEach((product) => {
       productsDiv.innerHTML += `
         <div>
-          <img src="${product.image}" alt="${product.name}" style="width:100px;">
+          <img src="${product.image}" alt="${product.name}" style="width: 100px;">
           <p>${product.name} - ₹${product.basePrice}</p>
           <input type="number" id="qty-${product.name}" value="1" min="1">
           <button onclick="addToCart('${product.name}')">Add to Cart</button>
@@ -45,9 +42,8 @@
       `;
     });
 
-    // Add to cart
     function addToCart(name) {
-      const quantity = parseInt(document.getElementById(`qty-${name}`).value);
+      const quantity = parseInt(document.getElementById(`qty-${product.name}`).value);
       const existing = cart.find((item) => item.name === name);
       if (existing) {
         existing.quantity += quantity;
@@ -58,13 +54,11 @@
       updateCartCount();
     }
 
-    // Update cart count
     function updateCartCount() {
       const count = cart.reduce((sum, item) => sum + item.quantity, 0);
       document.getElementById("cartCount").textContent = count;
     }
 
-    // Initial cart count
     updateCartCount();
   </script>
 </body>
