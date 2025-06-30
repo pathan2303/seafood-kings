@@ -197,60 +197,61 @@
   </div>
 
   <script src="products.js"></script>
-  <script>
-    const productList = document.getElementById("productList");
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+<script>
+  const productList = document.getElementById("productList");
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    function updateCartCount() {
-      const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-      document.getElementById("cartCount2").textContent = count;
-    }
+  function updateCartCount() {
+    const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    document.getElementById("cartCount2").textContent = count;
+  }
 
-    function addToCart(product, qty) {
-      const item = {
-        name: `${product.name} (${qty}kg)`,
-        price: Math.round(product.basePrice * qty),
-        quantity: qty
-      };
-      const existing = cart.find((item) => item.name === `${product.name} (${qty}kg)`);
-      if (existing) {
-        existing.quantity += qty;
-      } else {
-        cart.push(item);
-      }
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCartCount();
-      alert("✅ Added to cart!");
-    }
-
-    updateCartCount();
-
-    if (typeof products !== 'undefined' && Array.isArray(products)) {
-      products.forEach(product => {
-        const card = document.createElement("div");
-        card.className = "product-card";
-        card.innerHTML = `
-          <img src="${product.image}" alt="${product.name}">
-          <h3>${product.name}</h3>
-          <p>₹${product.basePrice}/kg</p>
-          <input type="number" step="0.25" min="0.25" class="qty-input" value="1">
-          <button class="add-btn">Add to Cart</button>
-        `;
-        const qtyInput = card.querySelector(".qty-input");
-        const addBtn = card.querySelector(".add-btn");
-        addBtn.addEventListener("click", () => {
-          const qty = parseFloat(qtyInput.value);
-          if (qty >= 0.25) {
-            addToCart(product, qty);
-          } else {
-            alert("Minimum quantity is 0.25kg!");
-          }
-        });
-        productList.appendChild(card);
-      });
+  function addToCart(product, qty) {
+    const itemName = `${product.name} (${qty}kg)`;
+    const item = {
+      name: itemName,
+      price: Math.round(product.basePrice * qty),
+      quantity: qty
+    };
+    const existing = cart.find((item) => item.name === itemName);
+    if (existing) {
+      existing.quantity += qty;
     } else {
-      productList.innerHTML = "<p style='color: red;'>Product list not loaded.</p>";
+      cart.push(item);
     }
-  </script>
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+    alert("✅ Added to cart!");
+  }
+
+  updateCartCount();
+
+  if (typeof products !== 'undefined' && Array.isArray(products)) {
+    products.forEach(product => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p>₹${product.basePrice}/kg</p>
+        <input type="number" step="0.25" min="0.25" class="qty-input" value="1">
+        <button class="add-btn">Add to Cart</button>
+      `;
+      const qtyInput = card.querySelector(".qty-input");
+      const addBtn = card.querySelector(".add-btn");
+      addBtn.addEventListener("click", () => {
+        const qty = parseFloat(qtyInput.value);
+        if (qty >= 0.25) {
+          addToCart(product, qty);
+        } else {
+          alert("Minimum quantity is 0.25kg!");
+        }
+      });
+      productList.appendChild(card);
+    });
+  } else {
+    productList.innerHTML = "<p style='color: red;'>Product list not loaded.</p>";
+  }
+</script>
 </body>
 </html>
