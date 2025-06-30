@@ -21,6 +21,17 @@
     document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2);
 
     function payWithRazorpay() {
+      console.log("Starting Razorpay payment...");
+      console.log("Razorpay Key:", CONFIG.razorpayKey);
+      console.log("Zapier Webhook URL:", CONFIG.zapierWebhook);
+      console.log("Cart Total (paise):", cartTotal);
+
+      if (!CONFIG.razorpayKey || !CONFIG.zapierWebhook) {
+        console.error("Config missing! Check config-public.js");
+        alert("Configuration error. Contact support.");
+        return;
+      }
+
       const options = {
         key: CONFIG.razorpayKey,
         amount: parseInt(cartTotal), // In paise
@@ -29,25 +40,34 @@
         description: "Order Payment",
         handler: function (response) {
           console.log("Payment Success:", response);
-          // Send data to Zapier
+          const payload = {
+            order_id: response.razorpay_order_id || "N/A",
+            payment_id: response.razorpay_payment_id,
+            signature: response.razorpay_signature || "N/A",
+            status: "success",
+            amount: cartTotal / 100,
+            timestamp: new Date().toISOString(),
+          };
+          console.log("Sending to Zapier:", payload);
+
           fetch(CONFIG.zapierWebhook, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              order_id: response.razorpay_order_id || "N/A",
-              payment_id: response.razorpay_payment_id,
-              signature: response.razorpay_signature || "N/A",
-              status: "success",
-              amount: cartTotal / 100,
-              timestamp: new Date().toISOString(),
-            }),
+            body: JSON.stringify(payload),
           })
             .then((res) => {
-              console.log("Zapier webhook sent:", res);
-              window.location.href = "thankyou.html";
+              console.log("Zapier webhook response:", res.status, res.statusText);
+              if (res.ok) {
+                console.log("Webhook sent successfully!");
+                window.location.href = "thankyou.html";
+              } else {
+                console.error("Webhook failed with status:", res.status, res.statusText);
+                alert("Order placed but failed to log. Contact support.");
+                window.location.href = "thankyou.html";
+              }
             })
             .catch((err) => {
-              console.error("Zapier error:", err);
+              console.error("Zapier fetch error:", err.message);
               alert("Order placed but failed to log. Contact support.");
               window.location.href = "thankyou.html";
             });
@@ -59,6 +79,7 @@
         },
         theme: { color: "#3399cc" },
       };
+
       const rzp = new Razorpay(options);
       rzp.on("payment.failed", function (response) {
         console.error("Payment Failed:", response.error);
