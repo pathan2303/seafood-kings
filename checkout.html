@@ -21,24 +21,27 @@
     header {
       text-align: center;
       padding: 1rem 2rem 0;
+      position: relative;
     }
-    nav {
+    .nav-links {
       display: flex;
       justify-content: flex-start;
       gap: 2rem;
       padding: 1rem 2rem 0;
     }
-    nav a {
+    .nav-links a {
       color: #e8c175;
       text-decoration: none;
       font-weight: 600;
+      transition: color 0.3s ease;
     }
-    nav a:hover {
+    .nav-links a:hover {
       color: #fff2cc;
     }
     h1 {
       font-family: 'Cinzel', serif;
       font-size: 1.5rem;
+      margin: 0.5rem 0 0.3rem;
       color: #e8c175;
     }
     p {
@@ -49,17 +52,32 @@
       right: 2rem;
       top: 1rem;
     }
-    button {
+    .cart-btn {
       background-color: #e8c175;
       color: #0d0d0d;
       font-weight: bold;
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 5px;
-      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.9rem;
     }
-    button:hover {
-      background-color: #d1b67c;
+    .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -12px;
+      background-color: #e8c175;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.75rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     footer {
       text-align: center;
@@ -74,39 +92,55 @@
     footer a:hover {
       color: #fff2cc;
     }
+    button {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #d1b67c;
+    }
   </style>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="config-public.js"></script>
 </head>
 <body>
+  <img src="octo2.png" alt="Sea Food Kings Banner" class="logo-banner">
+  <header>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="cart.html">Cart</a>
+      <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
+    </div>
+    <h1>Checkout</h1>
+    <div class="cart-right">
+      <a href="cart.html" class="cart-btn">🛒 View Cart <span id="cartCount2" class="cart-count">0</span></a>
+    </div>
+  </header>
   <div class="container">
-    <header>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="aboutus.html">About Us</a>
-        <a href="cart.html">Cart</a>
-        <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
-      </nav>
-      <h1>Checkout</h1>
-      <a href="cart.html">🛒 Back to Cart</a>
-    </header>
     <p>Total: ₹<span id="cartTotal">0</span></p>
     <div>
       <button onclick="payWithRazorpay()">Pay Online (Razorpay)</button>
       <p style="color: red; font-weight: bold;">Cash on Delivery Coming Soon!</p>
     </div>
-    <footer>
-      <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="terms-and-conditions.html">Terms & Conditions</a>
-      <a href="cancellation-refund.html">Cancellation & Refund</a>
-      <a href="shipping-delivery.html">Shipping & Delivery</a>
-      <a href="contact.html">Contact Us</a>
-      <p>© 2025 Sea Food Kings — All Rights Reserved</p>
-    </footer>
   </div>
+  <footer>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-and-conditions.html">Terms & Conditions</a>
+    <a href="cancellation-refund.html">Cancellation & Refund</a>
+    <a href="shipping-delivery.html">Shipping & Delivery</a>
+    <a href="contact.html">Contact Us</a>
+    <p>© 2025 Sea Food Kings — All Rights Reserved</p>
+  </footer>
   <script>
     const cartTotal = localStorage.getItem("cartTotal") || 100;
     document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2);
+    document.getElementById("cartCount2").textContent = (JSON.parse(localStorage.getItem("cart")) || []).length;
 
     function payWithRazorpay() {
       const options = {
@@ -116,26 +150,8 @@
         name: "Sea Food Kings",
         description: "Order Payment",
         handler: function (response) {
-          const payload = {
-            order_id: response.razorpay_order_id || "N/A",
-            payment_id: response.razorpay_payment_id,
-            status: "success",
-            amount: cartTotal / 100,
-            timestamp: new Date().toISOString(),
-          };
-          const form = document.createElement("form");
-          form.method = "POST";
-          form.action = "YOUR_GOOGLE_FORM_URL"; // Replace with your form URL
-          form.style.display = "none";
-          for (let key in payload) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = payload[key];
-            form.appendChild(input);
-          }
-          document.body.appendChild(form);
-          form.submit();
+          console.log("Payment Success:", response);
+          alert("Order placed successfully! Logging may fail due to server issue.");
           window.location.href = "thankyou.html";
         },
         prefill: { name: "Customer", email: "customer@example.com", contact: "9999999999" },
