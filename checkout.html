@@ -1,153 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checkout - Sea Food Kings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="config-public.js"></script>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #121212;
-      color: #e8c175;
-      margin: 0;
-      padding: 2rem;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: #1e1e1e;
-      padding: 2rem;
-      border-radius: 10px;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 0.7rem;
-      margin: 0.5rem 0;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 0.9rem;
-      border: none;
-      background-color: #e8c175;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      margin-top: 1rem;
-    }
-
-    .btn-secondary {
-      background-color: #333;
-      color: #e8c175;
-    }
-
-    .payment-options {
-      margin-top: 1.5rem;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
     <h1>Checkout</h1>
-    <input id="name" placeholder="Full Name" required />
-    <input id="phone" placeholder="Phone Number" required />
-    <textarea id="address" placeholder="Delivery Address" rows="3" required></textarea>
-    <input id="note" placeholder="Note (optional)" />
-
-    <div class="payment-options">
-      <button class="btn" onclick="payViaRazorpay()">Pay Online (Razorpay)</button>
-      <button class="btn btn-secondary" onclick="sendCODOrder()">Cash on Delivery</button>
+    <p>Total: ₹<span id="cartTotal">0</span></p>
+    <div>
+      <button onclick="payWithRazorpay()">Pay Online (Razorpay)</button>
+      <p style="color: red; font-weight: bold;">Cash on Delivery Coming Soon!</p>
     </div>
   </div>
-
   <script>
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    // Load cart total
+    const cartTotal = localStorage.getItem("cartTotal") || 100; // Fallback to ₹1
+    document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2);
 
-    function collectFormData() {
-      return {
-        name: document.getElementById("name").value.trim() || "Customer",
-        phone: document.getElementById("phone").value.trim() || "N/A",
-        address: document.getElementById("address").value.trim() || "N/A",
-        note: document.getElementById("note").value.trim(),
-        items: cart.map(item => `${item.name} (${item.price}₹)`).join(", "),
-        total,
-        time: new Date().toLocaleString()
-      };
-    }
-
-    function sendToZapier(data) {
-      return fetch(CONFIG.zapierWebhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-    }
-
-    function sendCODOrder() {
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-
-      const data = collectFormData();
-
-      sendToZapier(data)
-        .then(res => {
-          if (res.ok) {
-            localStorage.removeItem("cart");
-            window.location.href = "thankyou.html";
-          } else {
-            alert("❌ Failed to log order.");
-          }
-        })
-        .catch(() => {
-          alert("❌ Network error while placing order.");
-        });
-    }
-
-    function payViaRazorpay() {
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
-
-      const data = collectFormData();
-
+    function payWithRazorpay() {
       const options = {
         key: CONFIG.razorpayKey,
-        amount: data.total * 100,
+        amount: parseInt(cartTotal), // In paise
         currency: "INR",
         name: "Sea Food Kings",
         description: "Order Payment",
-        handler: function () {
-          sendToZapier(data)
-            .then(() => {
-              localStorage.removeItem("cart");
+        handler: function (response) {
+          console.log("Payment Success:", response);
+          // Send data to Zapier
+          fetch(CONFIG.zapierWebhook, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              order_id: response.razorpay_order_id || "N/A",
+              payment_id: response.razorpay_payment_id,
+              signature: response.razorpay_signature || "N/A",
+              status: "success",
+              amount: cartTotal / 100,
+              timestamp: new Date().toISOString(),
+            }),
+          })
+            .then((res) => {
+              console.log("Zapier webhook sent:", res);
               window.location.href = "thankyou.html";
             })
-            .catch(() => {
-              alert("✅ Payment done, but logging failed.");
+            .catch((err) => {
+              console.error("Zapier error:", err);
+              alert("Order placed but failed to log. Contact support.");
+              window.location.href = "thankyou.html";
             });
         },
         prefill: {
-          name: data.name,
-          contact: data.phone
+          name: "Customer Name", // Replace with form input
+          email: "customer@example.com",
+          contact: "9999999999",
         },
-        theme: {
-          color: "#e8c175"
-        }
+        theme: { color: "#3399cc" },
       };
-
       const rzp = new Razorpay(options);
+      rzp.on("payment.failed", function (response) {
+        console.error("Payment Failed:", response.error);
+        alert("Payment failed: " + response.error.description);
+      });
       rzp.open();
     }
   </script>
