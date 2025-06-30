@@ -1,8 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout - Sea Food Kings</title>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #111);
+      color: #e8c175;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    header {
+      text-align: center;
+      padding: 1rem 2rem 0;
+    }
+    nav {
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem;
+      padding: 1rem 2rem 0;
+    }
+    nav a {
+      color: #e8c175;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    nav a:hover {
+      color: #fff2cc;
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      color: #e8c175;
+    }
+    p {
+      color: #d1b67c;
+    }
+    .cart-right {
+      position: absolute;
+      right: 2rem;
+      top: 1rem;
+    }
+    button {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #d1b67c;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      border-top: 1px solid #444;
+    }
+    footer a {
+      color: #e8c175;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #fff2cc;
+    }
+  </style>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="config-public.js"></script>
 </head>
@@ -13,7 +85,7 @@
         <a href="index.html">Home</a>
         <a href="aboutus.html">About Us</a>
         <a href="cart.html">Cart</a>
-        <a href="contact.html">Contact Us</a>
+        <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
       </nav>
       <h1>Checkout</h1>
       <a href="cart.html">🛒 Back to Cart</a>
@@ -44,8 +116,26 @@
         name: "Sea Food Kings",
         description: "Order Payment",
         handler: function (response) {
-          console.log("Payment Success:", response);
-          alert("Order placed successfully! Logging may fail due to server issue.");
+          const payload = {
+            order_id: response.razorpay_order_id || "N/A",
+            payment_id: response.razorpay_payment_id,
+            status: "success",
+            amount: cartTotal / 100,
+            timestamp: new Date().toISOString(),
+          };
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = "YOUR_GOOGLE_FORM_URL"; // Replace with your form URL
+          form.style.display = "none";
+          for (let key in payload) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = payload[key];
+            form.appendChild(input);
+          }
+          document.body.appendChild(form);
+          form.submit();
           window.location.href = "thankyou.html";
         },
         prefill: { name: "Customer", email: "customer@example.com", contact: "9999999999" },
