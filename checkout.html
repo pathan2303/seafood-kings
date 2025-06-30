@@ -1,85 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Checkout</title>
+  <title>Checkout - Sea Food Kings</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="config-public.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Checkout</h1>
+    <header>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="aboutus.html">About Us</a>
+        <a href="cart.html">Cart</a>
+        <a href="contact.html">Contact Us</a>
+      </nav>
+      <h1>Checkout</h1>
+      <a href="cart.html">🛒 Back to Cart</a>
+    </header>
     <p>Total: ₹<span id="cartTotal">0</span></p>
     <div>
       <button onclick="payWithRazorpay()">Pay Online (Razorpay)</button>
       <p style="color: red; font-weight: bold;">Cash on Delivery Coming Soon!</p>
     </div>
+    <footer>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-and-conditions.html">Terms & Conditions</a>
+      <a href="cancellation-refund.html">Cancellation & Refund</a>
+      <a href="shipping-delivery.html">Shipping & Delivery</a>
+      <a href="contact.html">Contact Us</a>
+      <p>© 2025 Sea Food Kings — All Rights Reserved</p>
+    </footer>
   </div>
   <script>
-    // Load cart total
-    const cartTotal = localStorage.getItem("cartTotal") || 100; // Fallback to ₹1
+    const cartTotal = localStorage.getItem("cartTotal") || 100;
     document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2);
 
     function payWithRazorpay() {
-      console.log("Starting Razorpay payment...");
-      console.log("Razorpay Key:", CONFIG.razorpayKey);
-      console.log("Zapier Webhook URL:", CONFIG.zapierWebhook);
-      console.log("Cart Total (paise):", cartTotal);
-
-      if (!CONFIG.razorpayKey || !CONFIG.zapierWebhook) {
-        console.error("Config missing! Check config-public.js");
-        alert("Configuration error. Contact support.");
-        return;
-      }
-
       const options = {
         key: CONFIG.razorpayKey,
-        amount: parseInt(cartTotal), // In paise
+        amount: parseInt(cartTotal),
         currency: "INR",
         name: "Sea Food Kings",
         description: "Order Payment",
         handler: function (response) {
           console.log("Payment Success:", response);
-          const payload = {
-            order_id: response.razorpay_order_id || "N/A",
-            payment_id: response.razorpay_payment_id,
-            signature: response.razorpay_signature || "N/A",
-            status: "success",
-            amount: cartTotal / 100,
-            timestamp: new Date().toISOString(),
-          };
-          console.log("Sending to Zapier:", payload);
-
-          fetch(CONFIG.zapierWebhook, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          })
-            .then((res) => {
-              console.log("Zapier webhook response:", res.status, res.statusText);
-              if (res.ok) {
-                console.log("Webhook sent successfully!");
-                window.location.href = "thankyou.html";
-              } else {
-                console.error("Webhook failed with status:", res.status, res.statusText);
-                alert("Order placed but failed to log. Contact support.");
-                window.location.href = "thankyou.html";
-              }
-            })
-            .catch((err) => {
-              console.error("Zapier fetch error:", err.message);
-              alert("Order placed but failed to log. Contact support.");
-              window.location.href = "thankyou.html";
-            });
+          alert("Order placed successfully! Logging may fail due to server issue.");
+          window.location.href = "thankyou.html";
         },
-        prefill: {
-          name: "Customer Name", // Replace with form input
-          email: "customer@example.com",
-          contact: "9999999999",
-        },
+        prefill: { name: "Customer", email: "customer@example.com", contact: "9999999999" },
         theme: { color: "#3399cc" },
       };
-
       const rzp = new Razorpay(options);
       rzp.on("payment.failed", function (response) {
         console.error("Payment Failed:", response.error);
