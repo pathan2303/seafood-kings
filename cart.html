@@ -92,10 +92,37 @@
     footer a:hover {
       color: #fff2cc;
     }
+    .cart-item {
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .qty-btn {
+      background-color: #e8c175;
+      color: #0d0d0d;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .qty-btn:hover {
+      background-color: #d1b67c;
+    }
+    .remove-btn {
+      background-color: #ff4444;
+      color: #fff;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .remove-btn:hover {
+      background-color: #cc0000;
+    }
   </style>
 </head>
 <body>
-  <img src="octo2.png" alt="Sea Food Kings Banner" class="logo-banner">
   <header>
     <div class="nav-links">
       <a href="index.html">Home</a>
@@ -131,21 +158,41 @@
     function renderCart() {
       cartItemsDiv.innerHTML = "";
       let total = 0;
-      cart.forEach((item) => {
-        const product = products.find((p) => p.name === item.name.split(" (")[0]);
+      cart.forEach((item, index) => {
+        const productName = item.name.split(" (")[0];
+        const qty = item.quantity || 1;
+        const product = products.find((p) => p.name === productName);
         if (product) {
-          const qty = item.quantity || 1;
           const itemTotal = product.basePrice * qty;
           total += itemTotal;
           cartItemsDiv.innerHTML += `
-            <div style="margin: 1rem 0;">
-              <p>${item.name} - ₹${itemTotal}</p>
+            <div class="cart-item">
+              <p>${item.name} - ₹${itemTotal.toFixed(2)}</p>
+              <button class="qty-btn" onclick="changeQuantity(${index}, -1)">-</button>
+              <span>${qty}</span>
+              <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
+              <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
             </div>
           `;
         }
       });
       cartTotalSpan.textContent = total.toFixed(2);
-      cartCount.textContent = cart.length;
+      cartCount.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    }
+
+    function changeQuantity(index, delta) {
+      if (cart[index].quantity + delta >= 0.25) {
+        cart[index].quantity += delta;
+        if (cart[index].quantity < 0.25) cart[index].quantity = 0.25;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      }
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
     }
 
     renderCart();
