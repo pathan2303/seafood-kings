@@ -119,8 +119,13 @@
     <a href="contact.html">Contact Us</a>
     <p>© 2025 Sea Food Kings — All Rights Reserved</p>
   </footer>
-  <script>
-    document.getElementById("cartCount2").textContent = (JSON.parse(localStorage.getItem("cart")) || []).reduce((sum, item) => sum + (item.quantity || 1), 0);
-  </script>
+ <script>
+  // Clear cart after successful payment
+  localStorage.removeItem("cart");
+  localStorage.removeItem("cartTotal");
+  document.getElementById("cartCount2").textContent = 0;
+
+  document.getElementById("cartCount2").textContent = (JSON.parse(localStorage.getItem("cart")) || []).reduce((sum, item) => sum + (item.quantity || 1), 0);
+</script>
 </body>
 </html>
