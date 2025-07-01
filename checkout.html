@@ -171,31 +171,30 @@ function payWithRazorpay() {
     name: "Sea Food Kings",
     description: "Order Payment",
     handler: function (response) {
-      try {
-        const payload = {
-          order_id: response.razorpay_order_id || "N/A",
-          payment_id: response.razorpay_payment_id,
-          status: "success",
-          amount: cartTotal,
-          timestamp: new Date().toISOString(),
-        };
-        console.log("Payload:", payload);
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScUbTFCdh728xszIPB0tNgLGodQXGh3bpFKQV6Rg6cH3l1f2w/formResponse";
-        form.style.display = "none";
-        for (let key in payload) {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = key;
-          input.value = payload[key];
-          form.appendChild(input);
-        }
-        document.body.appendChild(form);
-        console.log("Form action:", form.action);
-        console.log("Form submitted:", form.outerHTML); // Log form structure
-        form.submit();
-        window.location.href = "thankyou.html";
+  try {
+    const payload = {
+      order_id: response.razorpay_order_id || "N/A",
+      payment_id: response.razorpay_payment_id,
+      status: "success",
+      amount: cartTotal,
+      timestamp: new Date().toISOString(),
+    };
+    // Send payload to server (e.g., via fetch API)
+    fetch('http://localhost:3000/save-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    .then(response => response.json())
+    .then(data => console.log('Server response:', data))
+    .catch(error => console.error('Error:', error));
+    window.location.href = "thankyou.html";
+  } catch (error) {
+    console.error("Payment handler error:", error);
+    alert("Payment processed, but logging failed. Contact support.");
+    window.location.href = "thankyou.html";
+  }
+}
       } catch (error) {
         console.error("Error:", error);
         alert("Payment processed, but logging failed. Contact support.");
