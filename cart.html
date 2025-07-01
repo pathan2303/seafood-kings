@@ -149,6 +149,7 @@
     <p>© 2025 Sea Food Kings — All Rights Reserved</p>
   </footer>
  <script src="products.js"></script>
+<script src="products.js"></script>
 <script>
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartItemsDiv = document.getElementById("cartItems");
@@ -156,6 +157,10 @@
   const cartCount = document.getElementById("cartCount2");
 
   function renderCart() {
+    if (!Array.isArray(cart)) {
+      localStorage.setItem("cart", JSON.stringify([]));
+      return;
+    }
     cartItemsDiv.innerHTML = "";
     let total = 0;
     cart.forEach((item, index) => {
@@ -176,25 +181,33 @@
         `;
       }
     });
-    cartTotalSpan.textContent = total.toFixed(2);
+    cartTotalSpan.textContent = total.toFixed(2) || "0.00";
     cartCount.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    localStorage.setItem("cart", JSON.stringify(cart)); // Save after render
+    localStorage.setItem("cart", JSON.stringify(cart)); // Save updated cart
   }
 
   function changeQuantity(index, delta) {
-    if (cart[index].quantity + delta >= 0.25) {
+    if (cart[index] && (cart[index].quantity + delta >= 0.25)) {
       cart[index].quantity += delta;
       if (cart[index].quantity < 0.25) cart[index].quantity = 0.25;
-      renderCart(); // Re-render after quantity change
+      renderCart(); // Re-render after change
     }
   }
 
   function removeItem(index) {
-    cart.splice(index, 1);
-    renderCart(); // Re-render after removal
+    if (cart[index]) {
+      cart.splice(index, 1);
+      renderCart(); // Re-render after removal
+    }
   }
 
-  renderCart();
+  // Ensure products.js is loaded before rendering
+  if (typeof products === "undefined") {
+    console.error("products.js not loaded or empty!");
+    cartItemsDiv.innerHTML = "<p>Error: Product data not available. Check products.js.</p>";
+  } else {
+    renderCart();
+  }
 </script>
 </body>
 </html>
