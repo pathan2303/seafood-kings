@@ -150,23 +150,23 @@
         const qty = item.quantity || 1;
         const product = products.find((p) => p.name === productName);
         if (product) {
-          total += product.basePrice * qty;
+          total += product.basePrice * qty; // basePrice assumed in Rs
         }
       });
     } else {
       console.error("Error: cart or products data is invalid or not loaded.");
     }
-    return total || 0; // Default to 0 if no valid data
+    return total || 0; // Total in Rs
   }
 
-  const cartTotal = calculateTotal();
-  document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2); // Assuming prices in paise
+  const cartTotal = calculateTotal(); // Total in Rs
+  document.getElementById("cartTotal").textContent = cartTotal.toFixed(2); // Display in Rs without /100
   document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   function payWithRazorpay() {
     const options = {
       key: CONFIG.razorpayKey,
-      amount: parseInt(cartTotal * 100), // Convert to paise
+      amount: parseInt(cartTotal * 100), // Convert Rs to paise for Razorpay
       currency: "INR",
       name: "Sea Food Kings",
       description: "Order Payment",
@@ -176,7 +176,7 @@
             order_id: response.razorpay_order_id || "N/A",
             payment_id: response.razorpay_payment_id,
             status: "success",
-            amount: cartTotal / 100,
+            amount: cartTotal, // Amount in Rs for Google Form
             timestamp: new Date().toISOString(),
           };
           console.log("Payload being sent to Google Form:", payload); // Debug log
