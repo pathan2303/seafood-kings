@@ -136,26 +136,31 @@
     <a href="contact.html">Contact Us</a>
     <p>© 2025 Sea Food Kings — All Rights Reserved</p>
   </footer>
-  <script>
+  <script src="products.js"></script>
+<script>
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartTotalSpan = document.getElementById("cartTotal");
   const cartCount = document.getElementById("cartCount2");
 
   function calculateTotal() {
     let total = 0;
-    cart.forEach((item) => {
-      const productName = item.name.split(" (")[0];
-      const qty = item.quantity || 1;
-      const product = products.find((p) => p.name === productName);
-      if (product) {
-        total += product.basePrice * qty;
-      }
-    });
-    return total;
+    if (Array.isArray(cart) && typeof products !== "undefined" && Array.isArray(products)) {
+      cart.forEach((item) => {
+        const productName = item.name.split(" (")[0];
+        const qty = item.quantity || 1;
+        const product = products.find((p) => p.name === productName);
+        if (product) {
+          total += product.basePrice * qty;
+        }
+      });
+    } else {
+      console.error("Error: cart or products data is invalid or not loaded.");
+    }
+    return total || 0; // Default to 0 if no valid data
   }
 
   const cartTotal = calculateTotal();
-  document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2); // Assuming prices are in paise
+  document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2); // Assuming prices in paise
   document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   function payWithRazorpay() {
@@ -174,7 +179,7 @@
             amount: cartTotal / 100,
             timestamp: new Date().toISOString(),
           };
-          console.log("Payload being sent to Google Form:", payload); // Add this line here
+          console.log("Payload being sent to Google Form:", payload); // Debug log
           const form = document.createElement("form");
           form.method = "POST";
           form.action = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScUbTFCdh728xszIPB0tNgLGodQXGh3bpFKQV6Rg6cH3l1f2w/formResponse";
