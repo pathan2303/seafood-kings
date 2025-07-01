@@ -1,2 +1,5 @@
 config.js
 config-public.js
+node_modules/
+package-lock.json
+payments.xlsx
