@@ -137,56 +137,73 @@
     <p>© 2025 Sea Food Kings — All Rights Reserved</p>
   </footer>
   <script>
-    const cartTotal = localStorage.getItem("cartTotal") || 100;
-    document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2);
-    document.getElementById("cartCount2").textContent = (JSON.parse(localStorage.getItem("cart")) || []).reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartTotalSpan = document.getElementById("cartTotal");
+  const cartCount = document.getElementById("cartCount2");
 
-    function payWithRazorpay() {
-      const options = {
-        key: CONFIG.razorpayKey,
-        amount: parseInt(cartTotal),
-        currency: "INR",
-        name: "Sea Food Kings",
-        description: "Order Payment",
-        handler: function (response) {
-          try {
-            const payload = {
-              order_id: response.razorpay_order_id || "N/A",
-              payment_id: response.razorpay_payment_id,
-              status: "success",
-              amount: cartTotal / 100,
-              timestamp: new Date().toISOString(),
-            };
-            const form = document.createElement("form");
-            form.method = "POST";
-            form.action = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScUbTFCdh728xszIPB0tNgLGodQXGh3bpFKQV6Rg6cH3l1f2w/formResponse"; // Exact URL
-            form.style.display = "none";
-            for (let key in payload) {
-              const input = document.createElement("input");
-              input.type = "hidden";
-              input.name = key;
-              input.value = payload[key];
-              form.appendChild(input);
-            }
-            document.body.appendChild(form);
-            form.submit();
-            window.location.href = "thankyou.html";
-          } catch (error) {
-            console.error("Payment handler error:", error);
-            alert("Payment processed, but logging failed. Contact support.");
-            window.location.href = "thankyou.html";
+  function calculateTotal() {
+    let total = 0;
+    cart.forEach((item) => {
+      const productName = item.name.split(" (")[0];
+      const qty = item.quantity || 1;
+      const product = products.find((p) => p.name === productName);
+      if (product) {
+        total += product.basePrice * qty;
+      }
+    });
+    return total;
+  }
+
+  const cartTotal = calculateTotal();
+  document.getElementById("cartTotal").textContent = (cartTotal / 100).toFixed(2); // Assuming prices are in paise
+  document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
+  function payWithRazorpay() {
+    const options = {
+      key: CONFIG.razorpayKey,
+      amount: parseInt(cartTotal * 100), // Convert to paise
+      currency: "INR",
+      name: "Sea Food Kings",
+      description: "Order Payment",
+      handler: function (response) {
+        try {
+          const payload = {
+            order_id: response.razorpay_order_id || "N/A",
+            payment_id: response.razorpay_payment_id,
+            status: "success",
+            amount: cartTotal / 100,
+            timestamp: new Date().toISOString(),
+          };
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScUbTFCdh728xszIPB0tNgLGodQXGh3bpFKQV6Rg6cH3l1f2w/formResponse";
+          form.style.display = "none";
+          for (let key in payload) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = payload[key];
+            form.appendChild(input);
           }
-        },
-        prefill: { name: "Customer", email: "customer@example.com", contact: "9999999999" },
-        theme: { color: "#3399cc" },
-      };
-      const rzp = new Razorpay(options);
-      rzp.on("payment.failed", function (response) {
-        console.error("Payment Failed:", response.error);
-        alert("Payment failed: " + response.error.description);
-      });
-      rzp.open();
-    }
-  </script>
+          document.body.appendChild(form);
+          form.submit();
+          window.location.href = "thankyou.html";
+        } catch (error) {
+          console.error("Payment handler error:", error);
+          alert("Payment processed, but logging failed. Contact support.");
+          window.location.href = "thankyou.html";
+        }
+      },
+      prefill: { name: "Customer", email: "customer@example.com", contact: "9999999999" },
+      theme: { color: "#3399cc" },
+    };
+    const rzp = new Razorpay(options);
+    rzp.on("payment.failed", function (response) {
+      console.error("Payment Failed:", response.error);
+      alert("Payment failed: " + response.error.description);
+    });
+    rzp.open();
+  }
+</script>
 </body>
 </html>
