@@ -148,54 +148,53 @@
     <a href="contact.html">Contact Us</a>
     <p>© 2025 Sea Food Kings — All Rights Reserved</p>
   </footer>
-  <script src="products.js"></script>
-  <script>
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const cartItemsDiv = document.getElementById("cartItems");
-    const cartTotalSpan = document.getElementById("cartTotal");
-    const cartCount = document.getElementById("cartCount2");
+ <script src="products.js"></script>
+<script>
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartItemsDiv = document.getElementById("cartItems");
+  const cartTotalSpan = document.getElementById("cartTotal");
+  const cartCount = document.getElementById("cartCount2");
 
-    function renderCart() {
-      cartItemsDiv.innerHTML = "";
-      let total = 0;
-      cart.forEach((item, index) => {
-        const productName = item.name.split(" (")[0];
-        const qty = item.quantity || 1;
-        const product = products.find((p) => p.name === productName);
-        if (product) {
-          const itemTotal = product.basePrice * qty;
-          total += itemTotal;
-          cartItemsDiv.innerHTML += `
-            <div class="cart-item">
-              <p>${item.name} - ₹${itemTotal.toFixed(2)}</p>
-              <button class="qty-btn" onclick="changeQuantity(${index}, -1)">-</button>
-              <span>${qty}</span>
-              <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
-              <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
-            </div>
-          `;
-        }
-      });
-      cartTotalSpan.textContent = total.toFixed(2);
-      cartCount.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    }
-
-    function changeQuantity(index, delta) {
-      if (cart[index].quantity + delta >= 0.25) {
-        cart[index].quantity += delta;
-        if (cart[index].quantity < 0.25) cart[index].quantity = 0.25;
-        localStorage.setItem("cart", JSON.stringify(cart));
-        renderCart();
+  function renderCart() {
+    cartItemsDiv.innerHTML = "";
+    let total = 0;
+    cart.forEach((item, index) => {
+      const productName = item.name.split(" (")[0];
+      const qty = item.quantity || 1;
+      const product = products.find((p) => p.name === productName);
+      if (product) {
+        const itemTotal = product.basePrice * qty;
+        total += itemTotal;
+        cartItemsDiv.innerHTML += `
+          <div class="cart-item">
+            <p>${item.name} - ₹${itemTotal.toFixed(2)}</p>
+            <button class="qty-btn" onclick="changeQuantity(${index}, -1)">-</button>
+            <span>${qty.toFixed(2)}</span>
+            <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+          </div>
+        `;
       }
-    }
+    });
+    cartTotalSpan.textContent = total.toFixed(2);
+    cartCount.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    localStorage.setItem("cart", JSON.stringify(cart)); // Save after render
+  }
 
-    function removeItem(index) {
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
+  function changeQuantity(index, delta) {
+    if (cart[index].quantity + delta >= 0.25) {
+      cart[index].quantity += delta;
+      if (cart[index].quantity < 0.25) cart[index].quantity = 0.25;
+      renderCart(); // Re-render after quantity change
     }
+  }
 
-    renderCart();
-  </script>
+  function removeItem(index) {
+    cart.splice(index, 1);
+    renderCart(); // Re-render after removal
+  }
+
+  renderCart();
+</script>
 </body>
 </html>
