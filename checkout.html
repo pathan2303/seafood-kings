@@ -137,6 +137,7 @@
     <p>© 2025 Sea Food Kings — All Rights Reserved</p>
   </footer>
   <script src="products.js"></script>
+<script src="products.js"></script>
 <script>
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartTotalSpan = document.getElementById("cartTotal");
@@ -150,23 +151,23 @@
         const qty = item.quantity || 1;
         const product = products.find((p) => p.name === productName);
         if (product) {
-          total += product.basePrice * qty; // basePrice assumed in Rs
+          total += product.basePrice * qty;
         }
       });
     } else {
       console.error("Error: cart or products data is invalid or not loaded.");
     }
-    return total || 0; // Total in Rs
+    return total || 0;
   }
 
-  const cartTotal = calculateTotal(); // Total in Rs
-  document.getElementById("cartTotal").textContent = cartTotal.toFixed(2); // Display in Rs without /100
+  const cartTotal = calculateTotal();
+  document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
   document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   function payWithRazorpay() {
     const options = {
       key: CONFIG.razorpayKey,
-      amount: parseInt(cartTotal * 100), // Convert Rs to paise for Razorpay
+      amount: parseInt(cartTotal * 100),
       currency: "INR",
       name: "Sea Food Kings",
       description: "Order Payment",
@@ -176,10 +177,10 @@
             order_id: response.razorpay_order_id || "N/A",
             payment_id: response.razorpay_payment_id,
             status: "success",
-            amount: cartTotal, // Amount in Rs for Google Form
+            amount: cartTotal,
             timestamp: new Date().toISOString(),
           };
-          console.log("Payload being sent to Google Form:", payload); // Debug log
+          console.log("Payload being sent to Google Form:", payload); // Debug payload
           const form = document.createElement("form");
           form.method = "POST";
           form.action = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScUbTFCdh728xszIPB0tNgLGodQXGh3bpFKQV6Rg6cH3l1f2w/formResponse";
@@ -192,6 +193,7 @@
             form.appendChild(input);
           }
           document.body.appendChild(form);
+          console.log("Form submitted to:", form.action); // Debug form action
           form.submit();
           window.location.href = "thankyou.html";
         } catch (error) {
