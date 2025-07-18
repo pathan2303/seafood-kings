@@ -34,27 +34,30 @@
     }
 
     .nav-links a {
-      color: #e8c175;
+      color: #000000; /* Changed to black */
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s ease;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Shadow effect */
     }
 
     .nav-links a:hover {
-      color: #fff2cc;
+      color: #333333; /* Darker shade on hover */
     }
 
     header h2 {
       font-family: 'Cinzel', serif;
       font-size: 1.5rem;
       margin: 0.5rem 0 0.3rem;
-      color: #e8c175;
+      color: #000000; /* Changed to black */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Deeper shadow */
     }
 
     header p {
       font-size: 0.85rem;
-      color: #d1b67c;
+      color: #000000; /* Changed to black */
       margin-bottom: 0.5rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Shadow effect */
     }
 
     .cart-right {
@@ -98,7 +101,7 @@
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
       padding: 2rem;
-      background: transparent; /* Removed gradient, background now from body */
+      background: transparent;
     }
 
     .product-card {
@@ -107,7 +110,7 @@
       border-radius: 10px;
       padding: 1rem;
       transition: transform 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); /* Deeper shadow */
     }
 
     .product-card:hover {
