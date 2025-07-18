@@ -10,7 +10,7 @@
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #111);
+      background: linear-gradient(135deg, #d6c7b8, #e8dfd6); /* Full background with shining */
       color: #e8c175;
     }
     .container {
@@ -30,22 +30,25 @@
       padding: 1rem 2rem 0;
     }
     .nav-links a {
-      color: #e8c175;
+      color: #000000; /* Black with shadow */
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s ease;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
     .nav-links a:hover {
-      color: #fff2cc;
+      color: #333333;
     }
     h1 {
       font-family: 'Cinzel', serif;
       font-size: 1.5rem;
       margin: 0.5rem 0 0.3rem;
-      color: #e8c175;
+      color: #000000; /* Black with shadow */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
     p {
-      color: #d1b67c;
+      color: #000000; /* Black with shadow */
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
     .cart-right {
       position: absolute;
@@ -85,18 +88,23 @@
       border-top: 1px solid #444;
     }
     footer a {
-      color: #e8c175;
+      color: #000000; /* Black with shadow */
       margin: 0 10px;
       text-decoration: none;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
     footer a:hover {
-      color: #fff2cc;
+      color: #333333;
     }
     .cart-item {
       margin: 1rem 0;
       display: flex;
       align-items: center;
       gap: 1rem;
+      background-color: #1b1b1b;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); /* Deep shadow for cart items */
     }
     .qty-btn {
       background-color: #e8c175;
@@ -148,66 +156,65 @@
     <a href="contact.html">Contact Us</a>
     <p>© 2025 Sea Food Kings — All Rights Reserved</p>
   </footer>
- <script src="products.js"></script>
-<script src="products.js"></script>
-<script>
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const cartItemsDiv = document.getElementById("cartItems");
-  const cartTotalSpan = document.getElementById("cartTotal");
-  const cartCount = document.getElementById("cartCount2");
+  <script src="products.js"></script>
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItemsDiv = document.getElementById("cartItems");
+    const cartTotalSpan = document.getElementById("cartTotal");
+    const cartCount = document.getElementById("cartCount2");
 
-  function renderCart() {
-    if (!Array.isArray(cart)) {
-      localStorage.setItem("cart", JSON.stringify([]));
-      return;
-    }
-    cartItemsDiv.innerHTML = "";
-    let total = 0;
-    cart.forEach((item, index) => {
-      const productName = item.name.split(" (")[0];
-      const qty = item.quantity || 1;
-      const product = products.find((p) => p.name === productName);
-      if (product) {
-        const itemTotal = product.basePrice * qty;
-        total += itemTotal;
-        cartItemsDiv.innerHTML += `
-          <div class="cart-item">
-            <p>${item.name} - ₹${itemTotal.toFixed(2)}</p>
-            <button class="qty-btn" onclick="changeQuantity(${index}, -1)">-</button>
-            <span>${qty.toFixed(2)}</span>
-            <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
-            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
-          </div>
-        `;
+    function renderCart() {
+      if (!Array.isArray(cart)) {
+        localStorage.setItem("cart", JSON.stringify([]));
+        return;
       }
-    });
-    cartTotalSpan.textContent = total.toFixed(2) || "0.00";
-    cartCount.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    localStorage.setItem("cart", JSON.stringify(cart)); // Save updated cart
-  }
-
-  function changeQuantity(index, delta) {
-    if (cart[index] && (cart[index].quantity + delta >= 0.25)) {
-      cart[index].quantity += delta;
-      if (cart[index].quantity < 0.25) cart[index].quantity = 0.25;
-      renderCart(); // Re-render after change
+      cartItemsDiv.innerHTML = "";
+      let total = 0;
+      cart.forEach((item, index) => {
+        const productName = item.name.split(" (")[0];
+        const qty = item.quantity || 1;
+        const product = products.find((p) => p.name === productName);
+        if (product) {
+          const itemTotal = product.basePrice * qty;
+          total += itemTotal;
+          cartItemsDiv.innerHTML += `
+            <div class="cart-item">
+              <p>${item.name} - ₹${itemTotal.toFixed(2)}</p>
+              <button class="qty-btn" onclick="changeQuantity(${index}, -1)">-</button>
+              <span>${qty.toFixed(2)}</span>
+              <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
+              <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+            </div>
+          `;
+        }
+      });
+      cartTotalSpan.textContent = total.toFixed(2) || "0.00";
+      cartCount.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      localStorage.setItem("cart", JSON.stringify(cart)); // Save updated cart
     }
-  }
 
-  function removeItem(index) {
-    if (cart[index]) {
-      cart.splice(index, 1);
-      renderCart(); // Re-render after removal
+    function changeQuantity(index, delta) {
+      if (cart[index] && (cart[index].quantity + delta >= 0.25)) {
+        cart[index].quantity += delta;
+        if (cart[index].quantity < 0.25) cart[index].quantity = 0.25;
+        renderCart(); // Re-render after change
+      }
     }
-  }
 
-  // Ensure products.js is loaded before rendering
-  if (typeof products === "undefined") {
-    console.error("products.js not loaded or empty!");
-    cartItemsDiv.innerHTML = "<p>Error: Product data not available. Check products.js.</p>";
-  } else {
-    renderCart();
-  }
-</script>
+    function removeItem(index) {
+      if (cart[index]) {
+        cart.splice(index, 1);
+        renderCart(); // Re-render after removal
+      }
+    }
+
+    // Ensure products.js is loaded before rendering
+    if (typeof products === "undefined") {
+      console.error("products.js not loaded or empty!");
+      cartItemsDiv.innerHTML = "<p>Error: Product data not available. Check products.js.</p>";
+    } else {
+      renderCart();
+    }
+  </script>
 </body>
 </html>
