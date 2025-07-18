@@ -6,173 +6,123 @@
   <title>Sea Food Kings</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #111);
-      color: #e8c175;
-    }
-
-    .logo-banner {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    header {
-      text-align: center;
-      padding: 1rem 2rem 0;
-      position: relative;
-    }
-
-    .nav-links {
-      display: flex;
-      justify-content: flex-start;
-      gap: 2rem;
-      padding: 1rem 2rem 0;
-    }
-
-    .nav-links a {
-      color: #e8c175;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a:hover {
-      color: #fff2cc;
-    }
-
-    header h2 {
-      font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
-      margin: 0.5rem 0 0.3rem;
-      color: #e8c175;
-    }
-
-    header p {
-      font-size: 0.85rem;
-      color: #d1b67c;
-      margin-bottom: 0.5rem;
-    }
-
-    .cart-right {
-      position: absolute;
-      right: 2rem;
-      top: 1rem;
-    }
-
-    .cart-btn {
-      background-color: #e8c175;
-      color: #0d0d0d;
-      font-weight: bold;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      position: relative;
-      font-size: 0.9rem;
-    }
-
-    .cart-count {
-      position: absolute;
-      top: -10px;
-      right: -12px;
-      background-color: #e8c175;
-      color: #000;
-      font-weight: bold;
-      font-size: 0.75rem;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .product-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      padding: 2rem;
-      background: linear-gradient(to right, #0d0d0d, #1a1a1a);
-    }
-
-    .product-card {
-      background-color: #1b1b1b;
-      border: 1px solid #e8c175;
-      border-radius: 10px;
-      padding: 1rem;
-      transition: transform 0.3s ease;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .product-card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 5px;
-    }
-
-    .product-card h3 {
-      font-size: 1rem;
-      margin: 0.5rem 0;
-      color: #e8c175;
-    }
-
-    .product-card p {
-      font-size: 0.9rem;
-    }
-
-    .qty-input {
-      width: 100%;
-      padding: 0.4rem;
-      margin-top: 0.5rem;
-      border-radius: 5px;
-      border: none;
-      text-align: center;
-      background-color: rgba(255, 255, 255, 0.05);
-      color: #e8c175;
-    }
-
-    .add-btn {
-      background-color: #e8c175;
-      color: #0d0d0d;
-      font-weight: bold;
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .add-btn:hover {
-      background-color: #d1b67c;
-    }
-
-    @media (max-width: 640px) {
-      .product-container {
-        grid-template-columns: 1fr;
-      }
-      .cart-right {
-        position: static;
-        transform: none;
-        margin-top: 0.5rem;
-      }
-      .nav-links {
-        flex-direction: column;
-        gap: 1rem;
-      }
-    }
-  </style>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #d6c7b8, #e8dfd6);
+    color: #333;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #d6c7b8;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.5);
+  }
+  header {
+    text-align: center;
+    padding: 1rem 2rem 0;
+    position: relative;
+    background: #d6c7b8;
+    border-bottom: 1px solid #c0b2a6;
+  }
+  .nav-links {
+    display: flex;
+    justify-content: flex-start;
+    gap: 2rem;
+    padding: 1rem 2rem 0;
+  }
+  .nav-links a {
+    color: #8a6f47;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  .nav-links a:hover {
+    color: #654321;
+  }
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    margin: 0.5rem 0 0.3rem;
+    color: #8a6f47;
+  }
+  p {
+    color: #555;
+  }
+  .cart-right {
+    position: absolute;
+    right: 2rem;
+    top: 1rem;
+  }
+  .cart-btn {
+    background: linear-gradient(135deg, #e8dfd6, #d6c7b8);
+    color: #333;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  }
+  .cart-btn:hover {
+    background: linear-gradient(135deg, #d6c7b8, #c0b2a6);
+  }
+  .cart-count {
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    background-color: #8a6f47;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.75rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .product {
+    background: #d6c7b8;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  button {
+    background: linear-gradient(135deg, #e8dfd6, #d6c7b8);
+    color: #333;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  }
+  button:hover {
+    background: linear-gradient(135deg, #d6c7b8, #c0b2a6);
+  }
+  footer {
+    text-align: center;
+    padding: 1rem 0;
+    border-top: 1px solid #c0b2a6;
+    background: #d6c7b8;
+  }
+  footer a {
+    color: #8a6f47;
+    margin: 0 10px;
+    text-decoration: none;
+  }
+  footer a:hover {
+    color: #654321;
+  }
+</style>
 </head>
 <body>
   <img src="octo2.png" alt="Sea Food Kings Banner" class="logo-banner">
