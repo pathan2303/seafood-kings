@@ -10,7 +10,7 @@
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #111);
+      background: linear-gradient(135deg, #d6c7b8, #e8dfd6); /* Full background with shining */
       color: #e8c175;
     }
     .container {
@@ -30,22 +30,25 @@
       padding: 1rem 2rem 0;
     }
     .nav-links a {
-      color: #e8c175;
+      color: #000000; /* Black with shadow */
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s ease;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
     .nav-links a:hover {
-      color: #fff2cc;
+      color: #333333;
     }
     h1 {
       font-family: 'Cinzel', serif;
       font-size: 1.5rem;
       margin: 0.5rem 0 0.3rem;
-      color: #e8c175;
+      color: #000000; /* Black with shadow */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
     p {
-      color: #d1b67c;
+      color: #000000; /* Black with shadow */
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
     .cart-right {
       position: absolute;
@@ -85,12 +88,13 @@
       border-top: 1px solid #444;
     }
     footer a {
-      color: #e8c175;
+      color: #000000; /* Black with shadow */
       margin: 0 10px;
       text-decoration: none;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
     footer a:hover {
-      color: #fff2cc;
+      color: #333333;
     }
     button {
       background-color: #e8c175;
@@ -136,76 +140,76 @@
     <a href="contact.html">Contact Us</a>
     <p>© 2025 Sea Food Kings — All Rights Reserved</p>
   </footer>
- <script src="products.js"></script>
-<script>
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const cartTotalSpan = document.getElementById("cartTotal");
-  const cartCount = document.getElementById("cartCount2");
+  <script src="products.js"></script>
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartTotalSpan = document.getElementById("cartTotal");
+    const cartCount = document.getElementById("cartCount2");
 
-  function calculateTotal() {
-    let total = 0;
-    if (Array.isArray(cart) && typeof products !== "undefined" && Array.isArray(products)) {
-      cart.forEach((item) => {
-        const productName = item.name.split(" (")[0];
-        const qty = item.quantity || 1;
-        const product = products.find((p) => p.name === productName);
-        if (product) {
-          total += product.basePrice * qty;
-        }
-      });
-    } else {
-      console.error("Error: cart or products data is invalid or not loaded.");
+    function calculateTotal() {
+      let total = 0;
+      if (Array.isArray(cart) && typeof products !== "undefined" && Array.isArray(products)) {
+        cart.forEach((item) => {
+          const productName = item.name.split(" (")[0];
+          const qty = item.quantity || 1;
+          const product = products.find((p) => p.name === productName);
+          if (product) {
+            total += product.basePrice * qty;
+          }
+        });
+      } else {
+        console.error("Error: cart or products data is invalid or not loaded.");
+      }
+      return total || 0;
     }
-    return total || 0;
-  }
 
-  const cartTotal = calculateTotal();
-  document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
-  document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    const cartTotal = calculateTotal();
+    document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
+    document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
-  function payWithRazorpay() {
-    const options = {
-      key: CONFIG.razorpayKey,
-      amount: parseInt(cartTotal * 100),
-      currency: "INR",
-      name: "Sea Food Kings",
-      description: "Order Payment",
-      handler: function (response) {
-        try {
-          const payload = {
-            order_id: response.razorpay_order_id || "N/A",
-            payment_id: response.razorpay_payment_id,
-            status: "success",
-            amount: cartTotal,
-            timestamp: new Date().toISOString(),
-          };
-          console.log("Payload:", payload);
-          // Send to local server
-          fetch('http://localhost:3000/save-payment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          })
-          .then(response => response.json())
-          .then(data => console.log('Server response:', data))
-          .catch(error => console.error('Fetch error:', error));
-          window.location.href = "thankyou.html";
-        } catch (error) {
-          console.error("Payment handler error:", error);
-          alert("Payment processed, but logging failed. Contact support.");
-          window.location.href = "thankyou.html";
-        }
-      },
-      prefill: { name: "Customer", email: "customer@example.com", contact: "9999999999" },
-      theme: { color: "#3399cc" },
-    };
-    const rzp = new Razorpay(options);
-    rzp.on("payment.failed", function (response) {
-      console.error("Payment Failed:", response.error);
-      alert("Payment failed: " + response.error.description);
-    });
-    rzp.open();
-  }
-</script>
+    function payWithRazorpay() {
+      const options = {
+        key: CONFIG.razorpayKey,
+        amount: parseInt(cartTotal * 100),
+        currency: "INR",
+        name: "Sea Food Kings",
+        description: "Order Payment",
+        handler: function (response) {
+          try {
+            const payload = {
+              order_id: response.razorpay_order_id || "N/A",
+              payment_id: response.razorpay_payment_id,
+              status: "success",
+              amount: cartTotal,
+              timestamp: new Date().toISOString(),
+            };
+            console.log("Payload:", payload);
+            // Send to local server
+            fetch('http://localhost:3000/save-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            })
+            .then(response => response.json())
+            .then(data => console.log('Server response:', data))
+            .catch(error => console.error('Fetch error:', error));
+            window.location.href = "thankyou.html";
+          } catch (error) {
+            console.error("Payment handler error:", error);
+            alert("Payment processed, but logging failed. Contact support.");
+            window.location.href = "thankyou.html";
+          }
+        },
+        prefill: { name: "Customer", email: "customer@example.com", contact: "9999999999" },
+        theme: { color: "#3399cc" },
+      };
+      const rzp = new Razorpay(options);
+      rzp.on("payment.failed", function (response) {
+        console.error("Payment Failed:", response.error);
+        alert("Payment failed: " + response.error.description);
+      });
+      rzp.open();
+    }
+  </script>
 </body>
 </html>
