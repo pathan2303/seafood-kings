@@ -10,7 +10,7 @@
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      background-color: #d6c7b8; /* Changed to simple #d6c7b8, no gradient */
+      background: linear-gradient(135deg, #d6c7b8, #e8dfd6); /* Subtle gradient for shining */
       color: #e8c175;
     }
 
@@ -98,7 +98,7 @@
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
       padding: 2rem;
-      background: linear-gradient(to right, #0d0d0d, #1a1a1a);
+      background: transparent; /* Removed gradient, background now from body */
     }
 
     .product-card {
@@ -107,6 +107,7 @@
       border-radius: 10px;
       padding: 1rem;
       transition: transform 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
     }
 
     .product-card:hover {
