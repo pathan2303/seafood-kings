@@ -167,16 +167,20 @@
     document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
-    function saveToGoogleSheet(payload) {
-      fetch('https://script.google.com/macros/s/AKfycbyszgKaWX0kC_Wzhyahi7w4MoNPt0sXEAHQTINNK4Hp4cO-EbnHBoSAPrMvlrx509KB/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(response => response.json())
-      .then(data => console.log('Sheet Log:', data))
-      .catch(error => console.error('Sheet Error:', error));
-    }
+function saveToGoogleSheet(payload) {
+  console.log("Sending to Google Sheets:", payload, "URL:", 'YOUR_GOOGLE_APPS_SCRIPT_URL');
+  fetch('https://script.google.com/macros/s/AKfycbwZeatcGIvobzSUpKpVQ9fnUjJm_oz3kvfnggybwtWznqg9kxirb3A8C6X2efuhwdQv/exec', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(response => {
+    console.log("Response Status:", response.status);
+    return response.json();
+  })
+  .then(data => console.log('Sheet Log:', data))
+  .catch(error => console.error('Sheet Error:', error));
+}
 
     function payWithRazorpay() {
       const options = {
