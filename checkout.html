@@ -146,20 +146,20 @@
     const cartTotalSpan = document.getElementById("cartTotal");
     const cartCount = document.getElementById("cartCount2");
 
-    function calculateTotal() {
-      let total = 0;
-      if (Array.isArray(cart) && typeof products !== "undefined" && Array.isArray(products)) {
-        cart.forEach((item) => {
-          const productName = item.name.split(" (")[0];
-          const qty = item.quantity || 1;
-          const product = products.find((p) => p.name === productName);
-          if (product) {
-            total += product.basePrice * qty;
-          }
-        });
-      } else {
-        console.error("Error: cart or products data is invalid or not loaded.");
-      }
+function saveToGoogleSheet(payload) {
+  console.log("Sending to Google Sheets:", payload, "URL:", 'YOUR_NEW_GOOGLE_APPS_SCRIPT_URL');
+  fetch('https://script.google.com/macros/s/AKfycbzvU_zTpTNGtFH9iF-xHElLA6s2N3cHP1O4vjoVUMY_XaOgrEoYevE2bMmB3D98nvRr/exec', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(response => {
+    console.log("Response Status:", response.status);
+    return response.json();
+  })
+  .then(data => console.log('Sheet Log:', data))
+  .catch(error => console.error('Sheet Error:', error));
+}
       return total || 0;
     }
 
