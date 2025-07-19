@@ -168,7 +168,7 @@
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
     function saveToGoogleSheet(payload) {
-      fetch('https://script.google.com/macros/s/AKfycby_ZmT6CMbBx_5MxBfTbQcwA04MB8jEkjOwZ9Dw3dOVlJSXfTUXyJ1kNSWkSAexLRrE/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbyszgKaWX0kC_Wzhyahi7w4MoNPt0sXEAHQTINNK4Hp4cO-EbnHBoSAPrMvlrx509KB/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
