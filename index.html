@@ -11,7 +11,7 @@
       font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #d6c7b8, #e8dfd6);
+      background: linear-gradient(135deg, #1e3a8a, #d6c7b8);
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -19,28 +19,41 @@
       flex-direction: column;
       color: #e8c175;
       text-align: center;
+      overflow: hidden;
     }
     .logo {
-      width: 200px;
+      width: 250px;
       height: auto;
       margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(232, 193, 117, 0.7));
     }
     .animation {
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
       height: auto;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
+      animation: float 3s infinite ease-in-out;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
     }
     h1 {
       font-family: 'Cinzel', serif;
-      font-size: 3rem;
-      color: #000000;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      font-size: 4rem;
+      color: #ffffff;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+      margin-bottom: 10px;
     }
     p {
-      font-size: 1.2rem;
-      color: #000000;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      font-size: 1.5rem;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+    }
+    .crown {
+      font-size: 2rem;
+      color: #e8c175;
     }
     .contact {
       margin-top: 20px;
@@ -48,30 +61,37 @@
     .contact a {
       color: #e8c175;
       text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
+      font-weight: 700;
+      padding: 10px 20px;
+      border: 2px solid #e8c175;
+      border-radius: 5px;
+      transition: all 0.3s ease;
     }
     .contact a:hover {
-      color: #d1b67c;
+      background-color: #e8c175;
+      color: #1e3a8a;
     }
     @media (max-width: 640px) {
       h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
       p {
-        font-size: 1rem;
+        font-size: 1.2rem;
       }
       .animation {
-        max-width: 300px;
+        max-width: 400px;
+      }
+      .logo {
+        width: 150px;
       }
     }
   </style>
 </head>
 <body>
   <img src="octo4.png" alt="Sea Food Kings Logo" class="logo">
-  <img src="https://cdn.dribbble.com/users/1760582/screenshots/3665488/under-construction.gif" alt="Under Construction Animation" class="animation">
-  <h1>We Are Coming Soon!</h1>
-  <p>Our premium seafood delivery service is under construction. Stay tuned for fresh updates!</p>
+  <img src="https://i.gifer.com/8e5X.gif" alt="Royal Fish Animation" class="animation">
+  <h1>We Are Coming Soon <span class="crown">👑</span></h1>
+  <p>Prepare for a regal seafood experience fit for kings!</p>
   <div class="contact">
     <p>For inquiries, contact us at <a href="https://wa.me/919152299833" target="_blank">+91 91522 99833</a></p>
   </div>
