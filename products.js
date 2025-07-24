@@ -8,7 +8,7 @@ const products = [
   { name: 'Pomfret 3 pcs', basePrice: 1300, image: 'images/pomfret1.png' },
   { name: 'Pomfret 2 pcs', basePrice: 1600, image: 'images/pomfret2.png' },
   { name: 'Surmai Small', basePrice: 700, image: 'images/surmai1.png' },
-  { name: 'Surmai Big', basePrice: 900, image: 'images/surmai2.png' },
+  { name: 'Surmai Big', basePrice: 900, image: 'images/surmai1.png' },
   { name: 'Surmai Fillet Boneless', basePrice: 1500, image: 'images/surmai3.png' },
   { name: 'Rawas Slices', basePrice: 800, image: 'images/rawas1.png' },
   { name: 'Rawas Fillet Boneless', basePrice: 1600, image: 'images/rawas2.png' },
