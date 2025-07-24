@@ -8,59 +8,44 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
       background: linear-gradient(135deg, #1e3a8a, #d6c7b8);
       height: 100vh;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       color: #e8c175;
       text-align: center;
-      overflow: hidden;
       position: relative;
+    }
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://cdn.pixabay.com/video/2022/10/18/135456-757318723_large.mp4') no-repeat center center/cover;
+      opacity: 0.7;
+      animation: fade 10s infinite;
+      z-index: 0;
+    }
+    @keyframes fade {
+      0% { opacity: 0.7; }
+      50% { opacity: 0.9; }
+      100% { opacity: 0.7; }
+    }
+    .overlay {
+      position: relative;
+      z-index: 1;
     }
     .logo {
       width: 250px;
       height: auto;
       margin-bottom: 20px;
       filter: drop-shadow(0 0 10px rgba(232, 193, 117, 0.7));
-    }
-    .animation {
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      height: 300px;
-      overflow: hidden;
-    }
-    .fish {
-      position: absolute;
-      width: 100px;
-      height: auto;
-      animation: swim 8s infinite linear;
-    }
-    .fish:nth-child(1) {
-      top: 20%;
-      left: -100px;
-      animation-delay: 0s;
-    }
-    .fish:nth-child(2) {
-      top: 50%;
-      left: -150px;
-      width: 120px;
-      animation-delay: 2s;
-    }
-    .fish:nth-child(3) {
-      top: 70%;
-      left: -200px;
-      width: 80px;
-      animation-delay: 4s;
-    }
-    @keyframes swim {
-      0% { transform: translateX(-100px); }
-      100% { transform: translateX(110%); }
     }
     h1 {
       font-family: 'Cinzel', serif;
@@ -75,4 +60,58 @@
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       margin-bottom: 30px;
     }
-    .
+    .crown {
+      font-size: 2rem;
+      color: #e8c175;
+    }
+    .contact {
+      margin-top: 20px;
+    }
+    .contact a {
+      color: #e8c175;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 10px 20px;
+      border: 2px solid #e8c175;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .contact a:hover {
+      background-color: #e8c175;
+      color: #1e3a8a;
+    }
+    .credit {
+      font-size: 0.8rem;
+      color: #ffffff;
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+    }
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      p {
+        font-size: 1.2rem;
+      }
+      .logo {
+        width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="overlay">
+    <img src="octo4.png" alt="Sea Food Kings Logo" class="logo">
+    <h1>We Are Coming Soon <span class="crown">👑</span></h1>
+    <p>Prepare for a regal seafood feast fit for royalty!</p>
+    <div class="contact">
+      <p>For inquiries, contact us at <a href="https://wa.me/919152299833" target="_blank">+91 91522 99833</a></p>
+    </div>
+    <div class="credit">
+      3D animation video by Quince Creative - <a href="https://quincemedia.com">https://quincemedia.com</a>
+    </div>
+  </div>
+</body>
+</html>
