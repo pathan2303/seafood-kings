@@ -78,33 +78,38 @@
     document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
-function saveToGoogleSheet(payload) {
-  console.log("Sending to Google Sheets - Raw Payload:", payload);
-  const url = 'https://script.google.com/macros/s/AKfycbyxBA5tmYzTSe_zFBjCf2gEhHqTbbeS2T-64KivcOpzzr61sYGReTLxIN3aXpB60yVj/exec';
-  console.log("Sending to URL:", url);
-  fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(response => {
-    console.log("Fetch Response Status:", response.status, "OK:", response.ok, "Text Status:", response.statusText);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    function saveToGoogleSheet(payload) {
+      console.log("Sending Payload:", JSON.stringify(payload, null, 2));
+      const url = 'https://script.google.com/macros/s/AKfycbx1YvppP1LafaPJ04jItlWFdljveJZTORJRF0ncoN60UQYQB_-phgiKaboCt8x2ztt6/exec';
+      console.log("Target URL:", url);
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => {
+        console.log("Response Check:", { status: response.status, ok: response.ok, statusText: response.statusText });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+        }
+        return response.text();
+      })
+      .then(text => {
+        const data = text ? JSON.parse(text) : {};
+        console.log('Raw Response Text:', text);
+        console.log('Parsed Response:', data);
+        if (data.result !== 'success') {
+          throw new Error('Unexpected response: ' + JSON.stringify(data));
+        }
+      })
+      .catch(error => {
+        console.error('Fetch Error:', error.message, error.stack);
+        alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
+      });
     }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Sheet Response Data:', data);
-    if (data.result !== 'success') {
-      throw new Error('Unexpected response: ' + JSON.stringify(data));
-    }
-  })
-  .catch(error => {
-    console.error('Sheet Error Details:', error.message, error.stack);
-    alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
-  });
-}
 
     function payWithRazorpay() {
       const customerName = document.getElementById("customerName").value;
