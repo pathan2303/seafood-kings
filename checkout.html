@@ -78,19 +78,31 @@
     document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
-    function saveToGoogleSheet(payload) {
-      console.log("Sending to Google Sheets:", payload, "URL:", 'https://script.google.com/macros/s/AKfycbyDNCbhZRpMTJf6VeZHmLfwLVcb62-G0khj1l8tibwEZrYcQsz_Qn-xJLnt1KdAQOJy/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(response => {
-        console.log("Response Status:", response.status);
-        return response.json();
-      })
-      .then(data => console.log('Sheet Log:', data))
-      .catch(error => console.error('Sheet Error:', error));
+function saveToGoogleSheet(payload) {
+  console.log("Sending to Google Sheets:", payload, "URL:", 'https://script.google.com/macros/s/AKfycbwZeatcGIvobzSUpKpVQ9fnUjJm_oz3kvfnggybwtWznqg9kxirb3A8C6X2efuhwdQv/exec');
+  fetch('https://script.google.com/macros/s/AKfycbwZeatcGIvobzSUpKpVQ9fnUjJm_oz3kvfnggybwtWznqg9kxirb3A8C6X2efuhwdQv/exec', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    console.log("Response Status:", response.status);
+    return response.json();
+  })
+  .then(data => {
+    console.log('Sheet Log:', data);
+    if (data.result !== 'success') {
+      throw new Error('Unexpected response: ' + JSON.stringify(data));
+    }
+  })
+  .catch(error => {
+    console.error('Sheet Error:', error.message);
+    alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
+  });
+}
 
     function payWithRazorpay() {
       const customerName = document.getElementById("customerName").value;
