@@ -9,9 +9,9 @@
         canvas { display: block; }
         #logo {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 100px; /* Adjust size as needed */
+            top: 10px;
+            left: 10px;
+            width: 80px; /* Smaller logo for mobile */
             z-index: 10;
         }
     </style>
@@ -29,7 +29,7 @@
 
         // Underwater background and fog
         scene.background = new THREE.Color(0x001a33);
-        scene.fog = new THREE.Fog(0x001a33, 1, 15); // Fog for underwater depth
+        scene.fog = new THREE.Fog(0x001a33, 1, 15);
 
         // Add ambient light
         const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
@@ -44,7 +44,7 @@
         const fishGeometry = new THREE.SphereGeometry(0.2, 32, 32);
         const fishMaterial = new THREE.MeshPhongMaterial({ color: 0x00b7eb, shininess: 100 });
         const fishes = [];
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 10; i++) { // Reduced to 10 for mobile
             const fish = new THREE.Mesh(fishGeometry, fishMaterial);
             fish.position.set(
                 Math.random() * 20 - 10,
@@ -57,31 +57,32 @@
 
         // Create bubbles (particle system)
         const bubbleGeometry = new THREE.BufferGeometry();
-        const bubbleCount = 50;
+        const bubbleCount = 30; // Reduced to 30 for mobile
         const positions = new Float32Array(bubbleCount * 3);
         const velocities = new Float32Array(bubbleCount * 3);
         for (let i = 0; i < bubbleCount * 3; i += 3) {
             positions[i] = Math.random() * 20 - 10;
             positions[i + 1] = Math.random() * 20 - 10;
             positions[i + 2] = Math.random() * 20 - 10;
-            velocities[i + 1] = 0.02 + Math.random() * 0.03; // Upward velocity
+            velocities[i + 1] = 0.02 + Math.random() * 0.03;
         }
         bubbleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         const bubbleMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true });
         const bubbles = new THREE.Points(bubbleGeometry, bubbleMaterial);
         scene.add(bubbles);
 
-        // Add 3D text
+        // Add 3D text (mobile-friendly)
         const fontLoader = new THREE.FontLoader();
         fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+            const textSize = window.innerWidth < 600 ? 0.4 : 0.5; // Smaller on mobile
             const textGeometry = new THREE.TextGeometry('We Are Coming Soon', {
                 font: font,
-                size: 0.8, // Slightly smaller for better fit
-                height: 0.2,
+                size: textSize,
+                height: 0.1,
             });
             const textMaterial = new THREE.MeshPhongMaterial({ color: 0x00ffff });
             const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-            textMesh.position.set(-4.5, 0, 0); // Adjusted position
+            textMesh.position.set(window.innerWidth < 600 ? -3.5 : -4, 0, 0); // Adjust position for mobile
             scene.add(textMesh);
         });
 
@@ -104,9 +105,9 @@
             // Animate bubbles
             const bubblePositions = bubbles.geometry.attributes.position.array;
             for (let i = 0; i < bubbleCount * 3; i += 3) {
-                bubblePositions[i + 1] += velocities[i + 1]; // Move bubbles upward
+                bubblePositions[i + 1] += velocities[i + 1];
                 if (bubblePositions[i + 1] > 10) {
-                    bubblePositions[i + 1] = -10; // Reset to bottom
+                    bubblePositions[i + 1] = -10;
                     bubblePositions[i] = Math.random() * 20 - 10;
                     bubblePositions[i + 2] = Math.random() * 20 - 10;
                 }
