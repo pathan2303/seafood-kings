@@ -17,10 +17,19 @@
             font-family: Arial, sans-serif;
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
             z-index: 10;
+            text-align: center;
+        }
+        #logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px; /* Adjust size as needed */
+            z-index: 10;
         }
     </style>
 </head>
 <body>
+    <img id="logo" src="octo3.png" alt="Octo3 Logo">
     <div id="coming-soon">We Are Coming Soon</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
@@ -31,19 +40,19 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Underwater background (blue gradient)
+        // Underwater background
         scene.background = new THREE.Color(0x001a33);
 
         // Add ambient light
         const ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
 
-        // Add directional light for 3D effect
+        // Add directional light
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
         directionalLight.position.set(0, 1, 1);
         scene.add(directionalLight);
 
-        // Create fish (using spheres as placeholders)
+        // Create fish (spheres as placeholders)
         const fishGeometry = new THREE.SphereGeometry(0.2, 32, 32);
         const fishMaterial = new THREE.MeshPhongMaterial({ color: 0xff4500, shininess: 100 });
         const fishes = [];
@@ -64,17 +73,13 @@
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
-
-            // Animate fishes
             fishes.forEach(fish => {
                 fish.position.x += Math.sin(Date.now() * 0.001 + fish.position.y) * 0.05;
                 fish.position.y += Math.cos(Date.now() * 0.001 + fish.position.z) * 0.02;
                 fish.rotation.y += 0.02;
-                // Keep fishes within bounds
                 if (fish.position.x > 10) fish.position.x = -10;
                 if (fish.position.x < -10) fish.position.x = 10;
             });
-
             renderer.render(scene, camera);
         }
         animate();
