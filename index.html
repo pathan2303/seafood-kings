@@ -29,7 +29,7 @@
     </style>
 </head>
 <body>
-    <img id="logo" src="octo4.png" alt="Octo3 Logo">
+    <img id="logo" src="octo3.png" alt="Octo3 Logo">
     <div id="coming-soon">We Are Coming Soon</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
@@ -40,11 +40,12 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Underwater background
+        // Underwater background and fog
         scene.background = new THREE.Color(0x001a33);
+        scene.fog = new THREE.Fog(0x001a33, 1, 15); // Fog for underwater depth
 
         // Add ambient light
-        const ambientLight = new THREE.AmbientLight(0x404040);
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
         scene.add(ambientLight);
 
         // Add directional light
@@ -54,9 +55,9 @@
 
         // Create fish (spheres as placeholders)
         const fishGeometry = new THREE.SphereGeometry(0.2, 32, 32);
-        const fishMaterial = new THREE.MeshPhongMaterial({ color: 0xff4500, shininess: 100 });
+        const fishMaterial = new THREE.MeshPhongMaterial({ color: 0x00b7eb, shininess: 100 });
         const fishes = [];
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 15; i++) { // Reduced to 15 for performance
             const fish = new THREE.Mesh(fishGeometry, fishMaterial);
             fish.position.set(
                 Math.random() * 20 - 10,
@@ -67,12 +68,30 @@
             fishes.push(fish);
         }
 
+        // Create bubbles (particle system)
+        const bubbleGeometry = new THREE.BufferGeometry();
+        const bubbleCount = 50;
+        const positions = new Float32Array(bubbleCount * 3);
+        const velocities = new Float32Array(bubbleCount * 3);
+        for (let i = 0; i < bubbleCount * 3; i += 3) {
+            positions[i] = Math.random() * 20 - 10;
+            positions[i + 1] = Math.random() * 20 - 10;
+            positions[i + 2] = Math.random() * 20 - 10;
+            velocities[i + 1] = 0.02 + Math.random() * 0.03; // Upward velocity
+        }
+        bubbleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const bubbleMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true });
+        const bubbles = new THREE.Points(bubbleGeometry, bubbleMaterial);
+        scene.add(bubbles);
+
         // Camera position
         camera.position.z = 5;
 
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
+
+            // Animate fish
             fishes.forEach(fish => {
                 fish.position.x += Math.sin(Date.now() * 0.001 + fish.position.y) * 0.05;
                 fish.position.y += Math.cos(Date.now() * 0.001 + fish.position.z) * 0.02;
@@ -80,6 +99,19 @@
                 if (fish.position.x > 10) fish.position.x = -10;
                 if (fish.position.x < -10) fish.position.x = 10;
             });
+
+            // Animate bubbles
+            const bubblePositions = bubbles.geometry.attributes.position.array;
+            for (let i = 0; i < bubbleCount * 3; i += 3) {
+                bubblePositions[i + 1] += velocities[i + 1]; // Move bubbles upward
+                if (bubblePositions[i + 1] > 10) {
+                    bubblePositions[i + 1] = -10; // Reset to bottom
+                    bubblePositions[i] = Math.random() * 20 - 10;
+                    bubblePositions[i + 2] = Math.random() * 20 - 10;
+                }
+            }
+            bubbles.geometry.attributes.position.needsUpdate = true;
+
             renderer.render(scene, camera);
         }
         animate();
