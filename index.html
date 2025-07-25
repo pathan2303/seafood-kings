@@ -55,6 +55,7 @@
     <dotlottie-wc src="https://lottie.host/d6e80493-697d-40fe-be89-afa45bdc3f96/dWhbhLhTCg.lottie" style="width: 200px; height: 200px;" speed="1" autoplay loop></dotlottie-wc>
     <div id="coming-soon">We Are Coming Soon</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/jsm/loaders/OBJLoader.js"></script>
     <script type="module" src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js"></script>
     <script>
         // Scene setup
@@ -76,20 +77,24 @@
         directionalLight.position.set(0, 1, 1);
         scene.add(directionalLight);
 
-        // Create fish (spheres as placeholders)
-        const fishGeometry = new THREE.SphereGeometry(0.15, 32, 32);
-        const fishMaterial = new THREE.MeshPhongMaterial({ color: 0x00b7eb, shininess: 150 });
+        // Load OBJ fish model
+        const loader = new THREE.OBJLoader();
         const fishes = [];
-        for (let i = 0; i < 6; i++) {
-            const fish = new THREE.Mesh(fishGeometry, fishMaterial);
-            fish.position.set(
-                Math.random() * 15 - 7.5,
-                Math.random() * 15 - 7.5,
-                Math.random() * 15 - 7.5
-            );
-            scene.add(fish);
-            fishes.push(fish);
-        }
+        loader.load('models/fish.obj', (obj) => {
+            for (let i = 0; i < 6; i++) {
+                const fish = obj.clone();
+                fish.scale.set(0.4, 0.4, 0.4); // Adjust scale as needed
+                fish.position.set(
+                    Math.random() * 15 - 7.5,
+                    Math.random() * 15 - 7.5,
+                    Math.random() * 15 - 7.5
+                );
+                scene.add(fish);
+                fishes.push(fish);
+            }
+        }, undefined, (error) => {
+            console.error('Error loading OBJ file:', error);
+        });
 
         // Create bubbles (particle system)
         const bubbleGeometry = new THREE.BufferGeometry();
