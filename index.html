@@ -1,117 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coming Soon - Sea Food Kings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #1e3a8a, #d6c7b8);
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: #e8c175;
-      text-align: center;
-      position: relative;
-    }
-    .background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://cdn.pixabay.com/video/2022/10/18/135456-757318723_large.mp4') no-repeat center center/cover;
-      opacity: 0.7;
-      animation: fade 10s infinite;
-      z-index: 0;
-    }
-    @keyframes fade {
-      0% { opacity: 0.7; }
-      50% { opacity: 0.9; }
-      100% { opacity: 0.7; }
-    }
-    .overlay {
-      position: relative;
-      z-index: 1;
-    }
-    .logo {
-      width: 250px;
-      height: auto;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 10px rgba(232, 193, 117, 0.7));
-    }
-    h1 {
-      font-family: 'Cinzel', serif;
-      font-size: 4rem;
-      color: #ffffff;
-      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-      margin-bottom: 10px;
-    }
-    p {
-      font-size: 1.5rem;
-      color: #ffffff;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      margin-bottom: 30px;
-    }
-    .crown {
-      font-size: 2rem;
-      color: #e8c175;
-    }
-    .contact {
-      margin-top: 20px;
-    }
-    .contact a {
-      color: #e8c175;
-      text-decoration: none;
-      font-weight: 700;
-      padding: 10px 20px;
-      border: 2px solid #e8c175;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-    }
-    .contact a:hover {
-      background-color: #e8c175;
-      color: #1e3a8a;
-    }
-    .credit {
-      font-size: 0.8rem;
-      color: #ffffff;
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-    }
-    @media (max-width: 640px) {
-      h1 {
-        font-size: 2.5rem;
-      }
-      p {
-        font-size: 1.2rem;
-      }
-      .logo {
-        width: 150px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Are Coming Soon</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+        #coming-soon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 3em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            z-index: 10;
+        }
+    </style>
 </head>
 <body>
-  <div class="background"></div>
-  <div class="overlay">
-    <img src="octo4.png" alt="Sea Food Kings Logo" class="logo">
-    <h1>We Are Coming Soon <span class="crown">👑</span></h1>
-    <p>Prepare for a regal seafood feast fit for royalty!</p>
-    <div class="contact">
-      <p>For inquiries, contact us at <a href="https://wa.me/919152299833" target="_blank">+91 91522 99833</a></p>
-    </div>
-    <div class="credit">
-      3D animation video by Quince Creative - <a href="https://quincemedia.com">https://quincemedia.com</a>
-    </div>
-  </div>
+    <div id="coming-soon">We Are Coming Soon</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Underwater background (blue gradient)
+        scene.background = new THREE.Color(0x001a33);
+
+        // Add ambient light
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+
+        // Add directional light for 3D effect
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(0, 1, 1);
+        scene.add(directionalLight);
+
+        // Create fish (using spheres as placeholders)
+        const fishGeometry = new THREE.SphereGeometry(0.2, 32, 32);
+        const fishMaterial = new THREE.MeshPhongMaterial({ color: 0xff4500, shininess: 100 });
+        const fishes = [];
+        for (let i = 0; i < 20; i++) {
+            const fish = new THREE.Mesh(fishGeometry, fishMaterial);
+            fish.position.set(
+                Math.random() * 20 - 10,
+                Math.random() * 20 - 10,
+                Math.random() * 20 - 10
+            );
+            scene.add(fish);
+            fishes.push(fish);
+        }
+
+        // Camera position
+        camera.position.z = 5;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Animate fishes
+            fishes.forEach(fish => {
+                fish.position.x += Math.sin(Date.now() * 0.001 + fish.position.y) * 0.05;
+                fish.position.y += Math.cos(Date.now() * 0.001 + fish.position.z) * 0.02;
+                fish.rotation.y += 0.02;
+                // Keep fishes within bounds
+                if (fish.position.x > 10) fish.position.x = -10;
+                if (fish.position.x < -10) fish.position.x = 10;
+            });
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
