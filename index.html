@@ -7,18 +7,6 @@
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
-        #coming-soon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 3em;
-            font-family: Arial, sans-serif;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-            z-index: 10;
-            text-align: center;
-        }
         #logo {
             position: absolute;
             top: 20px;
@@ -30,25 +18,8 @@
 </head>
 <body>
     <img id="logo" src="octo1.png" alt="Octo1 Logo">
-    <div id="coming-soon">We Are Coming Soon</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        <!-- Remove this from <body> -->
-<!-- <div id="coming-soon">We Are Coming Soon</div> -->
-
-<!-- Add this to the <script> before animate() -->
-const fontLoader = new THREE.FontLoader();
-fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
-    const textGeometry = new THREE.TextGeometry('We Are Coming Soon', {
-        font: font,
-        size: 1,
-        height: 0.2,
-    });
-    const textMaterial = new THREE.MeshPhongMaterial({ color: 0x00ffff });
-    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-    textMesh.position.set(-5, 0, 0);
-    scene.add(textMesh);
-});
         // Scene setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -73,7 +44,7 @@ fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.
         const fishGeometry = new THREE.SphereGeometry(0.2, 32, 32);
         const fishMaterial = new THREE.MeshPhongMaterial({ color: 0x00b7eb, shininess: 100 });
         const fishes = [];
-        for (let i = 0; i < 15; i++) { // Reduced to 15 for performance
+        for (let i = 0; i < 15; i++) {
             const fish = new THREE.Mesh(fishGeometry, fishMaterial);
             fish.position.set(
                 Math.random() * 20 - 10,
@@ -99,6 +70,20 @@ fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.
         const bubbleMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true });
         const bubbles = new THREE.Points(bubbleGeometry, bubbleMaterial);
         scene.add(bubbles);
+
+        // Add 3D text
+        const fontLoader = new THREE.FontLoader();
+        fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+            const textGeometry = new THREE.TextGeometry('We Are Coming Soon', {
+                font: font,
+                size: 0.8, // Slightly smaller for better fit
+                height: 0.2,
+            });
+            const textMaterial = new THREE.MeshPhongMaterial({ color: 0x00ffff });
+            const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+            textMesh.position.set(-4.5, 0, 0); // Adjusted position
+            scene.add(textMesh);
+        });
 
         // Camera position
         camera.position.z = 5;
