@@ -29,10 +29,26 @@
     </style>
 </head>
 <body>
-    <img id="logo" src="octo3.png" alt="Octo3 Logo">
+    <img id="logo" src="octo1.png" alt="Octo1 Logo">
     <div id="coming-soon">We Are Coming Soon</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
+        <!-- Remove this from <body> -->
+<!-- <div id="coming-soon">We Are Coming Soon</div> -->
+
+<!-- Add this to the <script> before animate() -->
+const fontLoader = new THREE.FontLoader();
+fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+    const textGeometry = new THREE.TextGeometry('We Are Coming Soon', {
+        font: font,
+        size: 1,
+        height: 0.2,
+    });
+    const textMaterial = new THREE.MeshPhongMaterial({ color: 0x00ffff });
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+    textMesh.position.set(-5, 0, 0);
+    scene.add(textMesh);
+});
         // Scene setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
