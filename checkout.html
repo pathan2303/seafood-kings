@@ -79,37 +79,41 @@
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
     function saveToGoogleSheet(payload) {
-      console.log("Sending Payload:", JSON.stringify(payload, null, 2));
-      const url = 'https://script.google.com/macros/s/AKfycbwAWTucyPW0ybre5hu8zNFteVYkaye9oqzWItvUl2PL9TM8-3YiLmA32yVHUxVfhP9D/exec'; // Replace with new URL
-      console.log("Target URL:", url);
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(response => {
-        console.log("Response Check:", { status: response.status, ok: response.ok, statusText: response.statusText });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
-        }
-        return response.text();
-      })
-      .then(text => {
-        const data = text ? JSON.parse(text) : {};
-        console.log('Raw Response Text:', text);
-        console.log('Parsed Response:', data);
-        if (data.result !== 'success') {
-          throw new Error('Unexpected response: ' + JSON.stringify(data));
-        }
-      })
-      .catch(error => {
-        console.error('Fetch Error:', error.message, error.stack);
-        alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
-      });
+  console.log("Sending Payload:", JSON.stringify(payload, null, 2));
+  const url = 'https://script.google.com/macros/s/NEW_URL/exec'; // Replace with new URL
+  console.log("Target URL:", url);
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(response => {
+    console.log("Response Check:", {
+      status: response.status,
+      ok: response.ok,
+      statusText: response.statusText,
+      url: response.url
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
     }
+    return response.text();
+  })
+  .then(text => {
+    console.log('Raw Response Text:', text);
+    const data = text ? JSON.parse(text) : {};
+    console.log('Parsed Response:', data);
+    if (data.result !== 'success') {
+      throw new Error('Unexpected response: ' + JSON.stringify(data));
+    }
+  })
+  .catch(error => {
+    console.error('Fetch Error:', error.message, error.stack);
+    alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
+  });
+}
 
     function payWithRazorpay() {
       const customerName = document.getElementById("customerName").value;
