@@ -1,187 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>We Are Coming Soon</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: linear-gradient(180deg, #001022 0%, #003355 100%); /* Rich underwater gradient */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-        #logo {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            width: 70px;
-            z-index: 10;
-            transition: transform 0.3s ease;
-        }
-        #logo:hover {
-            transform: scale(1.1); /* Subtle hover effect */
-        }
-        #coming-soon {
-            position: absolute;
-            top: 65%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #00d4ff;
-            font-size: 1.2em;
-            font-family: 'Montserrat', sans-serif;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
-            z-index: 10;
-            text-align: center;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from { text-shadow: 0 0 5px rgba(0, 212, 255, 0.6); }
-            to { text-shadow: 0 0 15px rgba(0, 212, 255, 1); }
-        }
-        dotlottie-wc {
-            z-index: 5;
-            width: 200px;
-            height: 200px;
-            animation: pulse 3s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        @media (min-width: 600px) {
-            #coming-soon { font-size: 1.8em; }
-            dotlottie-wc { width: 300px; height: 300px; }
-            #logo { width: 100px; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coming Soon - Sea Food Kings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1e3a8a, #d6c7b8);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #e8c175;
+      text-align: center;
+      position: relative;
+    }
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://media.giphy.com/media/3o7TKTDnHRM9cPja2g/giphy.gif') no-repeat center center/cover;
+      opacity: 0.8;
+      animation: pulse 6s infinite;
+      z-index: 0;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+    .overlay {
+      position: relative;
+      z-index: 1;
+    }
+    .logo {
+      width: 250px;
+      height: auto;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(232, 193, 117, 0.7));
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 4rem;
+      color: #ffffff;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.5rem;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+    }
+    .crown {
+      font-size: 2rem;
+      color: #e8c175;
+    }
+    .timer {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+    }
+    .contact {
+      margin-top: 20px;
+    }
+    .contact a {
+      color: #e8c175;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 10px 20px;
+      border: 2px solid #e8c175;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .contact a:hover {
+      background-color: #e8c175;
+      color: #1e3a8a;
+    }
+    .credit {
+      font-size: 0.8rem;
+      color: #ffffff;
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+    }
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      p {
+        font-size: 1.2rem;
+      }
+      .logo {
+        width: 150px;
+      }
+      .timer {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <img id="logo" src="octo1.png" alt="Octo1 Logo">
-    <dotlottie-wc src="https://lottie.host/d6e80493-697d-40fe-be89-afa45bdc3f96/dWhbhLhTCg.lottie" style="width: 200px; height: 200px;" speed="1" autoplay loop></dotlottie-wc>
-    <div id="coming-soon">We Are Coming Soon</div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/jsm/loaders/OBJLoader.js"></script>
-    <script type="module" src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js"></script>
-    <script>
-        // Scene setup
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+  <div class="background"></div>
+  <div class="overlay">
+    <img src="octo4.png" alt="Sea Food Kings Logo" class="logo">
+    <h1>We Are Coming Soon <span class="crown">👑</span></h1>
+    <p>Prepare for a regal seafood feast fit for royalty!</p>
+    <div class="timer" id="timer">00:00:00:00</div>
+    <div class="contact">
+      <p>For inquiries, contact us at <a href="https://wa.me/919152299833" target="_blank">+91 91522 99833</a></p>
+    </div>
+    <div class="credit">
+      Inspired by 3D animation style of Quince Creative - <a href="https://quincemedia.com">https://quincemedia.com</a>
+    </div>
+  </div>
+  <script>
+    // Set the launch date (default: 1 week from now, change as needed)
+    const launchDate = new Date("August 7, 2025 00:00:00").getTime();
 
-        // Underwater fog
-        scene.fog = new THREE.Fog(0x001022, 2, 10);
+    // Update the countdown every 1 second
+    const timer = setInterval(function() {
+      const now = new Date().getTime();
+      const distance = launchDate - now;
 
-        // Dynamic lighting
-        const ambientLight = new THREE.AmbientLight(0x335577, 1.2);
-        scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(1, 1, 1);
-        scene.add(directionalLight);
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // Load OBJ fish model
-        const loader = new THREE.OBJLoader();
-        const fishes = [];
-        loader.load('models/fish.obj', (obj) => {
-            obj.traverse(child => {
-                if (child.isMesh) {
-                    child.material = new THREE.MeshPhongMaterial({ 
-                        color: 0x00b7eb, 
-                        shininess: 200, 
-                        emissive: 0x004466, 
-                        emissiveIntensity: 0.3 
-                    });
-                }
-            });
-            for (let i = 0; i < 6; i++) {
-                const fish = obj.clone();
-                fish.scale.set(0.3, 0.3, 0.3); // Smaller for mobile
-                fish.position.set(
-                    Math.random() * 12 - 6,
-                    Math.random() * 12 - 6,
-                    Math.random() * 12 - 6
-                );
-                scene.add(fish);
-                fishes.push(fish);
-            }
-        }, undefined, (error) => {
-            console.error('Error loading OBJ file:', error);
-        });
+      document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-        // Create bubbles with wobble
-        const bubbleGeometry = new THREE.BufferGeometry();
-        const bubbleCount = 15;
-        const positions = new Float32Array(bubbleCount * 3);
-        const velocities = new Float32Array(bubbleCount * 3);
-        const wobbleOffsets = new Float32Array(bubbleCount);
-        for (let i = 0; i < bubbleCount * 3; i += 3) {
-            positions[i] = Math.random() * 12 - 6;
-            positions[i + 1] = Math.random() * 12 - 6;
-            positions[i + 2] = Math.random() * 12 - 6;
-            velocities[i + 1] = 0.04 + Math.random() * 0.05;
-            wobbleOffsets[i / 3] = Math.random() * Math.PI * 2;
-        }
-        bubbleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const bubbleMaterial = new THREE.PointsMaterial({ 
-            color: 0xffffff, 
-            size: 0.1, 
-            transparent: true, 
-            opacity: 0.8 
-        });
-        const bubbles = new THREE.Points(bubbleGeometry, bubbleMaterial);
-        scene.add(bubbles);
-
-        // Camera position
-        camera.position.z = 3.5;
-
-        // Animation loop
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Animate fish
-            fishes.forEach(fish => {
-                fish.position.x += Math.sin(Date.now() * 0.001 + fish.position.y) * 0.03;
-                fish.position.y += Math.cos(Date.now() * 0.001 + fish.position.z) * 0.015;
-                fish.rotation.y += 0.02;
-                if (fish.position.x > 6) fish.position.x = -6;
-                if (fish.position.x < -6) fish.position.x = 6;
-            });
-
-            // Animate bubbles with wobble
-            const bubblePositions = bubbles.geometry.attributes.position.array;
-            for (let i = 0; i < bubbleCount * 3; i += 3) {
-                bubblePositions[i + 1] += velocities[i + 1];
-                bubblePositions[i] += Math.sin(Date.now() * 0.002 + wobbleOffsets[i / 3]) * 0.02;
-                if (bubblePositions[i + 1] > 6) {
-                    bubblePositions[i + 1] = -6;
-                    bubblePositions[i] = Math.random() * 12 - 6;
-                    bubblePositions[i + 2] = Math.random() * 12 - 6;
-                }
-            }
-            bubbles.geometry.attributes.position.needsUpdate = true;
-
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+      if (distance < 0) {
+        clearInterval(timer);
+        document.getElementById("timer").innerHTML = "LAUNCHED!";
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
