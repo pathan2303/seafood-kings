@@ -1,51 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thank You - Sea Food Kings</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0a1a2e, #1a3a5a);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #e8c175;
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 4rem;
+      color: #ffffff;
+      text-shadow: 0 0 10px #e8c175;
+    }
+    p {
+      font-size: 1.5rem;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .details {
+      margin-top: 20px;
+    }
+    @media (max-width: 640px) {
+      h1 { font-size: 2.5rem; }
+      p { font-size: 1.2rem; }
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="aboutus.html">About Us</a>
-      <a href="cart.html">Cart</a>
-      <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
-    </div>
-    <h1>Thank You for Your Order!</h1>
-    <div class="cart-right">
-      <a href="cart.html" class="cart-btn">🛒 View Cart <span id="cartCount2" class="cart-count">0</span></a>
-    </div>
-  </header>
-  <div class="container">
-    <p>Your payment was successful. You'll receive a confirmation soon.</p>
-    <p>Order Details: <span id="customerDetails"></span></p>
-    <a href="index.html" class="cart-btn">Back to Home</a>
+  <h1>Thank You for Your Order! 👑</h1>
+  <p>Your payment was successful!</p>
+  <div class="details">
+    <p>Payment ID: <span id="paymentId"></span></p>
+    <p>Amount: <span id="amount"></span> INR</p>
   </div>
-  <footer>
-    <a href="privacy-policy.html">Privacy Policy</a>
-    <a href="terms-and-conditions.html">Terms & Conditions</a>
-    <a href="cancellation-refund.html">Cancellation & Refund</a>
-    <a href="shipping-delivery.html">Shipping & Delivery</a>
-    <a href="contact.html">Contact Us</a>
-    <p>© 2025 Sea Food Kings — All Rights Reserved</p>
-  </footer>
   <script>
-    // Clear cart after successful payment
-    localStorage.removeItem("cart");
-    localStorage.removeItem("cartTotal");
+    // Get query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentId = urlParams.get('payment_id');
+    const amount = urlParams.get('amount');
+    const status = urlParams.get('status');
 
-    // Update cart count
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    // Display details
+    document.getElementById('paymentId').textContent = paymentId || 'N/A';
+    document.getElementById('amount').textContent = amount || 'N/A';
 
-    // Show customer details
-    const customerDetails = JSON.parse(localStorage.getItem("customerDetails")) || {};
-    document.getElementById("customerDetails").textContent = `Name: ${customerDetails.name}, Phone: ${customerDetails.phone}, Address: ${customerDetails.address}`;
+    // Remove any old message listeners if present
+    window.removeEventListener('message', function() {});
   </script>
 </body>
 </html>
