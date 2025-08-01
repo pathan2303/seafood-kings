@@ -116,10 +116,6 @@
         alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
       });
     }
-
-    <script>
-  // ... (previous code remains same until createRazorpayOrder)
-
   async function createRazorpayOrder(amount) {
     try {
       const response = await fetch('https://script.google.com/macros/s/AKfycbzswJ1x7CljkubslXbrqcJHrDC1v-C9SdKfdMWlXM8ydGlbQTac1Ah2leh14FOgF3B9/exec', { // Replace with latest URL
@@ -214,7 +210,6 @@
       alert("Failed to initiate payment. Contact support. Error: " + error.message);
     }
   }
-  // ... (rest of the script remains same)
-</script>
+  </script>
 </body>
 </html>
