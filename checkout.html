@@ -77,7 +77,8 @@
     const cartTotal = calculateTotal();
     document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-function saveToGoogleSheet(payload) {
+
+    function saveToGoogleSheet(payload) {
   console.log("Sending Payload:", JSON.stringify(payload, null, 2));
   const url = 'https://script.google.com/macros/s/AKfycby1Ir0S6HHs-N1t4FSzX7_iVBcdeTHwHXhVbCWp-JGdo7BRzeZVfrD6-Bi90N7KXmFL/exec'; // Confirm latest URL
   console.log("Target URL:", url);
@@ -87,7 +88,8 @@ function saveToGoogleSheet(payload) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(payload),
-    mode: 'cors' // Explicitly set CORS mode
+    mode: 'cors', // Explicit CORS mode
+    credentials: 'omit' // Avoids credential-related CORS issues
   })
   .then(response => {
     console.log("Response Check:", {
