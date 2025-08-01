@@ -79,7 +79,7 @@
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 function saveToGoogleSheet(payload) {
   console.log("Sending Payload:", JSON.stringify(payload, null, 2));
-  const url = 'https://script.google.com/macros/s/AKfycbwAWTucyPW0ybre5hu8zNFteVYkaye9oqzWItvU12PL9TM8-3YiLmA32yVHUxVfhP9D/exec'; // Confirm latest URL
+  const url = 'https://script.google.com/macros/s/AKfycby1Ir0S6HHs-N1t4FSzX7_iVBcdeTHwHXhVbCWp-JGdo7BRzeZVfrD6-Bi90N7KXmFL/exec'; // Confirm latest URL
   console.log("Target URL:", url);
   fetch(url, {
     method: 'POST',
