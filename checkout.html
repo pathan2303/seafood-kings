@@ -116,24 +116,29 @@
         alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
       });
     }
+
   async function createRazorpayOrder(amount) {
-    try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbzswJ1x7CljkubslXbrqcJHrDC1v-C9SdKfdMWlXM8ydGlbQTac1Ah2leh14FOgF3B9/exec', { // Replace with latest URL
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ action: 'createOrder', amount: amount })
-      });
-      const data = await response.json();
-      if (data.order_id) {
-        return data.order_id;
-      } else {
-        throw new Error('Order creation failed: ' + JSON.stringify(data));
+    const maxRetries = 3;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzswJ1x7CljkubslXbrqcJHrDC1v-C9SdKfdMWlXM8ydGlbQTac1Ah2leh14FOgF3B9/exec', { // Replace with latest URL
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ action: 'createOrder', amount: amount })
+        });
+        const data = await response.json();
+        if (data.order_id) {
+          return data.order_id;
+        } else {
+          throw new Error('Order creation failed: ' + JSON.stringify(data));
+        }
+      } catch (error) {
+        console.error(`Order creation attempt ${attempt} failed:`, error);
+        if (attempt === maxRetries) throw error;
+        await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
       }
-    } catch (error) {
-      console.error('Order creation error:', error);
-      throw error;
     }
   }
 
