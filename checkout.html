@@ -77,17 +77,17 @@
     const cartTotal = calculateTotal();
     document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-
-    function saveToGoogleSheet(payload) {
+function saveToGoogleSheet(payload) {
   console.log("Sending Payload:", JSON.stringify(payload, null, 2));
-  const url = 'https://script.google.com/macros/s/AKfycbxUywSokLY5C9yXtMOFSM5TRYsHcwVpWR21EGXRapz5sviHdCxuaDl5uDSYs6oE_rCF/exec'; // Replace with new URL
+  const url = 'https://script.google.com/macros/s/AKfycbwAWTucyPW0ybre5hu8zNFteVYkaye9oqzWItvU12PL9TM8-3YiLmA32yVHUxVfhP9D/exec'; // Confirm latest URL
   console.log("Target URL:", url);
   fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    mode: 'cors' // Explicitly set CORS mode
   })
   .then(response => {
     console.log("Response Check:", {
@@ -114,7 +114,6 @@
     alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
   });
 }
-
     function payWithRazorpay() {
       const customerName = document.getElementById("customerName").value;
       const customerAddress = document.getElementById("customerAddress").value;
