@@ -79,44 +79,71 @@
     document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
     function saveToGoogleSheet(payload) {
-  console.log("Sending Payload:", JSON.stringify(payload, null, 2));
-  const url = 'https://script.google.com/macros/s/AKfycbx4rUSfI90Z6DjRqggb1Me4SSFHQSGA-HRrlYSYKwd5B5HgpBopY11Qi7YXI_sRp_cO/exec'; // Confirm latest URL
-  console.log("Target URL:", url);
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload),
-    mode: 'cors', // Explicit CORS mode
-    credentials: 'omit' // Avoids credential-related CORS issues
-  })
-  .then(response => {
-    console.log("Response Check:", {
-      status: response.status,
-      ok: response.ok,
-      statusText: response.statusText,
-      url: response.url
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+      console.log("Sending Payload:", JSON.stringify(payload, null, 2));
+      const url = 'https://script.google.com/macros/s/AKfycbx4rUSfI90Z6DjRqggb1Me4SSFHQSGA-HRrlYSYKwd5B5HgpBopY11Qi7YXI_sRp_cO/exec'; // Confirm latest URL
+      console.log("Target URL:", url);
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        mode: 'cors',
+        credentials: 'omit'
+      })
+      .then(response => {
+        console.log("Response Check:", {
+          status: response.status,
+          ok: response.ok,
+          statusText: response.statusText,
+          url: response.url
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+        }
+        return response.text();
+      })
+      .then(text => {
+        console.log('Raw Response Text:', text);
+        const data = text ? JSON.parse(text) : {};
+        console.log('Parsed Response:', data);
+        if (data.result !== 'success') {
+          throw new Error('Unexpected response: ' + JSON.stringify(data));
+        }
+      })
+      .catch(error => {
+        console.error('Fetch Error:', error.message, error.stack);
+        alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
+      });
     }
-    return response.text();
-  })
-  .then(text => {
-    console.log('Raw Response Text:', text);
-    const data = text ? JSON.parse(text) : {};
-    console.log('Parsed Response:', data);
-    if (data.result !== 'success') {
-      throw new Error('Unexpected response: ' + JSON.stringify(data));
+
+    async function createRazorpayOrder(amount) {
+      try {
+        const response = await fetch('https://api.razorpay.com/v1/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa(CONFIG.razorpayKey + ':') // Replace with your secret key
+          },
+          body: JSON.stringify({
+            amount: amount * 100, // Amount in paise
+            currency: 'INR',
+            receipt: 'order_rcptid_' + Date.now()
+          })
+        });
+        const data = await response.json();
+        if (data.id) {
+          return data.id;
+        } else {
+          throw new Error('Order creation failed: ' + JSON.stringify(data));
+        }
+      } catch (error) {
+        console.error('Order creation error:', error);
+        throw error;
+      }
     }
-  })
-  .catch(error => {
-    console.error('Fetch Error:', error.message, error.stack);
-    alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
-  });
-}
-    function payWithRazorpay() {
+
+    async function payWithRazorpay() {
       const customerName = document.getElementById("customerName").value;
       const customerAddress = document.getElementById("customerAddress").value;
       const customerCity = document.getElementById("customerCity").value;
@@ -141,40 +168,53 @@
       };
       localStorage.setItem("customerDetails", JSON.stringify(customerDetails));
 
-      const options = {
-        key: CONFIG.razorpayKey,
-        amount: parseInt(cartTotal * 100) || 100,
-        currency: "INR",
-        name: "Sea Food Kings",
-        description: "Order Payment",
-        handler: function (response) {
-          try {
-            const payload = {
-              order_id: response.razorpay_order_id || "N/A",
-              payment_id: response.razorpay_payment_id,
-              status: "success",
-              amount: cartTotal || 0,
-              timestamp: new Date().toISOString(),
-              ...customerDetails
-            };
-            console.log("Payment Payload:", payload);
-            saveToGoogleSheet(payload);
-            window.location.href = "thankyou.html";
-          } catch (error) {
-            console.error("Payment handler error:", error);
-            alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
-            window.location.href = "thankyou.html";
+      try {
+        // Create Razorpay order
+        const orderId = await createRazorpayOrder(cartTotal);
+        const options = {
+          key: CONFIG.razorpayKey,
+          amount: parseInt(cartTotal * 100) || 100,
+          currency: "INR",
+          name: "Sea Food Kings",
+          description: "Order Payment",
+          order_id: orderId, // Use created order ID
+          handler: function (response) {
+            try {
+              const payload = {
+                order_id: response.razorpay_order_id,
+                payment_id: response.razorpay_payment_id,
+                status: "success",
+                amount: cartTotal || 0,
+                timestamp: new Date().toISOString(),
+                ...customerDetails
+              };
+              console.log("Payment Payload:", payload);
+              saveToGoogleSheet(payload);
+              window.location.href = `thankyou.html?payment_id=${response.razorpay_payment_id}&amount=${cartTotal}&status=success`;
+            } catch (error) {
+              console.error("Payment handler error:", error);
+              alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
+              window.location.href = `thankyou.html?status=fail`;
+            }
+          },
+          prefill: { name: customerName, email: customerEmail, contact: customerPhone },
+          theme: { color: "#e8c175" },
+          modal: {
+            confirm_close: true,
+            escape: false
           }
-        },
-        prefill: { name: customerName, email: customerEmail, contact: customerPhone },
-        theme: { color: "#e8c175" }
-      };
-      const rzp = new Razorpay(options);
-      rzp.on("payment.failed", function (response) {
-        console.error("Payment Failed:", response.error);
-        alert("Payment failed: " + response.error.description);
-      });
-      rzp.open();
+        };
+        const rzp = new Razorpay(options);
+        rzp.on("payment.failed", function (response) {
+          console.error("Payment Failed:", response.error);
+          alert("Payment failed: " + response.error.description);
+          window.location.href = `thankyou.html?status=fail`;
+        });
+        rzp.open();
+      } catch (error) {
+        console.error("Razorpay setup error:", error);
+        alert("Failed to initiate payment. Contact support. Error: " + error.message);
+      }
     }
   </script>
 </body>
