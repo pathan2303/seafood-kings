@@ -1,79 +1,216 @@
-function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSheet();
-  var data = {};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - Sea Food Kings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="cart.html">Cart</a>
+      <a href="https://wa.me/919152299833" target="_blank">Contact Us</a>
+    </div>
+    <h1>Checkout</h1>
+    <div class="cart-right">
+      <a href="cart.html" class="cart-btn">🛒 View Cart <span id="cartCount2" class="cart-count">0</span></a>
+    </div>
+  </header>
+  <div class="container">
+    <p>Total: ₹<span id="cartTotal">0</span></p>
+    <div id="customerForm">
+      <h3>Customer Details</h3>
+      <input type="text" id="customerName" placeholder="Full Name" required>
+      <input type="text" id="customerAddress" placeholder="Address" required>
+      <input type="text" id="customerCity" placeholder="City" required>
+      <input type="text" id="customerState" placeholder="State" required>
+      <input type="text" id="customerPincode" placeholder="Pincode" required>
+      <input type="tel" id="customerPhone" placeholder="Phone Number" required>
+      <input type="email" id="customerEmail" placeholder="Email" required>
+    </div>
+    <div>
+      <button onclick="payWithRazorpay()">Pay Online (Razorpay)</button>
+      <p style="color: red; font-weight: bold;">Cash on Delivery Coming Soon!</p>
+    </div>
+  </div>
+  <footer>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-and-conditions.html">Terms & Conditions</a>
+    <a href="cancellation-refund.html">Cancellation & Refund</a>
+    <a href="shipping-delivery.html">Shipping & Delivery</a>
+    <a href="contact.html">Contact Us</a>
+    <p>© 2025 Sea Food Kings — All Rights Reserved</p>
+  </footer>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="config-public.js"></script>
+  <script src="products.js"></script>
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartTotalSpan = document.getElementById("cartTotal");
+    const cartCount = document.getElementById("cartCount2");
 
-  // Log the raw event for debugging
-  Logger.log("Raw Event: " + JSON.stringify(e));
-
-  // Check if e is defined and has postData
-  if (e && e.postData && e.postData.contents) {
-    try {
-      data = JSON.parse(e.postData.contents);
-      Logger.log("Received Raw Data: " + e.postData.contents);
-    } catch (parseError) {
-      Logger.log("Parse Error: " + parseError.message);
-      data = { error: "Failed to parse data" };
+    function calculateTotal() {
+      let total = 0;
+      if (Array.isArray(cart) && typeof products !== "undefined" && Array.isArray(products)) {
+        cart.forEach((item) => {
+          const productName = item.name.split(" (")[0];
+          const qty = item.quantity || parseFloat(item.name.match(/\((\d+\.?\d*)kg\)/)?.[1]) || 1;
+          const product = products.find((p) => p.name === productName);
+          if (product) {
+            total += product.basePrice * qty;
+            console.log(`Product: ${productName}, Qty: ${qty}, Price: ${product.basePrice}, Subtotal: ${product.basePrice * qty}`);
+          } else {
+            console.error(`Product not found: ${productName}`);
+          }
+        });
+      } else {
+        console.error("Error: cart or products data is invalid or not loaded.", { cart, products });
+      }
+      return total || 0;
     }
-  } else {
-    Logger.log("No valid postData received. Event:", JSON.stringify(e));
-    data = { error: "No valid data received" };
-  }
 
-  Logger.log("Parsed Data: " + JSON.stringify(data));
+    const cartTotal = calculateTotal();
+    document.getElementById("cartTotal").textContent = cartTotal.toFixed(2);
+    document.getElementById("cartCount2").textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
-  // Handle order creation or data logging based on action
-  if (data.action === 'createOrder' && data.amount) {
-    return createRazorpayOrder(data.amount);
-  } else if (data && data.payment_id) {
-    sheet.appendRow([new Date(), data.order_id || "N/A", data.payment_id, data.amount || 0, data.name || "Unknown", data.phone || "N/A"]);
-    return ContentService.createTextOutput(JSON.stringify({ result: 'success' }))
-      .setMimeType(ContentService.MimeType.JSON);
-  } else {
-    return ContentService.createTextOutput(JSON.stringify({ result: 'error', message: 'Invalid or no data' }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
-function createRazorpayOrder(amount) {
-  var razorpayKey = 'rzp_test_maU4XuBdHu3f6b'; // Replace with your Razorpay Key ID
-  var razorpaySecret = 'OFAmfrqd2cb8vmyPtUID3uAO'; // Replace with your Razorpay Secret Key (keep secure)
-  var url = 'https://api.razorpay.com/v1/orders';
-  var payload = {
-    amount: amount * 100, // Amount in paise
-    currency: 'INR',
-    receipt: 'order_rcptid_' + new Date().getTime(),
-    notes: {
-      purpose: 'Sea Food Kings Order'
+    function saveToGoogleSheet(payload) {
+      console.log("Sending Payload:", JSON.stringify(payload, null, 2));
+      const url = 'https://script.google.com/macros/s/AKfycbxsciBiB86tJ6Nm5h-IoQYyw1DZRliP9sIvk7J_taGGQoCFL74iMzYq-9fNEyNrN4WP/exec'; // Replace with latest URL
+      console.log("Target URL:", url);
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        mode: 'cors',
+        credentials: 'omit'
+      })
+      .then(response => {
+        console.log("Response Check:", {
+          status: response.status,
+          ok: response.ok,
+          statusText: response.statusText,
+          url: response.url
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+        }
+        return response.text();
+      })
+      .then(text => {
+        console.log('Raw Response Text:', text);
+        const data = text ? JSON.parse(text) : {};
+        console.log('Parsed Response:', data);
+        if (data.result !== 'success') {
+          throw new Error('Unexpected response: ' + JSON.stringify(data));
+        }
+      })
+      .catch(error => {
+        console.error('Fetch Error:', error.message, error.stack);
+        alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
+      });
     }
-  };
 
-  var options = {
-    method: 'post',
-    contentType: 'application/json',
-    headers: {
-      Authorization: 'Basic ' + Utilities.base64Encode(razorpayKey + ':' + razorpaySecret)
-    },
-    payload: JSON.stringify(payload)
-  };
-
-  try {
-    var response = UrlFetchApp.fetch(url, options);
-    var result = JSON.parse(response.getContentText());
-    Logger.log("Order Creation Response: " + JSON.stringify(result));
-    if (result.id) {
-      return ContentService.createTextOutput(JSON.stringify({ order_id: result.id }))
-        .setMimeType(ContentService.MimeType.JSON);
-    } else {
-      throw new Error('Order creation failed: ' + JSON.stringify(result));
+    async function createRazorpayOrder(amount) {
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxsciBiB86tJ6Nm5h-IoQYyw1DZRliP9sIvk7J_taGGQoCFL74iMzYq-9fNEyNrN4WP/exec', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ action: 'createOrder', amount: amount })
+        });
+        const data = await response.json();
+        if (data.order_id) {
+          return data.order_id;
+        } else {
+          throw new Error('Order creation failed: ' + JSON.stringify(data));
+        }
+      } catch (error) {
+        console.error('Order creation error:', error);
+        throw error;
+      }
     }
-  } catch (error) {
-    Logger.log("Order Creation Error: " + error.message);
-    return ContentService.createTextOutput(JSON.stringify({ error: error.message }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
 
-// Optional: Add doGet for testing
-function doGet(e) {
-  return HtmlService.createHtmlOutput("Test endpoint working");
-}
+    async function payWithRazorpay() {
+      const customerName = document.getElementById("customerName").value;
+      const customerAddress = document.getElementById("customerAddress").value;
+      const customerCity = document.getElementById("customerCity").value;
+      const customerState = document.getElementById("customerState").value;
+      const customerPincode = document.getElementById("customerPincode").value;
+      const customerPhone = document.getElementById("customerPhone").value;
+      const customerEmail = document.getElementById("customerEmail").value;
+
+      if (!customerName || !customerAddress || !customerCity || !customerState || !customerPincode || !customerPhone || !customerEmail) {
+        alert("Please fill all customer details.");
+        return;
+      }
+
+      const customerDetails = {
+        name: customerName,
+        address: customerAddress,
+        city: customerCity,
+        state: customerState,
+        pincode: customerPincode,
+        phone: customerPhone,
+        email: customerEmail
+      };
+      localStorage.setItem("customerDetails", JSON.stringify(customerDetails));
+
+      try {
+        // Create Razorpay order via Apps Script
+        const orderId = await createRazorpayOrder(cartTotal);
+        const options = {
+          key: CONFIG.razorpayKey,
+          amount: parseInt(cartTotal * 100) || 100,
+          currency: "INR",
+          name: "Sea Food Kings",
+          description: "Order Payment",
+          order_id: orderId,
+          handler: function (response) {
+            try {
+              const payload = {
+                order_id: response.razorpay_order_id,
+                payment_id: response.razorpay_payment_id,
+                status: "success",
+                amount: cartTotal || 0,
+                timestamp: new Date().toISOString(),
+                ...customerDetails
+              };
+              console.log("Payment Payload:", payload);
+              saveToGoogleSheet(payload);
+              window.location.href = `thankyou.html?payment_id=${response.razorpay_payment_id}&amount=${cartTotal}&status=success`;
+            } catch (error) {
+              console.error("Payment handler error:", error);
+              alert("Payment processed, but logging failed. Contact support. Error: " + error.message);
+              window.location.href = `thankyou.html?status=fail`;
+            }
+          },
+          prefill: { name: customerName, email: customerEmail, contact: customerPhone },
+          theme: { color: "#e8c175" },
+          modal: {
+            confirm_close: true,
+            escape: false
+          }
+        };
+        const rzp = new Razorpay(options);
+        rzp.on("payment.failed", function (response) {
+          console.error("Payment Failed:", response.error);
+          alert("Payment failed: " + response.error.description);
+          window.location.href = `thankyou.html?status=fail`;
+        });
+        rzp.open();
+      } catch (error) {
+        console.error("Razorpay setup error:", error);
+        alert("Failed to initiate payment. Contact support. Error: " + error.message);
+      }
+    }
+  </script>
+</body>
+</html>
